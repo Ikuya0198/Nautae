@@ -373,8 +373,8 @@
       <li><a href="archive.html">Archive</a></li>
     </ul>
     <div class="lang-toggle">
-      <button class="lang-btn active" data-lang="ja">JP</button>
-      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ja">JP</button>
+      <button class="lang-btn active" data-lang="en">EN</button>
     </div>
   </nav>
 
@@ -647,6 +647,7 @@
         #define PI 3.14159265358979323846
         uniform float uTime;
         uniform vec4  uWave0, uWave1, uWave2, uWave3;
+        uniform vec4  uWave4, uWave5, uWave6, uWave7;
         varying vec3  vWorldPos;
         varying vec3  vNormal;
         varying float vElevation;
@@ -670,6 +671,10 @@
           p += gerstner(uWave1, position, tang, bino);
           p += gerstner(uWave2, position, tang, bino);
           p += gerstner(uWave3, position, tang, bino);
+          p += gerstner(uWave4, position, tang, bino);
+          p += gerstner(uWave5, position, tang, bino);
+          p += gerstner(uWave6, position, tang, bino);
+          p += gerstner(uWave7, position, tang, bino);
           vNormal    = normalize(cross(bino, tang));
           vWorldPos  = (modelMatrix * vec4(p, 1.0)).xyz;
           vElevation = p.y;
@@ -677,55 +682,48 @@
         }
       `;
 
-      /* ── Fragment Shader ── */
+      /* ── Fragment Shader — midnight, no reflections ── */
       const fragmentShader = `
-        uniform vec3  uLightPos;
         varying vec3  vWorldPos;
         varying vec3  vNormal;
         varying float vElevation;
 
         void main() {
-          /* Water base colour — near-black ocean */
-          vec3 deep    = vec3(0.008, 0.020, 0.052);
-          vec3 surface = vec3(0.014, 0.044, 0.088);
-          vec3 wc = mix(deep, surface, clamp(vElevation * 1.6 + 0.5, 0.0, 1.0));
+          /* Midnight ocean — near-black, deep navy */
+          vec3 abyss   = vec3(0.003, 0.006, 0.020);
+          vec3 midwater = vec3(0.006, 0.016, 0.042);
+          vec3 crest    = vec3(0.010, 0.025, 0.060);
+          float t = clamp(vElevation * 2.2 + 0.5, 0.0, 1.0);
+          vec3 wc = mix(abyss, mix(midwater, crest, t * t), t);
 
-          /* Lighting vectors */
-          vec3 N = normalize(vNormal);
-          vec3 L = normalize(uLightPos - vWorldPos);
-          vec3 V = normalize(cameraPosition - vWorldPos);
-          vec3 H = normalize(L + V);
+          /* Subtle Fresnel — reveals wave shape without gold reflection */
+          vec3 N  = normalize(vNormal);
+          vec3 V  = normalize(cameraPosition - vWorldPos);
+          float fr = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 3.5);
+          vec3 frCol = vec3(0.012, 0.028, 0.068);
 
-          /* Sharp gold specular + soft glow */
-          float spec = pow(max(dot(N, H), 0.0), 512.0);
-          float soft = pow(max(dot(N, H), 0.0), 32.0) * 0.06;
-          vec3 gold  = vec3(0.78, 0.66, 0.43);
+          vec3 col = wc + frCol * fr * 0.35;
 
-          /* Fresnel — edge glow */
-          float fr = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 4.0);
-
-          vec3 col = wc;
-          col += gold * spec * 3.5;
-          col += gold * soft;
-          col += surface * fr * 0.20;
-
-          /* Depth fog toward horizon */
+          /* Horizon fog — dissolves into site background */
           float dist = length(vWorldPos - cameraPosition);
-          float fog  = 1.0 - exp(-max(0.0, dist - 2.0) * 0.045);
-          col = mix(col, vec3(0.024, 0.024, 0.056), clamp(fog, 0.0, 1.0));
+          float fog  = 1.0 - exp(-max(0.0, dist - 1.5) * 0.040);
+          col = mix(col, vec3(0.022, 0.022, 0.050), clamp(fog, 0.0, 1.0));
 
-          gl_FragColor = vec4(col, 0.96);
+          gl_FragColor = vec4(col, 0.97);
         }
       `;
 
       const uniforms = {
-        uTime:     { value: 0.0 },
-        uLightPos: { value: new THREE.Vector3(4, 14, -2) },
+        uTime:  { value: 0.0 },
         /* dir.x, dir.y, steepness, wavelength — all directed toward camera (+z) */
-        uWave0:    { value: new THREE.Vector4( 0.15,  0.99, 0.22, 7.0) },
-        uWave1:    { value: new THREE.Vector4(-0.40,  0.92, 0.14, 4.5) },
-        uWave2:    { value: new THREE.Vector4( 0.55,  0.83, 0.10, 3.0) },
-        uWave3:    { value: new THREE.Vector4(-0.12,  0.99, 0.07, 1.8) },
+        uWave0: { value: new THREE.Vector4( 0.10,  1.00, 0.20, 8.5) },  // long main swell
+        uWave1: { value: new THREE.Vector4(-0.38,  0.93, 0.13, 5.5) },  // left cross swell
+        uWave2: { value: new THREE.Vector4( 0.52,  0.85, 0.10, 3.8) },  // right secondary
+        uWave3: { value: new THREE.Vector4(-0.10,  1.00, 0.07, 2.4) },  // forward chop
+        uWave4: { value: new THREE.Vector4( 0.22,  0.97, 0.09, 11.0) }, // very long far swell
+        uWave5: { value: new THREE.Vector4(-0.62,  0.78, 0.05, 1.6) },  // wind chop NW
+        uWave6: { value: new THREE.Vector4( 0.80,  0.60, 0.04, 1.2) },  // diagonal ripple
+        uWave7: { value: new THREE.Vector4(-0.28,  0.96, 0.04, 0.9) },  // fine surface chop
       };
 
       const geo = new THREE.PlaneGeometry(40, 40, 220, 220);
@@ -820,7 +818,7 @@
     document.querySelectorAll('[data-i18n]').forEach(el => {
       originals[el.dataset.i18n] = el.innerHTML;
     });
-    let currentLang = sessionStorage.getItem('nwc_lang') || 'ja';
+    let currentLang = sessionStorage.getItem('nwc_lang') || 'en';
     function applyLang(lang) {
       currentLang = lang;
       sessionStorage.setItem('nwc_lang', lang);
