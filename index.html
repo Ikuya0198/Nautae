@@ -178,6 +178,32 @@
       background: #c8a96e; margin-top: 13px;
     }
 
+    /* ===== COMING SOON ===== */
+    #coming-soon { background: #0a0a0a; text-align: center; }
+    .cs-stores {
+      display: flex; justify-content: center; gap: 48px; margin-top: 56px; flex-wrap: wrap;
+    }
+    .cs-store {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      padding: 44px 52px; border: 1px solid rgba(255,255,255,0.07);
+      min-width: 240px; position: relative; overflow: hidden;
+    }
+    .cs-store::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px; background: linear-gradient(90deg, transparent, #c8a96e, transparent);
+    }
+    .cs-flag { font-size: 32px; line-height: 1; }
+    .cs-country {
+      font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300;
+      letter-spacing: 2px;
+    }
+    .cs-city { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+    .cs-badge {
+      display: inline-block; font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: #c8a96e; border: 1px solid rgba(200,169,110,0.35); padding: 5px 14px;
+      margin-top: 4px;
+    }
+
     /* ===== SHOP CTA ===== */
     #shop-cta { background: #080808; text-align: center; }
     .gold-vline {
@@ -375,6 +401,31 @@
         <div class="challenge-item r">スペインの伝統を継承しながら、イタリア農法・日本の醸造感性で再解釈すること</div>
         <div class="challenge-item r">毎年、新たなストーリーとともに限定リリース——昨年と同じワインは二度と造らないこと</div>
         <div class="challenge-item r">販売数を制限し、ワインを"消費物"ではなく"体験の記録"として届け続けること</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMING SOON -->
+  <section id="coming-soon" class="section">
+    <div class="container">
+      <p class="label r" style="text-align:center;">Stores</p>
+      <h2 class="heading r" style="text-align:center;">実店舗、まもなく。</h2>
+      <p class="body-text r" style="text-align:center; margin:0 auto; max-width:480px;">
+        日本とイタリアに、Nautae のワインを直接手に取れる場所が生まれます。
+      </p>
+      <div class="cs-stores">
+        <div class="cs-store r">
+          <div class="cs-flag">🇯🇵</div>
+          <p class="cs-country">Japan</p>
+          <p class="cs-city">Opening Soon</p>
+          <span class="cs-badge">Coming Soon</span>
+        </div>
+        <div class="cs-store r">
+          <div class="cs-flag">🇮🇹</div>
+          <p class="cs-country">Italy</p>
+          <p class="cs-city">Opening Soon</p>
+          <span class="cs-badge">Coming Soon</span>
+        </div>
       </div>
     </div>
   </section>
