@@ -15,37 +15,65 @@
     img { max-width: 100%; display: block; }
     a { text-decoration: none; }
 
-    /* NAV */
+    /* ===== LOADER ===== */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #080808;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 24px;
+    }
+    .loader-logo-img { width: 88px; opacity: 0; transform: translateY(12px); }
+    .loader-bar { width: 0; height: 1px; background: #c8a96e; max-width: 96px; }
+
+    /* ===== CURSOR ===== */
+    #cur-dot {
+      position: fixed; z-index: 9998; top: 0; left: 0;
+      width: 5px; height: 5px; background: #c8a96e;
+      border-radius: 50%; pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+    }
+    #cur-ring {
+      position: fixed; z-index: 9997; top: 0; left: 0;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(200,169,110,0.55);
+      border-radius: 50%; pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width 0.35s ease, height 0.35s ease,
+                  background 0.35s ease, border-color 0.35s ease;
+    }
+    body.on-hover #cur-ring {
+      width: 52px; height: 52px;
+      background: rgba(200,169,110,0.06);
+      border-color: rgba(200,169,110,0.28);
+    }
+
+    /* ===== NAV ===== */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 28px 48px;
-      transition: background 0.4s, padding 0.4s, border-color 0.4s;
+      transition: background 0.4s, padding 0.4s;
     }
     nav.scrolled {
       background: rgba(8,8,8,0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       padding: 14px 48px;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     .nav-logo img { height: 38px; }
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
-      color: rgba(255,255,255,0.65);
-      font-size: 11px; font-weight: 500;
-      letter-spacing: 2.5px; text-transform: uppercase;
-      transition: color 0.3s;
+      color: rgba(255,255,255,0.65); font-size: 11px; font-weight: 500;
+      letter-spacing: 2.5px; text-transform: uppercase; transition: color 0.3s;
     }
     .nav-links a:hover, .nav-links a.active { color: #c8a96e; }
 
-    /* HERO */
+    /* ===== HERO ===== */
     #hero {
       position: relative; min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; overflow: hidden;
-      background: #06060e;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; overflow: hidden; background: #06060e;
     }
     #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-content { position: relative; z-index: 1; padding: 0 24px; }
@@ -59,8 +87,7 @@
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(54px, 8.5vw, 104px);
-      font-weight: 300; letter-spacing: 8px; line-height: 1;
-      opacity: 0;
+      font-weight: 300; letter-spacing: 8px; line-height: 1; opacity: 0;
     }
     .hero-region {
       font-size: 11px; font-weight: 300; letter-spacing: 4px;
@@ -68,9 +95,8 @@
       margin-top: 18px; opacity: 0;
     }
     .hero-sub {
-      font-size: 14px; font-weight: 300;
-      color: rgba(255,255,255,0.5); line-height: 2;
-      margin-top: 32px; max-width: 420px;
+      font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.5);
+      line-height: 2; margin-top: 32px; max-width: 420px;
       margin-left: auto; margin-right: auto; opacity: 0;
     }
     .scroll-indicator {
@@ -84,8 +110,7 @@
       text-transform: uppercase; color: rgba(255,255,255,0.3);
     }
     .scroll-line {
-      width: 1px; height: 52px;
-      position: relative; overflow: hidden;
+      width: 1px; height: 52px; position: relative; overflow: hidden;
       background: rgba(200,169,110,0.15);
     }
     .scroll-line::after {
@@ -95,63 +120,44 @@
     }
     @keyframes scrollDown { 0% { top: -100%; } 100% { top: 100%; } }
 
-    /* COMMON */
+    /* ===== COMMON ===== */
     .section { padding: 120px 48px; }
     .container { max-width: 1100px; margin: 0 auto; }
-    .label {
-      font-size: 10px; letter-spacing: 4px;
-      text-transform: uppercase; color: #c8a96e; margin-bottom: 20px;
-    }
+    .label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c8a96e; margin-bottom: 20px; }
     .heading {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(36px, 4.5vw, 60px);
       font-weight: 300; line-height: 1.2; margin-bottom: 32px;
     }
-    .body-text {
-      font-size: 15px; line-height: 2;
-      color: rgba(255,255,255,0.6);
-    }
+    .body-text { font-size: 15px; line-height: 2; color: rgba(255,255,255,0.6); }
     .r { opacity: 0; transform: translateY(28px); }
 
-    /* STORY */
+    /* ===== STORY ===== */
     #story { background: #0c0c0c; }
-    .quote-wrap {
-      display: flex; gap: 36px; align-items: flex-start;
-      margin-bottom: 80px;
-    }
+    .quote-wrap { display: flex; gap: 36px; align-items: flex-start; margin-bottom: 80px; }
     .quote-bar { flex-shrink: 0; width: 2px; background: #c8a96e; align-self: stretch; min-height: 80px; }
     .quote-text {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(24px, 3.2vw, 42px);
-      font-weight: 300; font-style: italic;
-      line-height: 1.55; color: rgba(255,255,255,0.85);
+      font-weight: 300; font-style: italic; line-height: 1.55; color: rgba(255,255,255,0.85);
     }
     .story-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
 
-    /* TERROIR */
+    /* ===== TERROIR ===== */
     #terroir { background: #111; padding: 0; }
     .terroir-grid { display: grid; grid-template-columns: 1fr 1fr; }
     .terroir-text { padding: 100px 64px; }
     .terroir-img-wrap { overflow: hidden; }
     .terroir-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      min-height: 640px;
-      filter: brightness(0.78) saturate(0.85);
-      transition: transform 0.9s ease;
+      width: 100%; height: 100%; object-fit: cover; min-height: 640px;
+      filter: brightness(0.78) saturate(0.85); transition: transform 0.9s ease;
     }
     .terroir-img-wrap:hover img { transform: scale(1.04); }
     .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 52px; }
-    .stat-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 44px; font-weight: 300; color: #c8a96e;
-      display: block; line-height: 1;
-    }
-    .stat-label {
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(255,255,255,0.38); margin-top: 8px; display: block;
-    }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 300; color: #c8a96e; display: block; line-height: 1; }
+    .stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-top: 8px; display: block; }
 
-    /* CHALLENGE */
+    /* ===== CHALLENGE ===== */
     #challenge {
       position: relative;
       background: url('images/wine4.jpg') center/cover no-repeat;
@@ -172,7 +178,7 @@
       background: #c8a96e; margin-top: 13px;
     }
 
-    /* SHOP CTA */
+    /* ===== SHOP CTA ===== */
     #shop-cta { background: #080808; text-align: center; }
     .gold-vline {
       width: 1px; height: 72px;
@@ -183,21 +189,19 @@
       display: inline-block; margin-top: 44px;
       padding: 16px 52px; font-size: 11px; font-weight: 500;
       letter-spacing: 3px; text-transform: uppercase;
-      border: 1px solid #c8a96e; color: #c8a96e;
-      transition: all 0.35s ease;
+      border: 1px solid #c8a96e; color: #c8a96e; transition: all 0.35s ease;
     }
     .btn-outline:hover { background: #c8a96e; color: #080808; }
 
-    /* FOOTER */
+    /* ===== FOOTER ===== */
     footer {
       border-top: 1px solid rgba(255,255,255,0.07);
-      padding: 40px 48px;
-      display: flex; align-items: center; justify-content: space-between;
+      padding: 40px 48px; display: flex; align-items: center; justify-content: space-between;
     }
     footer img { height: 30px; opacity: 0.4; }
     .footer-text { font-size: 11px; color: rgba(255,255,255,0.22); letter-spacing: 1px; }
 
-    /* RESPONSIVE */
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
       .story-cols { grid-template-columns: 1fr; gap: 40px; }
       .terroir-grid { grid-template-columns: 1fr; }
@@ -210,10 +214,21 @@
       .section { padding: 80px 24px; }
       #challenge { background-attachment: scroll; padding: 100px 24px; }
       footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
+      #cur-dot, #cur-ring { display: none; }
     }
   </style>
 </head>
 <body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <img src="images/logo white.png" alt="Nautae" class="loader-logo-img">
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- CURSOR -->
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
 
   <!-- NAV -->
   <nav id="navbar">
@@ -285,22 +300,10 @@
           補糖・補酸・香料などの添加は一切行いません。
         </p>
         <div class="stats r">
-          <div>
-            <span class="stat-num">41°N</span>
-            <span class="stat-label">北緯</span>
-          </div>
-          <div>
-            <span class="stat-num">100%</span>
-            <span class="stat-label">手摘み収穫</span>
-          </div>
-          <div>
-            <span class="stat-num">&lt;200</span>
-            <span class="stat-label">年間最大本数</span>
-          </div>
-          <div>
-            <span class="stat-num">0</span>
-            <span class="stat-label">添加物</span>
-          </div>
+          <div><span class="stat-num">41°N</span><span class="stat-label">北緯</span></div>
+          <div><span class="stat-num">100%</span><span class="stat-label">手摘み収穫</span></div>
+          <div><span class="stat-num">&lt;200</span><span class="stat-label">年間最大本数</span></div>
+          <div><span class="stat-num">0</span><span class="stat-label">添加物</span></div>
         </div>
       </div>
       <div class="terroir-img-wrap r">
@@ -354,16 +357,82 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    // NAV
+    /* ===== LOADER ===== */
+    const isFirst = !sessionStorage.getItem('nwc_v');
+    sessionStorage.setItem('nwc_v', '1');
+
+    function hideLoader() {
+      gsap.to('#loader', {
+        yPercent: -100, duration: 0.85, ease: 'power3.inOut',
+        onComplete: () => { document.getElementById('loader').style.display = 'none'; }
+      });
+    }
+
+    if (isFirst) {
+      gsap.timeline()
+        .to('.loader-logo-img', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.2)
+        .to('.loader-bar',      { width: 96,    duration: 0.7, ease: 'power2.inOut'  }, 0.7)
+        .to({}, { duration: 0.6 })
+        .call(hideLoader);
+    } else {
+      gsap.to('#loader', {
+        yPercent: -100, duration: 0.65, ease: 'power3.inOut', delay: 0.1,
+        onComplete: () => { document.getElementById('loader').style.display = 'none'; }
+      });
+    }
+
+    /* ===== PAGE TRANSITION (exit) ===== */
+    document.querySelectorAll('a[href]').forEach(link => {
+      const h = link.getAttribute('href');
+      if (!h || h.startsWith('#') || h.startsWith('http') || h.startsWith('mailto') || h.startsWith('tel')) return;
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const dest = h;
+        const el = document.getElementById('loader');
+        el.style.display = 'flex';
+        gsap.fromTo(el,
+          { yPercent: -100 },
+          { yPercent: 0, duration: 0.52, ease: 'power3.inOut',
+            onComplete: () => { window.location.href = dest; }
+          }
+        );
+      });
+    });
+
+    /* ===== CURSOR ===== */
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.body.style.cursor = 'none';
+      const dot = document.getElementById('cur-dot');
+      const ring = document.getElementById('cur-ring');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+
+      window.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        gsap.to(dot, { x: mx, y: my, duration: 0.05 });
+      });
+
+      (function lerp() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        gsap.set(ring, { x: rx, y: ry });
+        requestAnimationFrame(lerp);
+      })();
+
+      document.querySelectorAll('a, button').forEach(el => {
+        el.style.cursor = 'none';
+        el.addEventListener('mouseenter', () => document.body.classList.add('on-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('on-hover'));
+      });
+    }
+
+    /* ===== NAV ===== */
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // THREE.JS CONSTELLATION
-    const isMobile = window.innerWidth < 768;
-    const canvas = document.getElementById('hero-canvas');
-
-    if (!isMobile) {
+    /* ===== THREE.JS CONSTELLATION ===== */
+    if (window.innerWidth >= 768) {
+      const canvas = document.getElementById('hero-canvas');
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -376,11 +445,8 @@
       const pos = new Float32Array(COUNT * 3);
       const arr = [];
       for (let i = 0; i < COUNT; i++) {
-        const x = (Math.random() - 0.5) * 14;
-        const y = (Math.random() - 0.5) * 14;
-        const z = (Math.random() - 0.5) * 7;
-        pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z;
-        arr.push(x, y, z);
+        const x = (Math.random() - 0.5) * 14, y = (Math.random() - 0.5) * 14, z = (Math.random() - 0.5) * 7;
+        pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z; arr.push(x, y, z);
       }
       const pGeo = new THREE.BufferGeometry();
       pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -388,58 +454,44 @@
       const points = new THREE.Points(pGeo, pMat);
       scene.add(points);
 
-      const linePos = [];
+      const lp = [];
       for (let i = 0; i < COUNT; i++) {
         for (let j = i + 1; j < COUNT; j++) {
           const dx = arr[i*3]-arr[j*3], dy = arr[i*3+1]-arr[j*3+1], dz = arr[i*3+2]-arr[j*3+2];
-          if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 2.3) {
-            linePos.push(arr[i*3],arr[i*3+1],arr[i*3+2], arr[j*3],arr[j*3+1],arr[j*3+2]);
-          }
+          if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 2.3) { lp.push(arr[i*3],arr[i*3+1],arr[i*3+2], arr[j*3],arr[j*3+1],arr[j*3+2]); }
         }
       }
       const lGeo = new THREE.BufferGeometry();
-      lGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePos), 3));
-      const lMat = new THREE.LineBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.07 });
-      const lines = new THREE.LineSegments(lGeo, lMat);
-      scene.add(lines);
+      lGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lp), 3));
+      scene.add(new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.07 })));
 
-      let mx = 0, my = 0;
-      window.addEventListener('mousemove', e => {
-        mx = (e.clientX / window.innerWidth - 0.5) * 2;
-        my = (e.clientY / window.innerHeight - 0.5) * 2;
-      });
-
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
+      let mx2 = 0, my2 = 0;
+      window.addEventListener('mousemove', e => { mx2 = (e.clientX / window.innerWidth - 0.5) * 2; my2 = (e.clientY / window.innerHeight - 0.5) * 2; });
+      window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
 
       (function tick() {
         requestAnimationFrame(tick);
-        points.rotation.y += 0.00035;
-        points.rotation.x += 0.00012;
-        lines.rotation.y = points.rotation.y;
-        lines.rotation.x = points.rotation.x;
-        camera.position.x += (mx * 0.35 - camera.position.x) * 0.04;
-        camera.position.y += (-my * 0.25 - camera.position.y) * 0.04;
+        points.rotation.y += 0.00035; points.rotation.x += 0.00012;
+        scene.children.forEach(c => { if (c.isLineSegments) { c.rotation.y = points.rotation.y; c.rotation.x = points.rotation.x; } });
+        camera.position.x += (mx2 * 0.35 - camera.position.x) * 0.04;
+        camera.position.y += (-my2 * 0.25 - camera.position.y) * 0.04;
         camera.lookAt(scene.position);
         renderer.render(scene, camera);
       })();
     } else {
-      canvas.style.display = 'none';
+      document.getElementById('hero-canvas').style.display = 'none';
     }
 
-    // HERO ENTRANCE
-    const tl = gsap.timeline({ delay: 0.2 });
+    /* ===== HERO ENTRANCE ===== */
+    const tl = gsap.timeline({ delay: isFirst ? 2.8 : 0.8 });
     tl.to('.hero-logo-img',  { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 0)
-      .to('.hero-badge',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.25)
-      .to('.hero-title',     { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out' }, 0.45)
-      .to('.hero-region',    { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.7)
-      .to('.hero-sub',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.85)
-      .to('.scroll-indicator', { opacity: 1,    duration: 1   }, 1.2);
+      .to('.hero-badge',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.2)
+      .to('.hero-title',     { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out' }, 0.4)
+      .to('.hero-region',    { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.65)
+      .to('.hero-sub',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.8)
+      .to('.scroll-indicator', { opacity: 1,    duration: 1   }, 1.1);
 
-    // SCROLL REVEAL
+    /* ===== SCROLL REVEAL ===== */
     gsap.utils.toArray('.r').forEach(el => {
       gsap.to(el, {
         opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
