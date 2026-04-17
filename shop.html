@@ -250,12 +250,38 @@
     .btn-send-inquiry:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: not-allowed; }
 
     /* ===== MOBILE WINES ===== */
-    #wines-mobile { display: none; padding: 60px 24px 80px; background: #0a0a0a; }
-    .mobile-card { background: #111; border: 1px solid rgba(255,255,255,0.06); padding: 36px 24px; margin-bottom: 20px; }
-    .mobile-bottle { width: 120px; margin: 0 auto 28px; }
-    .mobile-bottle img { width: 100%; filter: drop-shadow(0 16px 32px rgba(0,0,0,0.7)); }
-    .mobile-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin: 10px 0 12px; }
-    .mobile-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.9; margin-bottom: 24px; }
+    #wines-mobile { display: none; background: #0a0a0a; padding-bottom: 80px; }
+    .mobile-track {
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+      padding: 60px 0 40px;
+    }
+    .mobile-track::-webkit-scrollbar { display: none; }
+    .mobile-card {
+      flex: 0 0 85vw; scroll-snap-align: center;
+      background: #111; border: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 28px 32px; margin: 0 8px;
+      position: relative; overflow: hidden;
+    }
+    .mobile-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px; background: linear-gradient(90deg, transparent, rgba(200,169,110,0.4), transparent);
+    }
+    .mobile-card:first-child { margin-left: calc(7.5vw); }
+    .mobile-card:last-child  { margin-right: calc(7.5vw); }
+    .mobile-bottle { width: 100px; margin: 0 auto 28px; }
+    .mobile-bottle img { width: 100%; filter: drop-shadow(0 16px 32px rgba(0,0,0,0.8)); }
+    .mobile-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; margin: 10px 0 12px; }
+    .mobile-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.9; margin-bottom: 24px; }
+    .mobile-dots {
+      display: flex; justify-content: center; gap: 8px; padding: 0 0 8px;
+    }
+    .mobile-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); border: none; cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .mobile-dot.active { background: #c8a96e; transform: scale(1.3); }
     .mobile-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
     .mobile-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; }
 
@@ -373,6 +399,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Story</a></li>
       <li><a href="shop.html" class="active">Shop</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
     </ul>
   </nav>
 
@@ -389,6 +416,7 @@
     <button class="h-dot" data-i="1"></button>
     <button class="h-dot" data-i="2"></button>
     <button class="h-dot" data-i="3"></button>
+    <button class="h-dot" data-i="4"></button>
   </div>
 
   <!-- WINES: HORIZONTAL SCROLL (desktop) -->
@@ -401,7 +429,7 @@
         <div class="scroll-hint">Scroll</div>
         <div class="slide-inner">
           <div class="slide-info">
-            <span class="slide-num">01 / 04</span>
+            <span class="slide-num">01 / 05</span>
             <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
             <p class="slide-label">Flagship · Grand Cuvée</p>
             <h2 class="slide-name">"Luz de Mi Alma"</h2>
@@ -426,7 +454,7 @@
         <span class="slide-bg-num">02</span>
         <div class="slide-inner">
           <div class="slide-info">
-            <span class="slide-num">02 / 04</span>
+            <span class="slide-num">02 / 05</span>
             <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
             <p class="slide-label">Limited Only</p>
             <h2 class="slide-name">Hurricane</h2>
@@ -450,7 +478,7 @@
         <span class="slide-bg-num">03</span>
         <div class="slide-inner">
           <div class="slide-info">
-            <span class="slide-num">03 / 04</span>
+            <span class="slide-num">03 / 05</span>
             <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
             <p class="slide-label">Limited Only</p>
             <h2 class="slide-name">Norte 41°<br>Atlántico</h2>
@@ -475,7 +503,7 @@
         <span class="slide-bg-num">04</span>
         <div class="slide-inner">
           <div class="slide-info">
-            <span class="slide-num">04 / 04</span>
+            <span class="slide-num">04 / 05</span>
             <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
             <p class="slide-label">Limited Only · Collector</p>
             <h2 class="slide-name">112°N</h2>
@@ -495,38 +523,79 @@
         </div>
       </div>
 
+      <!-- 05 Aquel Lugar — AVAILABLE -->
+      <div class="h-slide">
+        <span class="slide-bg-num">05</span>
+        <div class="slide-inner">
+          <div class="slide-info">
+            <span class="slide-num">05 / 05</span>
+            <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
+            <p class="slide-label">Limited Only</p>
+            <h2 class="slide-name">Aquel Lugar</h2>
+            <p class="slide-name-sub">アケル・ルガール ／ あの場所</p>
+            <p class="slide-desc">
+              記憶の中の「あの場所」へと引き戻す一本。
+              熟した洋梨、白い花、微かなスパイスが重なり、
+              柔らかなミネラルとなめらかな酸が静かに長い余韻を紡ぎます。<br><br>
+              スタイル：辛口・ライト〜ミディアムボディ
+            </p>
+            <div class="slide-footer">
+              <div class="slide-price">¥38,500<small>（税込）</small></div>
+              <button class="btn-cart" data-wine="Aquel Lugar" data-price="38500" data-display="¥38,500">Add to Cart</button>
+            </div>
+          </div>
+          <div class="slide-bottle"><img src="images/test2.png" alt="Aquel Lugar"></div>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <!-- WINES: MOBILE -->
   <section id="wines-mobile">
-    <div class="mobile-card r">
-      <div class="mobile-bottle"><img src="images/LUZ DE MI Alma.png" alt="Luz de Mi Alma"></div>
-      <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
-      <h3 class="mobile-name">"Luz de Mi Alma"</h3>
-      <p class="mobile-desc">凛とした酸と海の塩気、長い余韻。年間 50〜150 本の限定グラン・キュヴェ。</p>
-      <div class="mobile-footer"><span class="mobile-price">¥249,000</span><button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button></div>
+    <div class="mobile-track" id="mobile-track">
+      <div class="mobile-card">
+        <div class="mobile-bottle"><img src="images/LUZ DE MI Alma.png" alt="Luz de Mi Alma"></div>
+        <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
+        <h3 class="mobile-name">"Luz de Mi Alma"</h3>
+        <p class="mobile-desc">凛とした酸と海の塩気、長い余韻。年間 50〜150 本の限定グラン・キュヴェ。</p>
+        <div class="mobile-footer"><span class="mobile-price">¥249,000</span><button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button></div>
+      </div>
+      <div class="mobile-card">
+        <div class="mobile-bottle"><img src="images/test1.png" alt="Hurricane"></div>
+        <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
+        <h3 class="mobile-name">Hurricane</h3>
+        <p class="mobile-desc">ライム、青りんご、直線的な酸とシャープなミネラル。</p>
+        <div class="mobile-footer"><span class="mobile-price">¥42,300</span><button class="btn-cart" data-wine="Hurricane" data-price="42300" data-display="¥42,300">Add to Cart</button></div>
+      </div>
+      <div class="mobile-card">
+        <div class="mobile-bottle"><img src="images/test3.png" alt="Norte 41°"></div>
+        <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
+        <h3 class="mobile-name">Norte 41° Atlántico</h3>
+        <p class="mobile-desc">北緯41°の大西洋。グレープフルーツと海風由来のミネラル。</p>
+        <div class="mobile-footer"><span class="mobile-price">¥50,400</span><button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button></div>
+      </div>
+      <div class="mobile-card">
+        <div class="mobile-bottle"><img src="images/test4.png" alt="112°N"></div>
+        <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
+        <h3 class="mobile-name">112°N</h3>
+        <p class="mobile-desc">航海・針路をテーマにしたコレクター向け。フレンチオークと長い余韻。</p>
+        <div class="mobile-footer"><span class="mobile-price">¥65,700</span><button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button></div>
+      </div>
+      <div class="mobile-card">
+        <div class="mobile-bottle"><img src="images/test2.png" alt="Aquel Lugar"></div>
+        <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
+        <h3 class="mobile-name">Aquel Lugar</h3>
+        <p class="mobile-desc">記憶の中の「あの場所」へ。洋梨と白い花、柔らかなミネラルと長い余韻。</p>
+        <div class="mobile-footer"><span class="mobile-price">¥38,500</span><button class="btn-cart" data-wine="Aquel Lugar" data-price="38500" data-display="¥38,500">Add to Cart</button></div>
+      </div>
     </div>
-    <div class="mobile-card r">
-      <div class="mobile-bottle"><img src="images/test1.png" alt="Hurricane"></div>
-      <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
-      <h3 class="mobile-name">Hurricane</h3>
-      <p class="mobile-desc">ライム、青りんご、直線的な酸とシャープなミネラル。</p>
-      <div class="mobile-footer"><span class="mobile-price">¥42,300</span><button class="btn-cart" data-wine="Hurricane" data-price="42300" data-display="¥42,300">Add to Cart</button></div>
-    </div>
-    <div class="mobile-card r">
-      <div class="mobile-bottle"><img src="images/test3.png" alt="Norte 41°"></div>
-      <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
-      <h3 class="mobile-name">Norte 41° Atlántico</h3>
-      <p class="mobile-desc">北緯41°の大西洋。グレープフルーツと海風由来のミネラル。</p>
-      <div class="mobile-footer"><span class="mobile-price">¥50,400</span><button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button></div>
-    </div>
-    <div class="mobile-card r">
-      <div class="mobile-bottle"><img src="images/test4.png" alt="112°N"></div>
-      <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
-      <h3 class="mobile-name">112°N</h3>
-      <p class="mobile-desc">航海・針路をテーマにしたコレクター向け。フレンチオークと長い余韻。</p>
-      <div class="mobile-footer"><span class="mobile-price">¥65,700</span><button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button></div>
+    <div class="mobile-dots" id="mobile-dots">
+      <button class="mobile-dot active" data-mi="0"></button>
+      <button class="mobile-dot" data-mi="1"></button>
+      <button class="mobile-dot" data-mi="2"></button>
+      <button class="mobile-dot" data-mi="3"></button>
+      <button class="mobile-dot" data-mi="4"></button>
     </div>
   </section>
 
@@ -551,6 +620,7 @@
         <ul class="footer-links">
           <li><a href="index.html">Story</a></li>
           <li><a href="shop.html">Shop</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
         </ul>
       </div>
       <div>
@@ -763,6 +833,23 @@
         }
       });
       window.addEventListener('resize', () => ScrollTrigger.refresh());
+    }
+
+    /* ===== MOBILE CAROUSEL DOTS ===== */
+    const mTrack = document.getElementById('mobile-track');
+    const mDots  = document.querySelectorAll('.mobile-dot');
+    if (mTrack) {
+      mTrack.addEventListener('scroll', () => {
+        const cardW = mTrack.querySelector('.mobile-card').offsetWidth + 16;
+        const idx = Math.round(mTrack.scrollLeft / cardW);
+        mDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }, { passive: true });
+      mDots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          const cardW = mTrack.querySelector('.mobile-card').offsetWidth + 16;
+          mTrack.scrollTo({ left: cardW * i, behavior: 'smooth' });
+        });
+      });
     }
 
     /* ===== SCROLL REVEAL ===== */

@@ -68,6 +68,17 @@
       letter-spacing: 2.5px; text-transform: uppercase; transition: color 0.3s;
     }
     .nav-links a:hover, .nav-links a.active { color: #c8a96e; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 2px; margin-left: 28px;
+      background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden;
+    }
+    .lang-btn {
+      background: none; border: none; color: rgba(255,255,255,0.38);
+      font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 500;
+      letter-spacing: 1.5px; padding: 5px 10px; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-btn.active { background: #c8a96e; color: #080808; }
+    .lang-btn:hover:not(.active) { color: rgba(255,255,255,0.75); }
 
     /* ===== HERO ===== */
     #hero {
@@ -204,6 +215,27 @@
       margin-top: 4px;
     }
 
+    /* ===== NOTIFY FORM ===== */
+    .notify-wrap { margin-top: 56px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .notify-label-sm { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 1px; margin-bottom: 16px; }
+    .notify-row { display: flex; }
+    .notify-row input {
+      flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-right: none; color: #fff; padding: 14px 18px;
+      font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none;
+      transition: border-color 0.3s;
+    }
+    .notify-row input:focus { border-color: rgba(200,169,110,0.45); }
+    .notify-row input::placeholder { color: rgba(255,255,255,0.22); }
+    .notify-row button {
+      background: #c8a96e; color: #080808; border: none; padding: 14px 24px;
+      font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+      white-space: nowrap;
+    }
+    .notify-row button:hover { background: #d4b87c; }
+    .notify-success { display: none; font-size: 12px; color: #7dc99a; letter-spacing: 1px; margin-top: 14px; }
+
     /* ===== SHOP CTA ===== */
     #shop-cta { background: #080808; text-align: center; }
     .gold-vline {
@@ -307,7 +339,12 @@
     <ul class="nav-links">
       <li><a href="index.html" class="active">Story</a></li>
       <li><a href="shop.html">Shop</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
     </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="ja">JP</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -318,7 +355,7 @@
       <div class="hero-badge">Spain · Italy · Japan</div>
       <h1 class="hero-title">Nautae<br>Wine Cellar</h1>
       <p class="hero-region">Limited · Handcrafted · Always Evolving</p>
-      <p class="hero-sub">スペインの伝統、イタリアの大地、日本の精神。<br>三つの文化が交差する場所から、ワインの未来を問い続ける。</p>
+      <p class="hero-sub" data-i18n="hero-sub">スペインの伝統、イタリアの大地、日本の精神。<br>三つの文化が交差する場所から、ワインの未来を問い続ける。</p>
     </div>
     <div class="scroll-indicator">
       <span>Scroll</span>
@@ -331,12 +368,12 @@
     <div class="container">
       <div class="quote-wrap r">
         <div class="quote-bar"></div>
-        <p class="quote-text">"ワインは完成品ではない。<br>毎年問い直されるべき、生きた問いかけだ。"</p>
+        <p class="quote-text" data-i18n="quote">"ワインは完成品ではない。<br>毎年問い直されるべき、生きた問いかけだ。"</p>
       </div>
       <div class="story-cols">
         <div>
           <p class="label r">The Designer</p>
-          <p class="body-text r">
+          <p class="body-text r" data-i18n="story-designer">
             Ikuya Odaka——日本人ワインデザイナー。<br><br>
             スペイン・ガリシアの伝統的な醸造技法を軸に、
             イタリアの農場で葡萄栽培を研究し、
@@ -347,7 +384,7 @@
         </div>
         <div>
           <p class="label r">Limited Only</p>
-          <p class="body-text r">
+          <p class="body-text r" data-i18n="story-limited">
             Nautae Wine Cellar のボトルは、毎年限定本数のみ。<br><br>
             新作のリリースにはかならずストーリーが伴う——
             その年の気候、訪れた土地、たどり着いた問い。
@@ -363,8 +400,8 @@
     <div class="terroir-grid">
       <div class="terroir-text">
         <p class="label r">Approach</p>
-        <h2 class="heading r">三つの土地が<br>一本に宿る</h2>
-        <p class="body-text r">
+        <h2 class="heading r" data-i18n="approach-heading">三つの土地が<br>一本に宿る</h2>
+        <p class="body-text r" data-i18n="approach-body">
           スペイン・ガリシアの伝統醸造技法が骨格を作る。
           イタリアの農場で育てた葡萄が果実の記憶を刻む。
           そして日本で行う独自の醸造工程が、
@@ -374,10 +411,10 @@
           Nautae のワインは存在している。
         </p>
         <div class="stats r">
-          <div><span class="stat-num">3</span><span class="stat-label">製造国</span></div>
-          <div><span class="stat-num">100%</span><span class="stat-label">手摘み収穫</span></div>
-          <div><span class="stat-num">年1回</span><span class="stat-label">限定リリース</span></div>
-          <div><span class="stat-num">0</span><span class="stat-label">添加物</span></div>
+          <div><span class="stat-num">3</span><span class="stat-label" data-i18n="stat-countries">製造国</span></div>
+          <div><span class="stat-num">100%</span><span class="stat-label" data-i18n="stat-harvest">手摘み収穫</span></div>
+          <div><span class="stat-num" data-i18n="stat-annual">年1回</span><span class="stat-label" data-i18n="stat-release">限定リリース</span></div>
+          <div><span class="stat-num">0</span><span class="stat-label" data-i18n="stat-additives">添加物</span></div>
         </div>
       </div>
       <div class="terroir-img-wrap r">
@@ -390,17 +427,17 @@
   <section id="challenge">
     <div class="container">
       <p class="label r">The Challenge</p>
-      <h2 class="heading r">既存のワインに<br>問いを立て続ける<br>こと。</h2>
-      <p class="body-text r">
+      <h2 class="heading r" data-i18n="challenge-heading">既存のワインに<br>問いを立て続ける<br>こと。</h2>
+      <p class="body-text r" data-i18n="challenge-body">
         Ikuya Odaka が追うのは「正解」ではなく「問い」だ。
         ワインの常識——産地、品種、製法——を一度疑い、
         三つの文化圏の知恵を掛け合わせることで、
         誰も見たことのない一本を生み出し続ける。
       </p>
       <div class="challenge-items">
-        <div class="challenge-item r">スペインの伝統を継承しながら、イタリア農法・日本の醸造感性で再解釈すること</div>
-        <div class="challenge-item r">毎年、新たなストーリーとともに限定リリース——昨年と同じワインは二度と造らないこと</div>
-        <div class="challenge-item r">販売数を制限し、ワインを"消費物"ではなく"体験の記録"として届け続けること</div>
+        <div class="challenge-item r" data-i18n="challenge-1">スペインの伝統を継承しながら、イタリア農法・日本の醸造感性で再解釈すること</div>
+        <div class="challenge-item r" data-i18n="challenge-2">毎年、新たなストーリーとともに限定リリース——昨年と同じワインは二度と造らないこと</div>
+        <div class="challenge-item r" data-i18n="challenge-3">販売数を制限し、ワインを"消費物"ではなく"体験の記録"として届け続けること</div>
       </div>
     </div>
   </section>
@@ -409,8 +446,8 @@
   <section id="coming-soon" class="section">
     <div class="container">
       <p class="label r" style="text-align:center;">Stores</p>
-      <h2 class="heading r" style="text-align:center;">実店舗、まもなく。</h2>
-      <p class="body-text r" style="text-align:center; margin:0 auto; max-width:480px;">
+      <h2 class="heading r" style="text-align:center;" data-i18n="cs-heading">実店舗、まもなく。</h2>
+      <p class="body-text r" style="text-align:center; margin:0 auto; max-width:480px;" data-i18n="cs-body">
         日本とイタリアに、Nautae のワインを直接手に取れる場所が生まれます。
       </p>
       <div class="cs-stores">
@@ -427,6 +464,15 @@
           <span class="cs-badge">Coming Soon</span>
         </div>
       </div>
+      <div class="notify-wrap r">
+        <p class="notify-label-sm" data-i18n="notify-label">オープン情報・新作リリースをいち早くお届けします</p>
+        <form class="notify-row" id="notify-form" action="https://formspree.io/f/xqewqzzy" method="POST">
+          <input type="email" name="email" placeholder="your@email.com" required>
+          <input type="hidden" name="type" value="notify">
+          <button type="submit">Notify Me</button>
+        </form>
+        <p class="notify-success" id="notify-success">登録ありがとうございます。</p>
+      </div>
     </div>
   </section>
 
@@ -436,7 +482,7 @@
       <div class="gold-vline r"></div>
       <p class="label r" style="text-align:center;">Limited Collection</p>
       <h2 class="heading r" style="text-align:center; max-width:100%;">Our Wines</h2>
-      <p class="body-text r" style="text-align:center; margin:0 auto; max-width:480px;">
+      <p class="body-text r" style="text-align:center; margin:0 auto; max-width:480px;" data-i18n="shop-cta-body">
         毎年限定リリース。今年のストーリーを纏ったコレクションをご覧ください。
       </p>
       <div style="text-align:center" class="r">
@@ -450,13 +496,14 @@
     <div class="footer-main">
       <div class="footer-brand">
         <img src="images/logo white.png" alt="Nautae Wine Cellar">
-        <p class="footer-tagline">ガリシアの大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
+        <p class="footer-tagline" data-i18n="footer-tagline">ガリシアの大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
       </div>
       <div>
         <p class="footer-col-title">Navigate</p>
         <ul class="footer-links">
           <li><a href="index.html">Story</a></li>
           <li><a href="shop.html">Shop</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
         </ul>
       </div>
       <div>
@@ -632,6 +679,74 @@
         scrollTrigger: { trigger: el, start: 'top 87%' }
       });
     });
+
+    /* ===== LANGUAGE TOGGLE ===== */
+    const i18n = {
+      en: {
+        'hero-sub': 'Spanish tradition. Italian terroir. Japanese spirit.<br>From the intersection of three cultures, questioning the future of wine.',
+        'quote': '"Wine is not a finished product.<br>It is a living question — to be asked again every year."',
+        'story-designer': 'Ikuya Odaka — Japanese wine designer.<br><br>Rooted in the traditional winemaking techniques of Galicia, Spain, he researches viticulture on Italian farms and experiments with original fermentation processes in Japan. Crossing three cultural worlds, he relentlessly questions what "advanced wine" truly means.',
+        'story-limited': 'Every Nautae Wine Cellar bottle is released in limited numbers each year.<br><br>Every new release comes with a story — the climate of that year, the lands visited, the questions reached. Each bottle becomes a record of that year\'s exploration.',
+        'approach-heading': 'Three lands,<br>one bottle.',
+        'approach-body': 'The traditional winemaking techniques of Galicia, Spain form the backbone. Grapes nurtured on Italian farms inscribe the memory of fruit. And the original fermentation process carried out in Japan gives texture and depth found nowhere else.<br><br>No process is skipped. Where the craft and wisdom of three nations converge — that is where Nautae wine exists.',
+        'stat-countries': 'Countries',
+        'stat-harvest': 'Hand-harvested',
+        'stat-annual': '1x / yr',
+        'stat-release': 'Annual Release',
+        'stat-additives': 'Additives',
+        'challenge-heading': 'To keep questioning<br>what already exists.',
+        'challenge-body': 'What Ikuya Odaka pursues is not "the answer" but "the question." He questions the conventions of wine — origin, grape variety, method — and by combining the wisdom of three cultural spheres, he continues to create bottles no one has ever seen before.',
+        'challenge-1': 'Inheriting Spanish tradition while reinterpreting through Italian viticulture and Japanese fermentation sensibility',
+        'challenge-2': 'Every year, a limited release with a new story — the same wine is never made twice',
+        'challenge-3': 'Limiting sales to deliver wine not as a commodity, but as a record of experience',
+        'cs-heading': 'Physical Stores,<br>Coming Soon.',
+        'cs-body': 'A place to hold Nautae wines in your hands is coming to Japan and Italy.',
+        'notify-label': 'Be the first to know about store openings and new releases',
+        'shop-cta-body': 'Annual limited releases. Explore this year\'s collection.',
+        'footer-tagline': 'From the rugged Atlantic coast of Galicia,<br>only a handful of barrels are born each year.'
+      }
+    };
+    const originals = {};
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      originals[el.dataset.i18n] = el.innerHTML;
+    });
+    let currentLang = sessionStorage.getItem('nwc_lang') || 'ja';
+    function applyLang(lang) {
+      currentLang = lang;
+      sessionStorage.setItem('nwc_lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        el.innerHTML = lang === 'en' && i18n.en[key] ? i18n.en[key] : originals[key];
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+    }
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+    if (currentLang === 'en') applyLang('en');
+
+    /* ===== NOTIFY FORM ===== */
+    const notifyForm = document.getElementById('notify-form');
+    if (notifyForm) {
+      notifyForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = notifyForm.querySelector('button');
+        btn.textContent = '...';
+        try {
+          const res = await fetch(notifyForm.action, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: new FormData(notifyForm)
+          });
+          if (res.ok) {
+            notifyForm.style.display = 'none';
+            document.getElementById('notify-success').style.display = 'block';
+          } else { btn.textContent = 'Retry'; }
+        } catch { btn.textContent = 'Retry'; }
+      });
+    }
   </script>
 </body>
 </html>
