@@ -630,7 +630,7 @@
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    /* ===== THREE.JS CONSTELLATION ===== */
+    /* ===== THREE.JS GERSTNER OCEAN ===== */
     if (window.innerWidth >= 768) {
       const canvas = document.getElementById('hero-canvas');
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
@@ -638,44 +638,121 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.z = 5;
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+      camera.position.set(0, 2.2, 5.5);
+      camera.lookAt(0, 0.4, -8);
 
-      const COUNT = 480;
-      const pos = new Float32Array(COUNT * 3);
-      const arr = [];
-      for (let i = 0; i < COUNT; i++) {
-        const x = (Math.random() - 0.5) * 14, y = (Math.random() - 0.5) * 14, z = (Math.random() - 0.5) * 7;
-        pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z; arr.push(x, y, z);
-      }
-      const pGeo = new THREE.BufferGeometry();
-      pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      const pMat = new THREE.PointsMaterial({ color: 0xd4a853, size: 0.032, transparent: true, opacity: 0.7 });
-      const points = new THREE.Points(pGeo, pMat);
-      scene.add(points);
+      /* ── Vertex Shader ── */
+      const vertexShader = `
+        #define PI 3.14159265358979323846
+        uniform float uTime;
+        uniform vec4  uWave0, uWave1, uWave2, uWave3;
+        varying vec3  vWorldPos;
+        varying vec3  vNormal;
+        varying float vElevation;
 
-      const lp = [];
-      for (let i = 0; i < COUNT; i++) {
-        for (let j = i + 1; j < COUNT; j++) {
-          const dx = arr[i*3]-arr[j*3], dy = arr[i*3+1]-arr[j*3+1], dz = arr[i*3+2]-arr[j*3+2];
-          if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 2.3) { lp.push(arr[i*3],arr[i*3+1],arr[i*3+2], arr[j*3],arr[j*3+1],arr[j*3+2]); }
+        vec3 gerstner(vec4 w, vec3 p, inout vec3 tang, inout vec3 bino) {
+          float k  = 2.0 * PI / w.w;
+          float c  = sqrt(9.81 / k);
+          vec2  d  = normalize(w.xy);
+          float f  = k * (dot(d, p.xz) - c * uTime);
+          float a  = w.z / k;
+          tang += vec3(-d.x*d.x*(w.z*sin(f)),  d.x*(w.z*cos(f)), -d.x*d.y*(w.z*sin(f)));
+          bino += vec3(-d.x*d.y*(w.z*sin(f)),  d.y*(w.z*cos(f)), -d.y*d.y*(w.z*sin(f)));
+          return vec3(d.x*(a*cos(f)), a*sin(f), d.y*(a*cos(f)));
         }
-      }
-      const lGeo = new THREE.BufferGeometry();
-      lGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lp), 3));
-      scene.add(new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.07 })));
 
-      let mx2 = 0, my2 = 0;
-      window.addEventListener('mousemove', e => { mx2 = (e.clientX / window.innerWidth - 0.5) * 2; my2 = (e.clientY / window.innerHeight - 0.5) * 2; });
-      window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        void main() {
+          vec3 p    = position;
+          vec3 tang = vec3(1.0, 0.0, 0.0);
+          vec3 bino = vec3(0.0, 0.0, 1.0);
+          p += gerstner(uWave0, position, tang, bino);
+          p += gerstner(uWave1, position, tang, bino);
+          p += gerstner(uWave2, position, tang, bino);
+          p += gerstner(uWave3, position, tang, bino);
+          vNormal    = normalize(cross(bino, tang));
+          vWorldPos  = (modelMatrix * vec4(p, 1.0)).xyz;
+          vElevation = p.y;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+        }
+      `;
 
+      /* ── Fragment Shader ── */
+      const fragmentShader = `
+        uniform vec3  uLightPos;
+        varying vec3  vWorldPos;
+        varying vec3  vNormal;
+        varying float vElevation;
+
+        void main() {
+          /* Water base colour — near-black ocean */
+          vec3 deep    = vec3(0.008, 0.020, 0.052);
+          vec3 surface = vec3(0.014, 0.044, 0.088);
+          vec3 wc = mix(deep, surface, clamp(vElevation * 1.6 + 0.5, 0.0, 1.0));
+
+          /* Lighting vectors */
+          vec3 N = normalize(vNormal);
+          vec3 L = normalize(uLightPos - vWorldPos);
+          vec3 V = normalize(cameraPosition - vWorldPos);
+          vec3 H = normalize(L + V);
+
+          /* Sharp gold specular + soft glow */
+          float spec = pow(max(dot(N, H), 0.0), 512.0);
+          float soft = pow(max(dot(N, H), 0.0), 32.0) * 0.06;
+          vec3 gold  = vec3(0.78, 0.66, 0.43);
+
+          /* Fresnel — edge glow */
+          float fr = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 4.0);
+
+          vec3 col = wc;
+          col += gold * spec * 3.5;
+          col += gold * soft;
+          col += surface * fr * 0.20;
+
+          /* Depth fog toward horizon */
+          float dist = length(vWorldPos - cameraPosition);
+          float fog  = 1.0 - exp(-max(0.0, dist - 2.0) * 0.045);
+          col = mix(col, vec3(0.024, 0.024, 0.056), clamp(fog, 0.0, 1.0));
+
+          gl_FragColor = vec4(col, 0.96);
+        }
+      `;
+
+      const uniforms = {
+        uTime:     { value: 0.0 },
+        uLightPos: { value: new THREE.Vector3(4, 14, -2) },
+        /* dir.x, dir.y, steepness, wavelength — all directed toward camera (+z) */
+        uWave0:    { value: new THREE.Vector4( 0.15,  0.99, 0.22, 7.0) },
+        uWave1:    { value: new THREE.Vector4(-0.40,  0.92, 0.14, 4.5) },
+        uWave2:    { value: new THREE.Vector4( 0.55,  0.83, 0.10, 3.0) },
+        uWave3:    { value: new THREE.Vector4(-0.12,  0.99, 0.07, 1.8) },
+      };
+
+      const geo = new THREE.PlaneGeometry(40, 40, 220, 220);
+      geo.rotateX(-Math.PI / 2);
+      const ocean = new THREE.Mesh(geo, new THREE.ShaderMaterial({
+        vertexShader, fragmentShader, uniforms, transparent: true
+      }));
+      scene.add(ocean);
+
+      let omx = 0, omy = 0;
+      window.addEventListener('mousemove', e => {
+        omx = (e.clientX / window.innerWidth  - 0.5) * 2;
+        omy = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      const oceanClock = new THREE.Clock();
       (function tick() {
         requestAnimationFrame(tick);
-        points.rotation.y += 0.00035; points.rotation.x += 0.00012;
-        scene.children.forEach(c => { if (c.isLineSegments) { c.rotation.y = points.rotation.y; c.rotation.x = points.rotation.x; } });
-        camera.position.x += (mx2 * 0.35 - camera.position.x) * 0.04;
-        camera.position.y += (-my2 * 0.25 - camera.position.y) * 0.04;
-        camera.lookAt(scene.position);
+        uniforms.uTime.value = oceanClock.getElapsedTime() * 0.65;
+        camera.position.x += (omx * 0.5 - camera.position.x) * 0.025;
+        camera.position.y  = 2.2 + omy * -0.2;
+        camera.lookAt(camera.position.x * 0.15, 0.4, -8);
         renderer.render(scene, camera);
       })();
     } else {
