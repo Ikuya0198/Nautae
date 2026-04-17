@@ -1,426 +1,451 @@
-<section class="faro-page" style="font-family: 'Helvetica Neue','Hiragino Sans','Noto Sans JP',system-ui,sans-serif; background:#111; color:#fff; padding:0; margin:0;">
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nautae Wine Cellar — Rías Baixas, Galicia</title>
+  <meta name="description" content="ガリシアの大西洋岸から生まれた、限定手造りワイン。Nautae Wine Cellar.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    .faro-page h1, .faro-page h2, .faro-page h3, .faro-page p {
-      margin: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: #080808; color: #fff; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 48px;
+      transition: background 0.4s, padding 0.4s, border-color 0.4s;
     }
-    .faro-inner {
-      max-width: 1100px;
-      margin: 0 auto;
+    nav.scrolled {
+      background: rgba(8,8,8,0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 14px 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .faro-section {
-      padding: 80px 6%;
+    .nav-logo img { height: 38px; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.65);
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      transition: color 0.3s;
     }
+    .nav-links a:hover, .nav-links a.active { color: #c8a96e; }
 
     /* HERO */
-    .faro-hero {
-      text-align: center;
-      padding: 140px 20px;
-      /* EDIT HERE: トップの海の写真 */
-      background:url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-      text-shadow:0 0 25px rgba(0,0,0,0.8);
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; overflow: hidden;
+      background: #06060e;
     }
-    .faro-hero-title {
-      font-size: 56px;
-      font-weight: 400;
-      letter-spacing: 4px;
-      line-height: 1.2;
+    #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-content { position: relative; z-index: 1; padding: 0 24px; }
+    .hero-logo-img { width: 80px; margin: 0 auto 32px; opacity: 0; }
+    .hero-badge {
+      display: inline-block; font-size: 10px; letter-spacing: 4px;
+      text-transform: uppercase; color: #c8a96e;
+      border: 1px solid rgba(200,169,110,0.35);
+      padding: 6px 18px; margin-bottom: 36px; opacity: 0;
     }
-    .faro-hero-region {
-      font-size: 22px;
-      font-weight: 300;
-      margin-top: 10px;
-      letter-spacing: 2px;
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(54px, 8.5vw, 104px);
+      font-weight: 300; letter-spacing: 8px; line-height: 1;
+      opacity: 0;
     }
-    .faro-hero-sub {
-      font-size: 17px;
-      margin-top: 26px;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.9;
+    .hero-region {
+      font-size: 11px; font-weight: 300; letter-spacing: 4px;
+      text-transform: uppercase; color: rgba(255,255,255,0.38);
+      margin-top: 18px; opacity: 0;
     }
-    .hero-center-fix {
-      text-align: center !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
-      display: block;
-      width: 100%;
+    .hero-sub {
+      font-size: 14px; font-weight: 300;
+      color: rgba(255,255,255,0.5); line-height: 2;
+      margin-top: 32px; max-width: 420px;
+      margin-left: auto; margin-right: auto; opacity: 0;
+    }
+    .scroll-indicator {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0; z-index: 1;
+    }
+    .scroll-indicator span {
+      font-size: 9px; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+    }
+    .scroll-line {
+      width: 1px; height: 52px;
+      position: relative; overflow: hidden;
+      background: rgba(200,169,110,0.15);
+    }
+    .scroll-line::after {
+      content: ''; position: absolute; top: -100%; left: 0;
+      width: 100%; height: 100%; background: #c8a96e;
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDown { 0% { top: -100%; } 100% { top: 100%; } }
+
+    /* COMMON */
+    .section { padding: 120px 48px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .label {
+      font-size: 10px; letter-spacing: 4px;
+      text-transform: uppercase; color: #c8a96e; margin-bottom: 20px;
+    }
+    .heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4.5vw, 60px);
+      font-weight: 300; line-height: 1.2; margin-bottom: 32px;
+    }
+    .body-text {
+      font-size: 15px; line-height: 2;
+      color: rgba(255,255,255,0.6);
+    }
+    .r { opacity: 0; transform: translateY(28px); }
+
+    /* STORY */
+    #story { background: #0c0c0c; }
+    .quote-wrap {
+      display: flex; gap: 36px; align-items: flex-start;
+      margin-bottom: 80px;
+    }
+    .quote-bar { flex-shrink: 0; width: 2px; background: #c8a96e; align-self: stretch; min-height: 80px; }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 3.2vw, 42px);
+      font-weight: 300; font-style: italic;
+      line-height: 1.55; color: rgba(255,255,255,0.85);
+    }
+    .story-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+
+    /* TERROIR */
+    #terroir { background: #111; padding: 0; }
+    .terroir-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .terroir-text { padding: 100px 64px; }
+    .terroir-img-wrap { overflow: hidden; }
+    .terroir-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      min-height: 640px;
+      filter: brightness(0.78) saturate(0.85);
+      transition: transform 0.9s ease;
+    }
+    .terroir-img-wrap:hover img { transform: scale(1.04); }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 52px; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 44px; font-weight: 300; color: #c8a96e;
+      display: block; line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.38); margin-top: 8px; display: block;
     }
 
-    .faro-heading {
-      font-size: 34px;
-      font-weight: 300;
-      text-align:center;
-      margin-bottom: 30px;
+    /* CHALLENGE */
+    #challenge {
+      position: relative;
+      background: url('images/wine4.jpg') center/cover no-repeat;
+      padding: 160px 48px;
     }
-    .faro-bodytext {
-      font-size: 18px;
-      line-height: 1.9;
-      color:#ddd;
+    #challenge::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(4,4,12,0.95) 0%, rgba(4,4,12,0.72) 100%);
     }
-    .faro-center {
-      text-align:center;
+    #challenge .container { position: relative; z-index: 1; max-width: 700px; }
+    .challenge-items { margin-top: 44px; display: flex; flex-direction: column; gap: 20px; }
+    .challenge-item {
+      display: flex; align-items: flex-start; gap: 20px;
+      font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.8;
     }
-
-    /* Terroir section */
-    .faro-terroir-img {
-      width:100%;
-      max-width: 600px;
-      border-radius:10px;
-      box-shadow:0 0 25px rgba(0,0,0,0.7);
-      display:block;
-      margin:0 auto 30px auto;
+    .challenge-item::before {
+      content: ''; flex-shrink: 0; width: 28px; height: 1px;
+      background: #c8a96e; margin-top: 13px;
     }
 
-    /* Wines section */
-    .wine-list {
-      display:flex;
-      flex-direction:column;
-      gap:50px;
+    /* SHOP CTA */
+    #shop-cta { background: #080808; text-align: center; }
+    .gold-vline {
+      width: 1px; height: 72px;
+      background: linear-gradient(to bottom, transparent, #c8a96e, transparent);
+      margin: 0 auto 52px;
     }
-    .wine-block {
-      display:flex;
-      flex-wrap:wrap;
-      gap:30px;
-      align-items:flex-start;
+    .btn-outline {
+      display: inline-block; margin-top: 44px;
+      padding: 16px 52px; font-size: 11px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase;
+      border: 1px solid #c8a96e; color: #c8a96e;
+      transition: all 0.35s ease;
     }
-    .wine-img-wrap {
-      flex:0 0 260px;
-      text-align:center;
-    }
-    .wine-img {
-      width:100%;
-      max-width:260px;
-      border-radius:10px;
-      box-shadow:0 0 25px rgba(0,0,0,0.6);
-    }
-    .wine-text {
-      flex:1;
-      min-width:260px;
-    }
-    .wine-title {
-      font-size:26px;
-      font-weight:300;
-      margin-bottom:8px;
-    }
-    .wine-desc {
-      font-size:16px;
-      line-height:1.9;
-      color:#ddd;
-      margin-bottom:16px;
-    }
-    .wine-meta {
-      font-size:15px;
-      color:#ccc;
-      line-height:1.8;
-    }
-    .wine-price-line {
-      margin-top:4px;
-    }
-    .wine-price-line strong {
-      font-weight:400;
-    }
-    .wine-price-original {
-      text-decoration: line-through;
-      opacity:0.7;
-      margin-right:8px;
-    }
+    .btn-outline:hover { background: #c8a96e; color: #080808; }
 
-    /* Cellar image */
-    .cellar-img {
-      width: 85%;
-      max-width: 520px;
-      border-radius: 12px;
-      box-shadow:0 0 25px rgba(0,0,0,0.75);
-      margin-bottom: 40px;
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
     }
+    footer img { height: 30px; opacity: 0.4; }
+    .footer-text { font-size: 11px; color: rgba(255,255,255,0.22); letter-spacing: 1px; }
 
-    /* Access section */
-    .faro-access-btn {
-      color:#fff;
-      padding:14px 40px;
-      border:1px solid #fff;
-      text-decoration:none;
-      letter-spacing:2px;
-      font-size:14px;
-      display:inline-block;
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .story-cols { grid-template-columns: 1fr; gap: 40px; }
+      .terroir-grid { grid-template-columns: 1fr; }
+      .terroir-text { padding: 64px 24px; }
+      .terroir-img-wrap img { min-height: 380px; }
     }
-    .limited-bg {
-      /* EDIT HERE: Limited Access 用の背景画像 */
-      background:url("images/wine4.jpg")
-                 center/cover no-repeat;
-      background-attachment: fixed;
-      padding:120px 6%;
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
-      .faro-section {
-        padding:60px 6%;
-      }
-      .faro-hero {
-        padding: 110px 16px;
-      }
-      .faro-hero-title {
-        font-size:34px;
-        letter-spacing:2px;
-      }
-      .faro-hero-region {
-        font-size:18px;
-      }
-      .faro-hero-sub {
-        font-size:15px;
-      }
-      .wine-block {
-        flex-direction:column;
-        align-items:center;
-      }
-      .wine-text {
-        text-align:left;
-      }
-      .limited-bg {
-        background-attachment: scroll;
-        padding:90px 6%;
-      }
+      nav, nav.scrolled { padding: 18px 24px; }
+      .nav-links { gap: 22px; }
+      .section { padding: 80px 24px; }
+      #challenge { background-attachment: scroll; padding: 100px 24px; }
+      footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
     }
   </style>
+</head>
+<body>
 
-  <!-- Hero Section -->
-  <div class="faro-hero">
-    <h1 class="faro-hero-title">
-      Nautae Wine Cellar
-    </h1>
-    <p class="faro-hero-region">
-      Rías Baixas, Galicia
-    </p>
-    <p class="faro-hero-sub hero-center-fix">
-      ガリシアの荒々しい大西洋岸に、ひとつの静かな灯台が立っている。<br>
-      その足元の小さなセラーで、ほんのわずかな樽だけが、<br>
-      市場ではなく、手渡しで届けるためだけのワインとして静かに造られている。
-    </p>
-  </div>
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo"><img src="images/logo white.png" alt="Nautae Wine Cellar"></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Story</a></li>
+      <li><a href="shop.html">Shop</a></li>
+    </ul>
+  </nav>
 
-  <!-- Story / Philosophy -->
-  <section class="faro-section">
-    <div class="faro-inner faro-center">
-      <h2 class="faro-heading">静かな時間と、ひとつの約束。</h2>
-      <p class="faro-bodytext">
-        スペイン・ガリシア地方 Rías Baixas。<br>
-        大西洋から吹きつける風と霧が、葡萄と人の時間をゆっくりと育てていく土地。<br><br>
-
-        Nautae Wine Cellar の静かなセラーでは、<br>
-        商業的な量産ではなく、<br>
-        <strong>特別な人にだけ手渡されるためのワイン</strong>だけが静かに醸されています。<br><br>
-
-        私たちのボトルは、ほとんど店頭に並ぶことはありません。<br>
-        友人へ、パートナー様へ、そして最愛の人へ。<br>
-        誰かの人生の節目にそっと寄り添うためだけに、<br>
-        今日も樽の中で眠り続けています。
-      </p>
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+      <img src="images/logo white.png" alt="Nautae" class="hero-logo-img">
+      <div class="hero-badge">Rías Baixas · Galicia · España</div>
+      <h1 class="hero-title">Nautae<br>Wine Cellar</h1>
+      <p class="hero-region">Handcrafted · Limited · Atlantic</p>
+      <p class="hero-sub">ガリシアの荒々しい大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- Terroir & Winemaking -->
-  <section class="faro-section" style="background:#151515;">
-    <div class="faro-inner faro-center">
-      <h2 class="faro-heading">Rías Baixas の葡萄と、静かな造り</h2>
-
-      <!-- EDIT HERE: Rías Baixas の葡萄畑の写真URLに差し替え -->
-      <img src="images/wine3.jpg"
-           alt="Rías Baixas Vineyard"
-           class="faro-terroir-img">
-
-      <p class="faro-bodytext">
-        使用する葡萄は、Rías Baixas の中でもごく限られた区画のみ。<br>
-        大西洋の潮風を真正面から受ける畑で育つ Albariño を中心に、<br>
-        花崗岩質のミネラル豊富な土壌と、海に近い冷涼な気候が<br>
-        きわめて高い酸と塩味を帯びたニュアンスをもたらします。
-      </p>
-      <p class="faro-bodytext" style="margin-top:18px;">
-        収穫はすべて<strong>手摘み</strong>。小さなケースで静かにセラーへ運ばれ、<br>
-        果実の抽出の際には<strong>搾汁率を意図的に低く</strong>抑えることで、<br>
-        皮由来の渋みや粗さを一切出さないようにしています。
-      </p>
-      <p class="faro-bodytext" style="margin-top:18px;">
-        可能な限り<strong>機械による処理を排除</strong>し、低温下でやさしく圧搾。<br>
-        発酵には畑由来の<strong>自然酵母</strong>だけを用い、<br>
-        補糖・補酸・香料などの添加は行いません。
-      </p>
-      <p class="faro-bodytext" style="margin-top:18px;">
-        こうして生まれるワインは、<br>
-        研ぎ澄まされた酸と、海水の飛沫や濡れた花崗岩を思わせる<br>
-        <strong>塩味とミネラル感</strong>を長い余韻として残します。<br>
-        Nautae Wine Cellar のワインは、テクニックではなく、<br>
-        「場所」と「時間」をそのままボトルに閉じ込めることを目指しています。
-      </p>
-    </div>
-  </section>
-
-  <!-- Wines: 4 vertical blocks, same layout -->
-  <section class="faro-section" style="background:#181818;">
-    <div class="faro-inner">
-      <h2 class="faro-heading">Wines of Nautae Wine Cellar</h2>
-
-      <div class="wine-list">
-
-        <!-- Luz de Mi Alma -->
-        <div class="wine-block">
-          <div class="wine-img-wrap">
-            <!-- EDIT HERE: Luz de Mi Alma のボトル画像URLに差し替え -->
-            <img src="images/LUZ DE MI Alma.png"
-                 alt="Luz de Mi Alma Bottle"
-                 class="wine-img">
-          </div>
-          <div class="wine-text">
-            <h3 class="wine-title">
-              “Luz de Mi Alma”
-              <span style="font-size:14px; color:#aaa; margin-left:6px;">（ルス・デ・ミ・アルマ：私の魂の光）</span>
-            </h3>
-            <p class="wine-desc">
-              Nautae Wine Cellar の頂点に立つグラン・キュヴェ。<br>
-              “Luz de Mi Alma” は、ワイナリーの哲学と個人的な物語を<br>
-              すべて注ぎ込んだ、象徴的な一本です。<br><br>
-              香りには、レモンピールや白桃、白い花、<br>
-              そして雨上がりの石畳を思わせるミネラルのニュアンス。<br>
-              口に含むと、凛とした酸が背骨をつくり、<br>
-              海の塩気を連想させる塩味と、ほのかなアーモンドのニュアンスが<br>
-              長い余韻となって静かに続きます。
-            </p>
-            <p class="wine-meta">
-              生産本数：年間 50〜150 本<br>
-              スタイル：辛口・フルボディ寄りのホワイト（長期熟成ポテンシャル）<br>
-              テイスティングの目安：10〜12℃、大ぶりの白ワイングラスにて
-            </p>
-            <p class="wine-meta wine-price-line">
-              販売価格：<strong>¥249,000</strong>
-            </p>
-          </div>
+  <!-- STORY -->
+  <section id="story" class="section">
+    <div class="container">
+      <div class="quote-wrap r">
+        <div class="quote-bar"></div>
+        <p class="quote-text">"市場のためではなく、<br>手渡しで届けるためだけのワイン。"</p>
+      </div>
+      <div class="story-cols">
+        <div>
+          <p class="label r">Our Story</p>
+          <p class="body-text r">
+            スペイン・ガリシア地方 Rías Baixas。大西洋から吹きつける風と霧が、
+            葡萄と人の時間をゆっくりと育てていく土地。<br><br>
+            Nautae Wine Cellar は、商業的な量産を選ばず、
+            特別な人にだけ届けるためのワインを静かに醸し続けています。
+          </p>
         </div>
-
-        <!-- Norte 1022 -->
-        <div class="wine-block">
-          <div class="wine-img-wrap">
-            <!-- EDIT HERE: Norte 1022 のボトル画像URLに差し替え -->
-            <img src="images/test1.png"
-                 alt="Hurricane Bottle"
-                 class="wine-img">
-          </div>
-          <div class="wine-text">
-            <h3 class="wine-title">Hurricane</h3>
-            <p class="wine-desc">
-              北（Norte）と「1022」という数字の組み合わせは、<br>
-              北風・北の海流・ある一日の記憶を暗示させる、知的な一本。<br><br>
-              香りはライム、青りんご、白い花。<br>
-              Luz de Mi Alma よりもわずかに軽やかで、直線的な酸と<br>
-              シャープなミネラルが際立つスタイルです。
-            </p>
-            <p class="wine-meta">
-              スタイル：辛口・ミディアムボディのホワイト
-            </p>
-            <p class="wine-meta wine-price-line">
-              参考価格：
-              <span class="wine-price-original">¥47,000</span>
-              <strong>¥42,300（10% OFF）</strong>
-            </p>
-          </div>
+        <div>
+          <p class="label r">Philosophy</p>
+          <p class="body-text r">
+            私たちのボトルは、ほとんど店頭に並ぶことはありません。
+            友人へ、パートナー様へ、そして最愛の人へ。<br><br>
+            誰かの人生の節目にそっと寄り添うためだけに、
+            今日も樽の中で静かに眠り続けています。
+          </p>
         </div>
-
-        <!-- 41° Atlántico -->
-        <div class="wine-block">
-          <div class="wine-img-wrap">
-            <!-- EDIT HERE: 41° Atlántico のボトル画像URLに差し替え -->
-            <img src="images/test3.png"
-                 alt="41° Atlántico Bottle"
-                 class="wine-img">
-          </div>
-          <div class="wine-text">
-            <h3 class="wine-title">Norte 41° Atlántico</h3>
-            <p class="wine-desc">
-              北緯 41°、大西洋。<br>
-              地図上の一点をワイン名にしたこのキュヴェは、<br>
-              テロワールそのものにフォーカスした海洋ワインです。<br><br>
-              グレープフルーツ、洋梨、アプリコットのアロマに、<br>
-              海風由来の塩気と、濡れた花崗岩のようなミネラル。<br>
-              心地よいボリューム感とフレッシュさを兼ね備えています。
-            </p>
-            <p class="wine-meta">
-              スタイル：辛口・ミディアム〜フルボディのホワイト
-            </p>
-            <p class="wine-meta wine-price-line">
-              参考価格：
-              <span class="wine-price-original">¥56,000</span>
-              <strong>¥50,400（10% OFF）</strong>
-            </p>
-          </div>
-        </div>
-
-        <!-- 112°N -->
-        <div class="wine-block">
-          <div class="wine-img-wrap">
-            <!-- EDIT HERE: 112°N のボトル画像URLに差し替え -->
-            <img src="images/test4.png"
-                 alt="112°N Bottle"
-                 class="wine-img">
-          </div>
-          <div class="wine-text">
-            <h3 class="wine-title">112°N</h3>
-            <p class="wine-desc">
-              ミニマルな記号だけで構成された、コレクター向けの一本。<br>
-              角度と方位を想起させる「112°N」は、<br>
-              航海・針路・決断をテーマにしたコンセプトワインです。<br><br>
-              より凝縮感のある果実味と、熟した白桃やネクタリン、<br>
-              かすかなハーブとスモークのニュアンス。<br>
-              重厚なフレンチオークが、海のミネラル感に陰影を与え、<br>
-              非常に長い余韻を生み出します。
-            </p>
-            <p class="wine-meta">
-              スタイル：辛口・フルボディのホワイト（熟成向き）
-            </p>
-            <p class="wine-meta wine-price-line">
-              参考価格：
-              <span class="wine-price-original">¥73,000</span>
-              <strong>¥65,700（10% OFF）</strong>
-            </p>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
 
-  <!-- Cellar Philosophy -->
-  <section class="faro-section" style="background:#181818;">
-    <div class="faro-inner faro-center">
-
-      <!-- EDIT HERE：セラー写真をここに差し替え -->
-      <img src="images/wine5.jpg"
-           class="cellar-img" alt="Cellar image">
-
-      <h2 class="faro-heading">静かなセラーの哲学</h2>
-      <p class="faro-bodytext">
-        葡萄は単一またはごく少数の契約畑より、年間生産本数を限定して確保。<br>
-        小さな樽と静かな地下室だけが、私たちの“工場”です。<br><br>
-
-        詳細なスペックやテクニカルデータを語りすぎることよりも、<br>
-        グラスの中で何が起きるかを最優先に考える。<br>
-        それが Nautae Wine Cellar の哲学です。
-      </p>
+  <!-- TERROIR -->
+  <section id="terroir">
+    <div class="terroir-grid">
+      <div class="terroir-text">
+        <p class="label r">Terroir</p>
+        <h2 class="heading r">Rías Baixas の<br>葡萄と、静かな造り</h2>
+        <p class="body-text r">
+          使用する葡萄は、Rías Baixas の中でもごく限られた区画のみ。
+          大西洋の潮風を真正面から受ける畑で育つ Albariño を中心に、
+          花崗岩質のミネラル豊富な土壌と海に近い冷涼な気候が、
+          きわめて高い酸と塩味のニュアンスをもたらします。<br><br>
+          収穫はすべて手摘み。自然酵母のみで発酵させ、
+          補糖・補酸・香料などの添加は一切行いません。
+        </p>
+        <div class="stats r">
+          <div>
+            <span class="stat-num">41°N</span>
+            <span class="stat-label">北緯</span>
+          </div>
+          <div>
+            <span class="stat-num">100%</span>
+            <span class="stat-label">手摘み収穫</span>
+          </div>
+          <div>
+            <span class="stat-num">&lt;200</span>
+            <span class="stat-label">年間最大本数</span>
+          </div>
+          <div>
+            <span class="stat-num">0</span>
+            <span class="stat-label">添加物</span>
+          </div>
+        </div>
+      </div>
+      <div class="terroir-img-wrap r">
+        <img src="images/wine3.jpg" alt="Rías Baixas Vineyard">
+      </div>
     </div>
   </section>
 
-  <!-- Access / Purchase -->
-  <section class="faro-section limited-bg">
-    <div class="faro-inner faro-center">
-      <h2 class="faro-heading">Limited Access Only</h2>
-      <p class="faro-bodytext" style="font-size:17px; max-width:720px; margin:0 auto 40px auto;">
-        本ワイナリーのボトルは、原則として一般販売を行っておりません。<br>
-        招待を受けた方、および特別なご案内（Invitation Code）をお持ちの方のみ、下記よりお問い合わせいただけます。
+  <!-- CHALLENGE -->
+  <section id="challenge">
+    <div class="container">
+      <p class="label r">Our Challenge</p>
+      <h2 class="heading r">量産の時代に、<br>手渡しの文化を<br>守り続けること。</h2>
+      <p class="body-text r">
+        世界中でワインの大量生産が進む中、私たちはあえて逆の道を選びます。
+        規模を追わず、深度を追う。一本一本に物語を込め、
+        届ける相手の顔を思い浮かべながら造る。
       </p>
-      <a href="#" class="faro-access-btn">
-        SPECIAL INQUIRY
-      </a>
+      <div class="challenge-items">
+        <div class="challenge-item r">量産ラインではなく、小さな樽とセラーだけを"工場"にすること</div>
+        <div class="challenge-item r">ガリシアの海風と石畳が育てた、唯一無二のテロワールをボトルに閉じ込めること</div>
+        <div class="challenge-item r">数字ではなく、グラスの中で何が起きるかだけを最優先に考え続けること</div>
+      </div>
     </div>
   </section>
 
-</section>
+  <!-- SHOP CTA -->
+  <section id="shop-cta" class="section">
+    <div class="container">
+      <div class="gold-vline r"></div>
+      <p class="label r" style="text-align:center;">Limited Collection</p>
+      <h2 class="heading r" style="text-align:center; max-width:100%;">Our Wines</h2>
+      <p class="body-text r" style="text-align:center; margin:0 auto; max-width:480px;">
+        年間生産本数が限られた、特別なコレクションをご覧ください。
+      </p>
+      <div style="text-align:center" class="r">
+        <a href="shop.html" class="btn-outline">View Collection</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <img src="images/logo white.png" alt="Nautae Wine Cellar">
+    <p class="footer-text">© 2025 Nautae Wine Cellar · Rías Baixas, Galicia</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // NAV
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // THREE.JS CONSTELLATION
+    const isMobile = window.innerWidth < 768;
+    const canvas = document.getElementById('hero-canvas');
+
+    if (!isMobile) {
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 5;
+
+      const COUNT = 480;
+      const pos = new Float32Array(COUNT * 3);
+      const arr = [];
+      for (let i = 0; i < COUNT; i++) {
+        const x = (Math.random() - 0.5) * 14;
+        const y = (Math.random() - 0.5) * 14;
+        const z = (Math.random() - 0.5) * 7;
+        pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z;
+        arr.push(x, y, z);
+      }
+      const pGeo = new THREE.BufferGeometry();
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const pMat = new THREE.PointsMaterial({ color: 0xd4a853, size: 0.032, transparent: true, opacity: 0.7 });
+      const points = new THREE.Points(pGeo, pMat);
+      scene.add(points);
+
+      const linePos = [];
+      for (let i = 0; i < COUNT; i++) {
+        for (let j = i + 1; j < COUNT; j++) {
+          const dx = arr[i*3]-arr[j*3], dy = arr[i*3+1]-arr[j*3+1], dz = arr[i*3+2]-arr[j*3+2];
+          if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 2.3) {
+            linePos.push(arr[i*3],arr[i*3+1],arr[i*3+2], arr[j*3],arr[j*3+1],arr[j*3+2]);
+          }
+        }
+      }
+      const lGeo = new THREE.BufferGeometry();
+      lGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePos), 3));
+      const lMat = new THREE.LineBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.07 });
+      const lines = new THREE.LineSegments(lGeo, lMat);
+      scene.add(lines);
+
+      let mx = 0, my = 0;
+      window.addEventListener('mousemove', e => {
+        mx = (e.clientX / window.innerWidth - 0.5) * 2;
+        my = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      (function tick() {
+        requestAnimationFrame(tick);
+        points.rotation.y += 0.00035;
+        points.rotation.x += 0.00012;
+        lines.rotation.y = points.rotation.y;
+        lines.rotation.x = points.rotation.x;
+        camera.position.x += (mx * 0.35 - camera.position.x) * 0.04;
+        camera.position.y += (-my * 0.25 - camera.position.y) * 0.04;
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+      })();
+    } else {
+      canvas.style.display = 'none';
+    }
+
+    // HERO ENTRANCE
+    const tl = gsap.timeline({ delay: 0.2 });
+    tl.to('.hero-logo-img',  { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 0)
+      .to('.hero-badge',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.25)
+      .to('.hero-title',     { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out' }, 0.45)
+      .to('.hero-region',    { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.7)
+      .to('.hero-sub',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.85)
+      .to('.scroll-indicator', { opacity: 1,    duration: 1   }, 1.2);
+
+    // SCROLL REVEAL
+    gsap.utils.toArray('.r').forEach(el => {
+      gsap.to(el, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 87%' }
+      });
+    });
+  </script>
+</body>
+</html>
