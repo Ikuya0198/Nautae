@@ -236,6 +236,10 @@
 
   <!-- NAV -->
   <nav id="navbar">
+    <button class="nav-back" onclick="history.length>1?history.back():location.href='index.html'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>Back</span>
+    </button>
     <a href="index.html" class="nav-logo"><img src="images/logo white.webp" alt="Nautae Wine Cellar"></a>
     <ul class="nav-links">
       <li><a href="index.html" class="active">Story</a></li>
@@ -560,20 +564,20 @@
         varying float vElevation;
 
         void main() {
-          /* Midnight ocean — near-black, deep navy */
-          vec3 abyss   = vec3(0.003, 0.006, 0.020);
-          vec3 midwater = vec3(0.006, 0.016, 0.042);
-          vec3 crest    = vec3(0.010, 0.025, 0.060);
-          float t = clamp(vElevation * 2.2 + 0.5, 0.0, 1.0);
+          /* Midnight ocean — visible navy, darker troughs / brighter crests */
+          vec3 abyss   = vec3(0.006, 0.013, 0.038);
+          vec3 midwater = vec3(0.015, 0.040, 0.100);
+          vec3 crest    = vec3(0.030, 0.078, 0.185);
+          float t = clamp(vElevation * 2.8 + 0.5, 0.0, 1.0);
           vec3 wc = mix(abyss, mix(midwater, crest, t * t), t);
 
-          /* Subtle Fresnel — reveals wave shape without gold reflection */
+          /* Fresnel — reveals wave edges */
           vec3 N  = normalize(vNormal);
           vec3 V  = normalize(cameraPosition - vWorldPos);
-          float fr = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 3.5);
-          vec3 frCol = vec3(0.012, 0.028, 0.068);
+          float fr = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 3.0);
+          vec3 frCol = vec3(0.022, 0.060, 0.145);
 
-          vec3 col = wc + frCol * fr * 0.35;
+          vec3 col = wc + frCol * fr * 0.55;
 
           /* Horizon fog — dissolves into site background */
           float dist = length(vWorldPos - cameraPosition);
