@@ -5,58 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nautae Wine Cellar — Rías Baixas, Galicia</title>
   <meta name="description" content="ガリシアの大西洋岸から生まれた、限定手造りワイン。Nautae Wine Cellar.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/cg-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="images/logo white.webp" as="image">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Montserrat', system-ui, sans-serif; background: #080808; color: #fff; overflow-x: hidden; }
-    img { max-width: 100%; display: block; }
-    a { text-decoration: none; }
-
-    /* ===== LOADER ===== */
-    #loader {
-      position: fixed; inset: 0; z-index: 9999;
-      background: #080808;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 24px;
-    }
-    .loader-logo-img { width: 88px; opacity: 0; transform: translateY(12px); }
-    .loader-bar { width: 0; height: 1px; background: #c8a96e; max-width: 96px; }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 28px 48px;
-      transition: background 0.4s, padding 0.4s;
-    }
-    nav.scrolled {
-      background: rgba(8,8,8,0.94);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      padding: 14px 48px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .nav-logo img { height: 38px; }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      color: rgba(255,255,255,0.65); font-size: 11px; font-weight: 500;
-      letter-spacing: 2.5px; text-transform: uppercase; transition: color 0.3s;
-    }
-    .nav-links a:hover, .nav-links a.active { color: #c8a96e; }
-    .lang-toggle {
-      display: flex; align-items: center; gap: 2px; margin-left: 28px;
-      background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden;
-    }
-    .lang-btn {
-      background: none; border: none; color: rgba(255,255,255,0.38);
-      font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 500;
-      letter-spacing: 1.5px; padding: 5px 10px; cursor: pointer; transition: all 0.2s;
-    }
-    .lang-btn.active { background: #c8a96e; color: #080808; }
-    .lang-btn:hover:not(.active) { color: rgba(255,255,255,0.75); }
-
     /* ===== HERO ===== */
     #hero {
       position: relative; min-height: 100vh;
@@ -118,7 +72,6 @@
       font-weight: 300; line-height: 1.2; margin-bottom: 32px;
     }
     .body-text { font-size: 15px; line-height: 2; color: rgba(255,255,255,0.6); }
-    .r { opacity: 0; transform: translateY(28px); }
 
     /* ===== STORY ===== */
     #story { background: #0c0c0c; }
@@ -239,86 +192,6 @@
     }
     .btn-outline:hover { background: #c8a96e; color: #080808; }
 
-    /* ===== FOOTER ===== */
-    footer {
-      background: #050505;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-    .footer-main {
-      display: grid; grid-template-columns: 1.6fr 1fr 1fr;
-      gap: 64px; padding: 80px 48px 64px; max-width: 1200px; margin: 0 auto;
-    }
-    .footer-brand img { height: 36px; opacity: 0.7; margin-bottom: 20px; }
-    .footer-tagline {
-      font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300;
-      font-style: italic; color: rgba(255,255,255,0.38); line-height: 1.7; max-width: 260px;
-    }
-    .footer-col-title {
-      font-size: 9px; letter-spacing: 3.5px; text-transform: uppercase;
-      color: #c8a96e; margin-bottom: 24px; font-weight: 500;
-    }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-    .footer-links a {
-      font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 0.5px;
-      transition: color 0.3s;
-    }
-    .footer-links a:hover { color: rgba(255,255,255,0.85); }
-    .footer-contact-item {
-      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;
-    }
-    .footer-contact-item svg { flex-shrink: 0; margin-top: 1px; opacity: 0.45; }
-    .footer-contact-item span {
-      font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6;
-    }
-    .footer-contact-item a {
-      font-size: 13px; color: rgba(255,255,255,0.45); transition: color 0.3s;
-    }
-    .footer-contact-item a:hover { color: rgba(255,255,255,0.85); }
-    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 0; }
-    .footer-bottom {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 24px 48px; max-width: 1200px; margin: 0 auto;
-    }
-    .footer-copy { font-size: 11px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; }
-    .footer-legal { display: flex; gap: 28px; }
-    .footer-legal a { font-size: 11px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; transition: color 0.3s; }
-    .footer-legal a:hover { color: rgba(255,255,255,0.45); }
-    @media (max-width: 900px) {
-      .footer-main { grid-template-columns: 1fr 1fr; gap: 48px; padding: 64px 24px 48px; }
-      .footer-brand { grid-column: 1 / -1; }
-    }
-    @media (max-width: 600px) {
-      .footer-main { grid-template-columns: 1fr; gap: 40px; padding: 56px 24px 40px; }
-      .footer-bottom { flex-direction: column; gap: 12px; padding: 20px 24px; text-align: center; }
-    }
-
-    /* ===== GRAIN OVERLAY ===== */
-    body::after {
-      content: ''; position: fixed; inset: 0; z-index: 9997; pointer-events: none;
-      opacity: 0.032;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      animation: grain 0.3s steps(1) infinite;
-    }
-    @keyframes grain {
-      0%   { transform: translate(0, 0); }
-      20%  { transform: translate(-3px, 2px); }
-      40%  { transform: translate(2px, -3px); }
-      60%  { transform: translate(3px, 2px); }
-      80%  { transform: translate(-2px, -2px); }
-    }
-
-    /* ===== SELECTION ===== */
-    ::selection { background: rgba(200,169,110,0.22); color: #fff; }
-
-    /* ===== SCROLL PROGRESS ===== */
-    #scroll-progress {
-      position: fixed; top: 0; left: 0; z-index: 10000;
-      height: 1px; background: linear-gradient(90deg, #c8a96e 0%, #e8c87a 50%, #c8a96e 100%);
-      width: 0%; pointer-events: none;
-      box-shadow: 0 0 8px rgba(200,169,110,0.55);
-    }
-
     /* ===== HERO VIGNETTE ===== */
     .hero-vignette {
       position: absolute; bottom: 0; left: 0; right: 0;
@@ -345,8 +218,6 @@
       .terroir-img-wrap img { min-height: 380px; }
     }
     @media (max-width: 768px) {
-      nav, nav.scrolled { padding: 18px 24px; }
-      .nav-links { gap: 22px; }
       .section { padding: 80px 24px; }
       #challenge { background-attachment: scroll; padding: 100px 24px; }
       footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
@@ -571,8 +442,8 @@
     <div class="footer-bottom">
       <p class="footer-copy">© 2025 Nautae Wine Cellar · Rías Baixas, Galicia, España</p>
       <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">特定商取引法に基づく表記</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="tokutei.html">特定商取引法に基づく表記</a>
       </div>
     </div>
   </footer>

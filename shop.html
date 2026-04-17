@@ -5,44 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop — Nautae Wine Cellar</title>
   <meta name="description" content="Nautae Wine Cellar のワインコレクション。限定手造りワインのご案内。">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/cg-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="images/logo white.webp" as="image">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Montserrat', system-ui, sans-serif; background: #080808; color: #fff; overflow-x: hidden; }
-    img { max-width: 100%; display: block; }
-    a { text-decoration: none; }
+    nav { z-index: 200; }
 
     /* ===== PAIRING ===== */
     .slide-pairing { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
     .pairing-icon { color: rgba(200,169,110,0.45); flex-shrink: 0; }
     .pairing-label { font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(200,169,110,0.55); margin-right: 4px; }
     .pairing-text { font-size: 11px; color: rgba(255,255,255,0.32); letter-spacing: 0.5px; }
-
-    /* ===== LOADER ===== */
-    #loader {
-      position: fixed; inset: 0; z-index: 9999; background: #080808;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
-    }
-    .loader-logo-img { width: 88px; opacity: 0; transform: translateY(12px); }
-    .loader-bar { width: 0; height: 1px; background: #c8a96e; max-width: 96px; }
-
-    /* ===== NAV ===== */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 28px 48px; transition: background 0.4s, padding 0.4s;
-    }
-    nav.scrolled {
-      background: rgba(8,8,8,0.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      padding: 14px 48px; border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .nav-logo img { height: 38px; }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a { color: rgba(255,255,255,0.65); font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; transition: color 0.3s; }
-    .nav-links a:hover, .nav-links a.active { color: #c8a96e; }
 
     /* ===== SHOP HERO ===== */
     #shop-hero {
@@ -57,7 +32,6 @@
     .hero-label { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #c8a96e; margin-bottom: 20px; }
     .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 7vw, 84px); font-weight: 300; letter-spacing: 6px; }
     .hero-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); margin-top: 20px; line-height: 1.9; }
-    .r { opacity: 0; transform: translateY(28px); }
 
     /* ===== STATUS BADGE ===== */
     .status-badge {
@@ -322,54 +296,6 @@
     .form-success p { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; margin-bottom: 10px; }
     .form-success small { font-size: 13px; color: rgba(255,255,255,0.45); }
 
-    /* ===== FOOTER ===== */
-    footer { background: #050505; border-top: 1px solid rgba(255,255,255,0.07); }
-    .footer-main { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 64px; padding: 80px 48px 64px; max-width: 1200px; margin: 0 auto; }
-    .footer-brand img { height: 36px; opacity: 0.7; margin-bottom: 20px; }
-    .footer-tagline { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; font-style: italic; color: rgba(255,255,255,0.38); line-height: 1.7; max-width: 260px; }
-    .footer-col-title { font-size: 9px; letter-spacing: 3.5px; text-transform: uppercase; color: #c8a96e; margin-bottom: 24px; font-weight: 500; }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-    .footer-links a { font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 0.5px; transition: color 0.3s; }
-    .footer-links a:hover { color: rgba(255,255,255,0.85); }
-    .footer-contact-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
-    .footer-contact-item svg { flex-shrink: 0; margin-top: 1px; opacity: 0.45; }
-    .footer-contact-item span { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6; }
-    .footer-contact-item a { font-size: 13px; color: rgba(255,255,255,0.45); transition: color 0.3s; }
-    .footer-contact-item a:hover { color: rgba(255,255,255,0.85); }
-    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 0; }
-    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; max-width: 1200px; margin: 0 auto; }
-    .footer-copy { font-size: 11px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; }
-    .footer-legal { display: flex; gap: 28px; }
-    .footer-legal a { font-size: 11px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; transition: color 0.3s; }
-    .footer-legal a:hover { color: rgba(255,255,255,0.45); }
-    @media (max-width: 900px) {
-      .footer-main { grid-template-columns: 1fr 1fr; gap: 48px; padding: 64px 24px 48px; }
-      .footer-brand { grid-column: 1 / -1; }
-    }
-    @media (max-width: 600px) {
-      .footer-main { grid-template-columns: 1fr; gap: 40px; padding: 56px 24px 40px; }
-      .footer-bottom { flex-direction: column; gap: 12px; padding: 20px 24px; text-align: center; }
-    }
-
-    /* ===== GRAIN OVERLAY ===== */
-    body::after {
-      content: ''; position: fixed; inset: 0; z-index: 9997; pointer-events: none;
-      opacity: 0.032;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      animation: grain 0.3s steps(1) infinite;
-    }
-    @keyframes grain {
-      0%   { transform: translate(0, 0); }
-      20%  { transform: translate(-3px, 2px); }
-      40%  { transform: translate(2px, -3px); }
-      60%  { transform: translate(3px, 2px); }
-      80%  { transform: translate(-2px, -2px); }
-    }
-
-    /* ===== SELECTION ===== */
-    ::selection { background: rgba(200,169,110,0.22); color: #fff; }
-
     /* ===== BOTTLE AMBIENT GLOW ===== */
     .slide-bottle { position: relative; }
     .slide-bottle::before {
@@ -436,6 +362,10 @@
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="archive.html">Archive</a></li>
     </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="ja">JP</button>
+      <button class="lang-btn active" data-lang="en">EN</button>
+    </div>
   </nav>
 
   <!-- SHOP HERO -->
@@ -746,8 +676,8 @@
     <div class="footer-bottom">
       <p class="footer-copy">© 2025 Nautae Wine Cellar · Rías Baixas, Galicia, España</p>
       <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">特定商取引法に基づく表記</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="tokutei.html">特定商取引法に基づく表記</a>
       </div>
     </div>
   </footer>
@@ -785,20 +715,20 @@
       <button class="modal-close" id="modal-close">✕</button>
       <div id="modal-form-wrap">
         <p class="modal-label">Wine Inquiry</p>
-        <h3 class="modal-title">お問い合わせ</h3>
+        <h3 class="modal-title" data-i18n="modal-title">お問い合わせ</h3>
         <div class="cart-summary" id="modal-summary"></div>
         <form id="inquiry-form" action="https://formspree.io/f/xqewqzzy" method="POST">
           <input type="hidden" name="order" id="hidden-order">
-          <div class="form-group"><input type="text" name="name" placeholder="お名前 *" required></div>
-          <div class="form-group"><input type="email" name="email" placeholder="メールアドレス *" required></div>
-          <div class="form-group"><textarea name="message" placeholder="メッセージ・ご質問（任意）"></textarea></div>
+          <div class="form-group"><input type="text" name="name" data-ph-ja="お名前 *" data-ph-en="Name *" placeholder="お名前 *" required></div>
+          <div class="form-group"><input type="email" name="email" data-ph-ja="メールアドレス *" data-ph-en="Email *" placeholder="メールアドレス *" required></div>
+          <div class="form-group"><textarea name="message" data-ph-ja="メッセージ・ご質問（任意）" data-ph-en="Message / Question (optional)"></textarea></div>
           <button type="submit" class="form-submit">Send Inquiry</button>
         </form>
       </div>
       <div class="form-success" id="form-success">
         <div class="s-icon">✦</div>
-        <p>ありがとうございます。</p>
-        <small>担当者より 2〜3 営業日以内にご連絡いたします。</small>
+        <p data-i18n="success-title">ありがとうございます。</p>
+        <small data-i18n="success-body">担当者より 2〜3 営業日以内にご連絡いたします。</small>
       </div>
     </div>
   </div>
@@ -807,6 +737,37 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
+
+    /* ===== LANGUAGE ===== */
+    const shopI18n = {
+      en: {
+        'modal-title':    'Inquiry',
+        'success-title':  'Thank you.',
+        'success-body':   "We'll be in touch within 2–3 business days.",
+      }
+    };
+    const shopOriginals = {};
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      shopOriginals[el.dataset.i18n] = el.innerHTML;
+    });
+    function applyShopLang(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        el.innerHTML = lang === 'en' && shopI18n.en[key] ? shopI18n.en[key] : shopOriginals[key];
+      });
+      document.querySelectorAll('[data-ph-' + lang + ']').forEach(el => {
+        el.placeholder = el.dataset['ph' + lang.charAt(0).toUpperCase() + lang.slice(1)] || el.dataset['ph' + lang];
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      sessionStorage.setItem('nwc_lang', lang);
+    }
+    const shopLang = sessionStorage.getItem('nwc_lang') || 'en';
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyShopLang(btn.dataset.lang));
+    });
+    if (shopLang === 'en') applyShopLang('en');
 
     /* ===== LOADER ===== */
     const isFirst = !sessionStorage.getItem('nwc_v');
@@ -937,8 +898,11 @@
       const totalAmt  = document.getElementById('drawer-total-amt');
       const btn       = document.getElementById('drawer-inquire');
 
+      const lang = sessionStorage.getItem('nwc_lang') || 'en';
       if (cart.length === 0) {
-        container.innerHTML = '<p class="cart-empty">カートは空です。<br>ワインを選んでください。</p>';
+        container.innerHTML = lang === 'en'
+          ? '<p class="cart-empty">Your cart is empty.<br>Choose a wine to add.</p>'
+          : '<p class="cart-empty">カートは空です。<br>ワインを選んでください。</p>';
         totalEl.style.display = 'none';
         btn.disabled = true;
         return;
