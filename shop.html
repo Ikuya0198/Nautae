@@ -285,6 +285,49 @@
     .mobile-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
     .mobile-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; }
 
+    /* ===== OTHER PRODUCTS ===== */
+    #other-products { background: #080808; padding: 100px 48px; }
+    .other-header { text-align: center; margin-bottom: 72px; }
+    .other-header .label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c8a96e; margin-bottom: 20px; }
+    .other-header .heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 300; line-height: 1.2; margin-bottom: 16px; }
+    .other-header .sub { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 2; max-width: 420px; margin: 0 auto; }
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1100px; margin: 0 auto; }
+    .product-card {
+      position: relative; background: #0f0f0f;
+      padding: 56px 36px; text-align: center; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: border-color 0.4s;
+    }
+    .product-card:hover { border-color: rgba(200,169,110,0.25); }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px; background: linear-gradient(90deg, transparent, rgba(200,169,110,0.3), transparent);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .product-card:hover::before { opacity: 1; }
+    .product-icon {
+      width: 52px; height: 52px; margin: 0 auto 28px;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(200,169,110,0.6);
+    }
+    .product-cat { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #c8a96e; margin-bottom: 12px; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; margin-bottom: 14px; }
+    .product-desc { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.9; margin-bottom: 28px; }
+    .product-cs {
+      display: inline-block; font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(200,169,110,0.55); border: 1px solid rgba(200,169,110,0.2);
+      padding: 6px 16px;
+    }
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns: 1fr 1fr; }
+      #other-products { padding: 80px 24px; }
+    }
+    @media (max-width: 600px) {
+      .product-grid { grid-template-columns: 1fr; gap: 1px; }
+      #other-products { padding: 64px 20px; }
+    }
+
     /* ===== NOTE ===== */
     #note { padding: 80px 48px; background: #0c0c0c; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
     .note-text { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 2.2; max-width: 540px; margin: 0 auto; }
@@ -596,6 +639,48 @@
       <button class="mobile-dot" data-mi="2"></button>
       <button class="mobile-dot" data-mi="3"></button>
       <button class="mobile-dot" data-mi="4"></button>
+    </div>
+  </section>
+
+  <!-- OTHER PRODUCTS -->
+  <section id="other-products">
+    <div class="other-header">
+      <p class="label r">Other Products</p>
+      <h2 class="heading r">Nautae の世界観を、<br>身にまとう。</h2>
+      <p class="sub r">ワインを超えて、Nautae のフィロソフィーを日常へ。<br>アパレルをはじめとした関連プロダクトを準備中です。</p>
+    </div>
+    <div class="product-grid">
+
+      <div class="product-card r">
+        <div class="product-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+        </div>
+        <p class="product-cat">Apparel</p>
+        <h3 class="product-name">Wearables</h3>
+        <p class="product-desc">ガリシアの海風と静寂をまとった、<br>ミニマルなアパレルライン。</p>
+        <span class="product-cs">Coming Soon</span>
+      </div>
+
+      <div class="product-card r">
+        <div class="product-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <p class="product-cat">Accessories</p>
+        <h3 class="product-name">Objects</h3>
+        <p class="product-desc">ワインの時間をより深くする、<br>厳選されたプロダクト。</p>
+        <span class="product-cs">Coming Soon</span>
+      </div>
+
+      <div class="product-card r">
+        <div class="product-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <p class="product-cat">Publication</p>
+        <h3 class="product-name">Archive Book</h3>
+        <p class="product-desc">毎年のリリースとストーリーを<br>一冊に綴るアーカイブブック。</p>
+        <span class="product-cs">Coming Soon</span>
+      </div>
+
     </div>
   </section>
 
