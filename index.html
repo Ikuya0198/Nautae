@@ -15,23 +15,6 @@
     img { max-width: 100%; display: block; }
     a { text-decoration: none; }
 
-    /* ===== AGE GATE ===== */
-    #age-gate {
-      position: fixed; inset: 0; z-index: 10000; background: #04040c;
-      display: none; align-items: center; justify-content: center;
-    }
-    .age-inner { text-align: center; padding: 48px 24px; max-width: 440px; width: 100%; }
-    .age-logo { width: 56px; margin: 0 auto 40px; opacity: 0.55; }
-    .age-vline { width: 1px; height: 48px; background: linear-gradient(to bottom, transparent, #c8a96e, transparent); margin: 0 auto 36px; }
-    .age-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 300; line-height: 1.5; margin-bottom: 16px; }
-    .age-sub { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 1px; line-height: 2; margin-bottom: 44px; }
-    .age-btns { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .age-yes { background: #c8a96e; color: #080808; border: none; padding: 14px 52px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
-    .age-yes:hover { background: #d4b87c; }
-    .age-no { background: none; border: none; color: rgba(255,255,255,0.22); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 1px; cursor: pointer; text-decoration: underline; transition: color 0.3s; padding: 4px; }
-    .age-no:hover { color: rgba(255,255,255,0.5); }
-    .age-denied { display: none; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 2; margin-top: 28px; }
-
     /* ===== LOADER ===== */
     #loader {
       position: fixed; inset: 0; z-index: 9999;
@@ -350,21 +333,6 @@
   </style>
 </head>
 <body>
-
-  <!-- AGE GATE -->
-  <div id="age-gate">
-    <div class="age-inner">
-      <img src="images/logo white.png" alt="Nautae" class="age-logo">
-      <div class="age-vline"></div>
-      <h2 class="age-heading">このサイトは<br>アルコール飲料を扱っています</h2>
-      <p class="age-sub">ご利用には年齢確認が必要です。<br>あなたは20歳以上ですか？</p>
-      <div class="age-btns">
-        <button class="age-yes" id="age-yes">はい、20歳以上です</button>
-        <button class="age-no" id="age-no">いいえ、20歳未満です</button>
-      </div>
-      <p class="age-denied" id="age-denied">申し訳ありませんが、<br>このサイトにはアクセスできません。</p>
-    </div>
-  </div>
 
   <!-- LOADER -->
   <div id="loader">
@@ -736,23 +704,6 @@
         scrollTrigger: { trigger: el, start: 'top 87%' }
       });
     });
-
-    /* ===== AGE GATE ===== */
-    (function() {
-      if (sessionStorage.getItem('nwc_age')) return;
-      const gate = document.getElementById('age-gate');
-      gate.style.display = 'flex';
-      document.getElementById('age-yes').addEventListener('click', () => {
-        sessionStorage.setItem('nwc_age', '1');
-        gate.style.transition = 'opacity 0.6s ease';
-        gate.style.opacity = '0';
-        setTimeout(() => { gate.style.display = 'none'; }, 600);
-      });
-      document.getElementById('age-no').addEventListener('click', () => {
-        document.querySelector('.age-btns').style.display = 'none';
-        document.getElementById('age-denied').style.display = 'block';
-      });
-    })();
 
     /* ===== COUNTDOWN ===== */
     const RELEASE_DATE = new Date('2026-10-01T00:00:00');

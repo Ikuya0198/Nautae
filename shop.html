@@ -15,20 +15,6 @@
     img { max-width: 100%; display: block; }
     a { text-decoration: none; }
 
-    /* ===== AGE GATE ===== */
-    #age-gate { position: fixed; inset: 0; z-index: 10000; background: #04040c; display: none; align-items: center; justify-content: center; }
-    .age-inner { text-align: center; padding: 48px 24px; max-width: 440px; width: 100%; }
-    .age-logo { width: 56px; margin: 0 auto 40px; opacity: 0.55; }
-    .age-vline { width: 1px; height: 48px; background: linear-gradient(to bottom, transparent, #c8a96e, transparent); margin: 0 auto 36px; }
-    .age-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 300; line-height: 1.5; margin-bottom: 16px; }
-    .age-sub { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 1px; line-height: 2; margin-bottom: 44px; }
-    .age-btns { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .age-yes { background: #c8a96e; color: #080808; border: none; padding: 14px 52px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
-    .age-yes:hover { background: #d4b87c; }
-    .age-no { background: none; border: none; color: rgba(255,255,255,0.22); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 1px; cursor: pointer; text-decoration: underline; transition: color 0.3s; padding: 4px; }
-    .age-no:hover { color: rgba(255,255,255,0.5); }
-    .age-denied { display: none; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 2; margin-top: 28px; }
-
     /* ===== PAIRING ===== */
     .slide-pairing { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
     .pairing-icon { color: rgba(200,169,110,0.45); flex-shrink: 0; }
@@ -42,38 +28,6 @@
     }
     .loader-logo-img { width: 88px; opacity: 0; transform: translateY(12px); }
     .loader-bar { width: 0; height: 1px; background: #c8a96e; max-width: 96px; }
-
-    /* ===== CODE GATE ===== */
-    #code-gate {
-      position: fixed; inset: 0; z-index: 9998; background: #080808;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-    }
-    #code-gate.active { opacity: 1; pointer-events: auto; }
-    .gate-inner { text-align: center; padding: 48px 24px; max-width: 420px; width: 100%; }
-    .gate-logo { width: 68px; margin: 0 auto 44px; opacity: 0.55; }
-    .gate-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c8a96e; margin-bottom: 16px; }
-    .gate-title { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300; margin-bottom: 12px; }
-    .gate-sub { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 2; margin-bottom: 40px; }
-    .gate-row { display: flex; }
-    .gate-row input {
-      flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
-      border-right: none; color: #fff; padding: 15px 20px;
-      font-family: 'Montserrat', sans-serif; font-size: 14px; letter-spacing: 5px;
-      text-transform: uppercase; outline: none; text-align: center; transition: border-color 0.3s;
-    }
-    .gate-row input:focus { border-color: rgba(200,169,110,0.5); }
-    .gate-row button {
-      background: #c8a96e; color: #080808; border: none; padding: 15px 28px;
-      font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600;
-      letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s;
-    }
-    .gate-row button:hover { background: #d4b87c; }
-    .gate-error {
-      font-size: 11px; color: #e08080; letter-spacing: 1px;
-      margin-top: 14px; min-height: 16px; transition: opacity 0.3s; opacity: 0;
-    }
-    .gate-error.show { opacity: 1; }
 
     /* ===== CURSOR ===== */
     #cur-dot {
@@ -430,42 +384,12 @@
 </head>
 <body>
 
-  <!-- AGE GATE -->
-  <div id="age-gate">
-    <div class="age-inner">
-      <img src="images/logo white.png" alt="Nautae" class="age-logo">
-      <div class="age-vline"></div>
-      <h2 class="age-heading">このサイトは<br>アルコール飲料を扱っています</h2>
-      <p class="age-sub">ご利用には年齢確認が必要です。<br>あなたは20歳以上ですか？</p>
-      <div class="age-btns">
-        <button class="age-yes" id="age-yes">はい、20歳以上です</button>
-        <button class="age-no" id="age-no">いいえ、20歳未満です</button>
-      </div>
-      <p class="age-denied" id="age-denied">申し訳ありませんが、<br>このサイトにはアクセスできません。</p>
-    </div>
-  </div>
-
   <!-- LOADER -->
   <div id="loader">
     <img src="images/logo white.png" alt="Nautae" class="loader-logo-img">
     <div class="loader-bar"></div>
   </div>
 
-  <!-- CODE GATE -->
-  <!-- ↓ 招待コードはここで変更できます (ACCESS_CODE変数) -->
-  <div id="code-gate">
-    <div class="gate-inner">
-      <img src="images/logo white.png" alt="Nautae" class="gate-logo">
-      <p class="gate-label">Limited Access</p>
-      <h2 class="gate-title">Invitation Code</h2>
-      <p class="gate-sub">このページへのアクセスには招待コードが必要です。</p>
-      <div class="gate-row">
-        <input type="text" id="gate-input" placeholder="Enter code" autocomplete="off" spellcheck="false">
-        <button id="gate-submit">Enter</button>
-      </div>
-      <p class="gate-error" id="gate-error">Invalid code. Please try again.</p>
-    </div>
-  </div>
 
   <!-- CURSOR -->
   <div id="cur-dot"></div>
@@ -852,90 +776,22 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    /* ===== AGE GATE ===== */
-    (function() {
-      if (sessionStorage.getItem('nwc_age')) return;
-      const gate = document.getElementById('age-gate');
-      gate.style.display = 'flex';
-      document.getElementById('age-yes').addEventListener('click', () => {
-        sessionStorage.setItem('nwc_age', '1');
-        gate.style.transition = 'opacity 0.6s ease';
-        gate.style.opacity = '0';
-        setTimeout(() => { gate.style.display = 'none'; }, 600);
-      });
-      document.getElementById('age-no').addEventListener('click', () => {
-        document.querySelector('.age-btns').style.display = 'none';
-        document.getElementById('age-denied').style.display = 'block';
-      });
-    })();
-
-    /* ============================
-       招待コード — ここで変更可能
-    ============================ */
-    const ACCESS_CODE = 'NAUTAE';
-
     /* ===== LOADER ===== */
     const isFirst = !sessionStorage.getItem('nwc_v');
     sessionStorage.setItem('nwc_v', '1');
-    const hasAccess = !!sessionStorage.getItem('nwc_access');
 
     function hideLoader() {
-      gsap.to('#loader', {
-        yPercent: -100, duration: 0.85, ease: 'power3.inOut',
-        onComplete: () => {
-          document.getElementById('loader').style.display = 'none';
-          if (!hasAccess) showCodeGate();
-        }
-      });
+      gsap.to('#loader', { yPercent: -100, duration: 0.85, ease: 'power3.inOut', onComplete: () => { document.getElementById('loader').style.display = 'none'; } });
     }
 
     if (isFirst) {
       gsap.timeline()
         .to('.loader-logo-img', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.2)
         .to('.loader-bar',      { width: 96,    duration: 0.7, ease: 'power2.inOut'  }, 0.7)
-        .to({}, { duration: 0.6 })
-        .call(hideLoader);
+        .to({}, { duration: 0.6 }).call(hideLoader);
     } else {
-      gsap.to('#loader', {
-        yPercent: -100, duration: 0.65, ease: 'power3.inOut', delay: 0.1,
-        onComplete: () => {
-          document.getElementById('loader').style.display = 'none';
-          if (!hasAccess) showCodeGate();
-        }
-      });
+      gsap.to('#loader', { yPercent: -100, duration: 0.65, ease: 'power3.inOut', delay: 0.1, onComplete: () => { document.getElementById('loader').style.display = 'none'; } });
     }
-
-    /* ===== CODE GATE ===== */
-    function showCodeGate() {
-      const gate = document.getElementById('code-gate');
-      gate.classList.add('active');
-      gsap.to(gate, { opacity: 1, duration: 0.5, ease: 'power2.out' });
-      setTimeout(() => document.getElementById('gate-input').focus(), 500);
-    }
-
-    function checkCode() {
-      const val = document.getElementById('gate-input').value.trim().toUpperCase();
-      const err = document.getElementById('gate-error');
-      if (val === ACCESS_CODE) {
-        sessionStorage.setItem('nwc_access', '1');
-        gsap.to('#code-gate', {
-          yPercent: -100, duration: 0.8, ease: 'power3.inOut',
-          onComplete: () => { document.getElementById('code-gate').style.display = 'none'; }
-        });
-      } else {
-        err.classList.add('show');
-        gsap.fromTo('#gate-input',
-          { x: -10 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' }
-        );
-        setTimeout(() => err.classList.remove('show'), 3000);
-      }
-    }
-
-    document.getElementById('gate-submit').addEventListener('click', checkCode);
-    document.getElementById('gate-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') checkCode();
-      document.getElementById('gate-error').classList.remove('show');
-    });
 
     /* ===== PAGE TRANSITION ===== */
     document.querySelectorAll('a[href]').forEach(link => {
