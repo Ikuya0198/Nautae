@@ -17,13 +17,43 @@
 
     /* ===== LOADER ===== */
     #loader {
-      position: fixed; inset: 0; z-index: 9999;
-      background: #080808;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 24px;
+      position: fixed; inset: 0; z-index: 9999; background: #080808;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
     }
     .loader-logo-img { width: 88px; opacity: 0; transform: translateY(12px); }
     .loader-bar { width: 0; height: 1px; background: #c8a96e; max-width: 96px; }
+
+    /* ===== CODE GATE ===== */
+    #code-gate {
+      position: fixed; inset: 0; z-index: 9998; background: #080808;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+    }
+    #code-gate.active { opacity: 1; pointer-events: auto; }
+    .gate-inner { text-align: center; padding: 48px 24px; max-width: 420px; width: 100%; }
+    .gate-logo { width: 68px; margin: 0 auto 44px; opacity: 0.55; }
+    .gate-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c8a96e; margin-bottom: 16px; }
+    .gate-title { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300; margin-bottom: 12px; }
+    .gate-sub { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 2; margin-bottom: 40px; }
+    .gate-row { display: flex; }
+    .gate-row input {
+      flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+      border-right: none; color: #fff; padding: 15px 20px;
+      font-family: 'Montserrat', sans-serif; font-size: 14px; letter-spacing: 5px;
+      text-transform: uppercase; outline: none; text-align: center; transition: border-color 0.3s;
+    }
+    .gate-row input:focus { border-color: rgba(200,169,110,0.5); }
+    .gate-row button {
+      background: #c8a96e; color: #080808; border: none; padding: 15px 28px;
+      font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+    }
+    .gate-row button:hover { background: #d4b87c; }
+    .gate-error {
+      font-size: 11px; color: #e08080; letter-spacing: 1px;
+      margin-top: 14px; min-height: 16px; transition: opacity 0.3s; opacity: 0;
+    }
+    .gate-error.show { opacity: 1; }
 
     /* ===== CURSOR ===== */
     #cur-dot {
@@ -35,11 +65,9 @@
       position: fixed; z-index: 9997; top: 0; left: 0;
       width: 32px; height: 32px; border: 1px solid rgba(200,169,110,0.55);
       border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%);
-      transition: width 0.35s ease, height 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+      transition: width .35s, height .35s, background .35s, border-color .35s;
     }
-    body.on-hover #cur-ring {
-      width: 52px; height: 52px; background: rgba(200,169,110,0.06); border-color: rgba(200,169,110,0.28);
-    }
+    body.on-hover #cur-ring { width: 52px; height: 52px; background: rgba(200,169,110,0.06); border-color: rgba(200,169,110,0.28); }
 
     /* ===== NAV ===== */
     nav {
@@ -53,10 +81,7 @@
     }
     .nav-logo img { height: 38px; }
     .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      color: rgba(255,255,255,0.65); font-size: 11px; font-weight: 500;
-      letter-spacing: 2.5px; text-transform: uppercase; transition: color 0.3s;
-    }
+    .nav-links a { color: rgba(255,255,255,0.65); font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; transition: color 0.3s; }
     .nav-links a:hover, .nav-links a.active { color: #c8a96e; }
 
     /* ===== SHOP HERO ===== */
@@ -74,20 +99,26 @@
     .hero-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); margin-top: 20px; line-height: 1.9; }
     .r { opacity: 0; transform: translateY(28px); }
 
-    /* ===== HORIZONTAL SCROLL (desktop) ===== */
-    #wines-h {
-      overflow: hidden;
-      position: relative;
+    /* ===== STATUS BADGE ===== */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
     }
-    .h-track {
-      display: flex;
-      will-change: transform;
-    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .s-available { color: #7dc99a; }
+    .s-available .status-dot { background: #7dc99a; }
+    .s-limited { color: #c8a96e; }
+    .s-limited .status-dot { background: #c8a96e; }
+    .s-sold-out { color: rgba(255,255,255,0.3); }
+    .s-sold-out .status-dot { background: rgba(255,255,255,0.2); }
+
+    /* ===== HORIZONTAL SCROLL ===== */
+    #wines-h { overflow: hidden; position: relative; }
+    .h-track { display: flex; will-change: transform; }
     .h-slide {
       min-width: 100vw; height: 100vh;
       display: flex; align-items: center;
-      position: relative; overflow: hidden;
-      background: #0a0a0a;
+      position: relative; overflow: hidden; background: #0a0a0a;
     }
     .h-slide:nth-child(even) { background: #0d0d10; }
     .slide-bg-num {
@@ -97,46 +128,34 @@
       color: rgba(200,169,110,0.04); line-height: 1; user-select: none; pointer-events: none;
     }
     .slide-inner {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 80px; align-items: center;
-      padding: 0 96px; max-width: 1400px; margin: 0 auto; width: 100%;
-      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+      padding: 0 96px; max-width: 1400px; margin: 0 auto; width: 100%; position: relative; z-index: 1;
     }
-    .slide-info { }
-    .slide-num {
-      font-family: 'Cormorant Garamond', serif; font-size: 13px;
-      color: rgba(200,169,110,0.5); letter-spacing: 3px; margin-bottom: 20px; display: block;
-    }
-    .slide-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c8a96e; margin-bottom: 16px; }
-    .slide-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 4vw, 58px); font-weight: 300; line-height: 1.1; margin-bottom: 8px;
-    }
-    .slide-name-sub { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-bottom: 28px; }
-    .slide-desc { font-size: 14px; line-height: 2; color: rgba(255,255,255,0.55); margin-bottom: 40px; max-width: 440px; }
-    .slide-footer {
-      display: flex; align-items: center; gap: 28px;
-      padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    .slide-price { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; }
+    .slide-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: rgba(200,169,110,0.5); letter-spacing: 3px; margin-bottom: 20px; display: block; }
+    .slide-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c8a96e; margin-bottom: 14px; }
+    .slide-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 58px); font-weight: 300; line-height: 1.1; margin-bottom: 8px; }
+    .slide-name-sub { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-bottom: 24px; }
+    .slide-desc { font-size: 14px; line-height: 2; color: rgba(255,255,255,0.55); margin-bottom: 36px; max-width: 440px; }
+    .slide-footer { display: flex; align-items: center; gap: 24px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .slide-price { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; }
     .slide-price small { font-family: 'Montserrat', sans-serif; font-size: 10px; color: rgba(255,255,255,0.3); margin-left: 4px; }
-    .slide-bottle {
-      display: flex; align-items: center; justify-content: center; height: 68vh;
-    }
+    .slide-bottle { display: flex; align-items: center; justify-content: center; height: 68vh; }
     .slide-bottle img {
       height: 100%; width: auto; max-width: 260px; object-fit: contain;
-      filter: drop-shadow(0 32px 64px rgba(0,0,0,0.75));
-      transition: transform 0.6s ease;
+      filter: drop-shadow(0 32px 64px rgba(0,0,0,0.75)); transition: transform 0.6s ease;
     }
     .h-slide:hover .slide-bottle img { transform: translateY(-14px) scale(1.02); }
+    .h-slide.sold-out .slide-bottle img { filter: drop-shadow(0 32px 64px rgba(0,0,0,0.75)) grayscale(0.6) brightness(0.7); }
 
-    /* Inquire button */
-    .btn-inquire {
+    /* Add to Cart button */
+    .btn-cart {
       background: transparent; border: 1px solid rgba(200,169,110,0.55); color: #c8a96e;
       padding: 12px 28px; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 500;
-      letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+      letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; white-space: nowrap;
     }
-    .btn-inquire:hover { background: #c8a96e; color: #080808; border-color: #c8a96e; }
+    .btn-cart:hover:not(:disabled) { background: #c8a96e; color: #080808; border-color: #c8a96e; }
+    .btn-cart:disabled { color: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.15); cursor: not-allowed; }
+    .btn-cart.added { background: rgba(200,169,110,0.12); }
 
     /* Progress dots */
     #h-progress {
@@ -145,93 +164,137 @@
       opacity: 0; pointer-events: none; transition: opacity 0.4s;
     }
     #h-progress.visible { opacity: 1; pointer-events: auto; }
-    .h-dot {
-      width: 6px; height: 6px; border-radius: 3px;
-      background: rgba(255,255,255,0.2); border: none; cursor: pointer;
-      transition: all 0.4s ease;
-    }
+    .h-dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.2); border: none; cursor: pointer; transition: all 0.4s ease; }
     .h-dot.active { width: 28px; background: #c8a96e; }
 
-    /* Scroll hint */
     .scroll-hint {
       position: absolute; bottom: 36px; right: 60px;
       display: flex; align-items: center; gap: 10px;
-      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-      z-index: 10;
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.25); z-index: 10;
     }
-    .scroll-hint::after {
-      content: ''; width: 40px; height: 1px; background: rgba(200,169,110,0.4);
-    }
+    .scroll-hint::after { content: ''; width: 40px; height: 1px; background: rgba(200,169,110,0.4); }
 
-    /* ===== MOBILE WINES (< 768px) ===== */
-    #wines-mobile { display: none; padding: 60px 24px 80px; background: #0a0a0a; }
-    .mobile-card {
-      background: #111; border: 1px solid rgba(255,255,255,0.06);
-      padding: 36px 24px; margin-bottom: 20px;
+    /* ===== FLOATING CART BUTTON ===== */
+    #cart-btn {
+      position: fixed; bottom: 36px; right: 48px; z-index: 300;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #c8a96e; color: #080808; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 28px rgba(200,169,110,0.35); transition: transform 0.3s, box-shadow 0.3s;
     }
+    #cart-btn:hover { transform: scale(1.08); box-shadow: 0 12px 36px rgba(200,169,110,0.45); }
+    #cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: #fff; color: #080808;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0); transition: all 0.3s ease;
+    }
+    #cart-badge.show { opacity: 1; transform: scale(1); }
+
+    /* ===== CART DRAWER ===== */
+    #cart-overlay {
+      position: fixed; inset: 0; z-index: 350; background: rgba(0,0,0,0.6);
+      opacity: 0; pointer-events: none; transition: opacity 0.35s;
+    }
+    #cart-overlay.show { opacity: 1; pointer-events: auto; }
+    #cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 360;
+      width: 400px; max-width: 100vw;
+      background: #131313; border-left: 1px solid rgba(255,255,255,0.08);
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.4s ease;
+    }
+    #cart-drawer.open { transform: translateX(0); }
+    .drawer-head {
+      padding: 28px 28px 22px; border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .drawer-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; }
+    .drawer-close { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer; transition: color 0.3s; line-height: 1; }
+    .drawer-close:hover { color: #fff; }
+    #drawer-items { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .cart-empty { text-align: center; padding: 60px 24px; font-size: 13px; color: rgba(255,255,255,0.3); line-height: 2; }
+    .cart-item {
+      padding: 20px 28px; border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .ci-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; line-height: 1.4; }
+    .ci-price { font-size: 12px; color: rgba(255,255,255,0.45); }
+    .ci-controls { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .ci-btn {
+      width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; line-height: 1;
+    }
+    .ci-btn:hover { background: #c8a96e; color: #080808; border-color: #c8a96e; }
+    .ci-qty { font-size: 14px; min-width: 20px; text-align: center; }
+    .ci-remove { background: none; border: none; color: rgba(255,255,255,0.2); font-size: 14px; cursor: pointer; transition: color 0.2s; margin-left: 4px; }
+    .ci-remove:hover { color: #e08080; }
+    .drawer-foot { padding: 20px 28px; border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+    .drawer-total {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .drawer-total-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+    .drawer-total-amount { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; }
+    .btn-send-inquiry {
+      width: 100%; background: #c8a96e; color: #080808; border: none; padding: 15px;
+      font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+    }
+    .btn-send-inquiry:hover { background: #d4b87c; }
+    .btn-send-inquiry:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: not-allowed; }
+
+    /* ===== MOBILE WINES ===== */
+    #wines-mobile { display: none; padding: 60px 24px 80px; background: #0a0a0a; }
+    .mobile-card { background: #111; border: 1px solid rgba(255,255,255,0.06); padding: 36px 24px; margin-bottom: 20px; }
     .mobile-bottle { width: 120px; margin: 0 auto 28px; }
     .mobile-bottle img { width: 100%; filter: drop-shadow(0 16px 32px rgba(0,0,0,0.7)); }
-    .mobile-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c8a96e; margin-bottom: 10px; }
-    .mobile-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 12px; }
+    .mobile-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin: 10px 0 12px; }
     .mobile-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.9; margin-bottom: 24px; }
     .mobile-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
     .mobile-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; }
 
     /* ===== NOTE ===== */
-    #note {
-      padding: 80px 48px; background: #0c0c0c;
-      border-top: 1px solid rgba(255,255,255,0.05); text-align: center;
-    }
+    #note { padding: 80px 48px; background: #0c0c0c; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
     .note-text { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 2.2; max-width: 540px; margin: 0 auto; }
     .note-text strong { color: rgba(255,255,255,0.55); font-weight: 500; }
 
-    /* ===== MODAL ===== */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 300;
-      background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      align-items: center; justify-content: center; padding: 24px;
-    }
+    /* ===== INQUIRY MODAL ===== */
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 24px; }
     .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: #131313; border: 1px solid rgba(255,255,255,0.1);
-      padding: 52px 48px; max-width: 500px; width: 100%; position: relative;
-      animation: modalIn 0.4s ease;
-    }
+    .modal-box { background: #131313; border: 1px solid rgba(255,255,255,0.1); padding: 48px 44px; max-width: 520px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; animation: modalIn 0.4s ease; }
     @keyframes modalIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-    .modal-close {
-      position: absolute; top: 18px; right: 22px; background: none; border: none;
-      color: rgba(255,255,255,0.3); font-size: 22px; cursor: pointer; transition: color 0.3s; line-height: 1;
-    }
+    .modal-close { position: absolute; top: 18px; right: 22px; background: none; border: none; color: rgba(255,255,255,0.3); font-size: 22px; cursor: pointer; transition: color 0.3s; line-height: 1; }
     .modal-close:hover { color: #fff; }
     .modal-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c8a96e; margin-bottom: 12px; }
-    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; margin-bottom: 6px; }
-    .modal-wine-display { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 36px; letter-spacing: 1px; }
-    .form-group { margin-bottom: 16px; }
+    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; margin-bottom: 24px; }
+    .cart-summary { margin-bottom: 28px; padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); }
+    .summary-row { display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.6); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-total { display: flex; justify-content: space-between; font-size: 14px; padding: 12px 0 0; margin-top: 8px; }
+    .summary-total span:last-child { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: #c8a96e; }
+    .form-group { margin-bottom: 14px; }
     .form-group input, .form-group textarea {
       width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-      color: #fff; padding: 13px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px;
-      outline: none; transition: border-color 0.3s;
+      color: #fff; padding: 13px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none; transition: border-color 0.3s;
     }
     .form-group input:focus, .form-group textarea:focus { border-color: rgba(200,169,110,0.5); }
-    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
     .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.22); }
-    .form-submit {
-      width: 100%; background: #c8a96e; color: #080808; border: none; padding: 15px;
-      font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600;
-      letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: background 0.3s;
-    }
+    .form-submit { width: 100%; background: #c8a96e; color: #080808; border: none; padding: 15px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: background 0.3s; }
     .form-submit:hover { background: #d4b87c; }
     .form-success { display: none; text-align: center; padding: 32px 0; }
-    .form-success .success-icon { font-size: 36px; margin-bottom: 16px; opacity: 0.7; }
+    .form-success .s-icon { font-size: 32px; margin-bottom: 16px; opacity: 0.7; }
     .form-success p { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; margin-bottom: 10px; }
     .form-success small { font-size: 13px; color: rgba(255,255,255,0.45); }
 
     /* ===== FOOTER ===== */
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.07); padding: 40px 48px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; }
     footer img { height: 30px; opacity: 0.4; }
     .footer-text { font-size: 11px; color: rgba(255,255,255,0.22); letter-spacing: 1px; }
 
@@ -243,7 +306,9 @@
       #wines-h { display: none; }
       #wines-mobile { display: block; }
       #h-progress { display: none; }
-      .modal-box { padding: 40px 24px; }
+      #cart-btn { bottom: 24px; right: 24px; }
+      #cart-drawer { width: 100vw; }
+      .modal-box { padding: 36px 20px; }
       footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
       #note { padding: 60px 24px; }
       #cur-dot, #cur-ring { display: none; }
@@ -256,6 +321,22 @@
   <div id="loader">
     <img src="images/logo white.png" alt="Nautae" class="loader-logo-img">
     <div class="loader-bar"></div>
+  </div>
+
+  <!-- CODE GATE -->
+  <!-- ↓ 招待コードはここで変更できます (ACCESS_CODE変数) -->
+  <div id="code-gate">
+    <div class="gate-inner">
+      <img src="images/logo white.png" alt="Nautae" class="gate-logo">
+      <p class="gate-label">Limited Access</p>
+      <h2 class="gate-title">Invitation Code</h2>
+      <p class="gate-sub">このページへのアクセスには招待コードが必要です。</p>
+      <div class="gate-row">
+        <input type="text" id="gate-input" placeholder="Enter code" autocomplete="off" spellcheck="false">
+        <button id="gate-submit">Enter</button>
+      </div>
+      <p class="gate-error" id="gate-error">Invalid code. Please try again.</p>
+    </div>
   </div>
 
   <!-- CURSOR -->
@@ -290,159 +371,138 @@
   <section id="wines-h">
     <div class="h-track" id="h-track">
 
-      <!-- 01 Luz de Mi Alma -->
+      <!-- 01 Luz de Mi Alma — LIMITED -->
       <div class="h-slide">
         <span class="slide-bg-num">01</span>
         <div class="scroll-hint">Scroll</div>
         <div class="slide-inner">
           <div class="slide-info">
             <span class="slide-num">01 / 04</span>
+            <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
             <p class="slide-label">Flagship · Grand Cuvée</p>
             <h2 class="slide-name">"Luz de Mi Alma"</h2>
             <p class="slide-name-sub">ルス・デ・ミ・アルマ ／ 私の魂の光</p>
             <p class="slide-desc">
               Nautae Wine Cellar の頂点に立つグラン・キュヴェ。
-              レモンピールや白桃、白い花、そして雨上がりの石畳を思わせるミネラルのニュアンス。
+              レモンピールや白桃、白い花、石畳を思わせるミネラルのニュアンス。
               凛とした酸が背骨をつくり、海の塩気とほのかなアーモンドが長い余韻を残します。<br><br>
-              スタイル：辛口・フルボディ（長期熟成ポテンシャル）<br>
-              生産本数：年間 50〜150 本
+              スタイル：辛口・フルボディ（長期熟成ポテンシャル）　生産本数：年間 50〜150 本
             </p>
             <div class="slide-footer">
               <div class="slide-price">¥249,000<small>（税込）</small></div>
-              <button class="btn-inquire" data-wine="Luz de Mi Alma" data-price="¥249,000">Inquire</button>
+              <button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button>
             </div>
           </div>
-          <div class="slide-bottle">
-            <img src="images/LUZ DE MI Alma.png" alt="Luz de Mi Alma">
-          </div>
+          <div class="slide-bottle"><img src="images/LUZ DE MI Alma.png" alt="Luz de Mi Alma"></div>
         </div>
       </div>
 
-      <!-- 02 Hurricane -->
+      <!-- 02 Hurricane — AVAILABLE -->
       <div class="h-slide">
         <span class="slide-bg-num">02</span>
         <div class="slide-inner">
           <div class="slide-info">
             <span class="slide-num">02 / 04</span>
+            <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
             <p class="slide-label">Limited Only</p>
             <h2 class="slide-name">Hurricane</h2>
             <p class="slide-name-sub">&nbsp;</p>
             <p class="slide-desc">
               北風・北の海流・ある一日の記憶を暗示させる、知的な一本。
-              ライム、青りんご、白い花の香り。
-              Luz de Mi Alma よりもわずかに軽やかで、
-              直線的な酸とシャープなミネラルが際立つスタイルです。<br><br>
+              ライム、青りんご、白い花の香り。直線的な酸とシャープなミネラルが際立つスタイルです。<br><br>
               スタイル：辛口・ミディアムボディ
             </p>
             <div class="slide-footer">
               <div class="slide-price">¥42,300<small>（税込）</small></div>
-              <button class="btn-inquire" data-wine="Hurricane" data-price="¥42,300">Inquire</button>
+              <button class="btn-cart" data-wine="Hurricane" data-price="42300" data-display="¥42,300">Add to Cart</button>
             </div>
           </div>
-          <div class="slide-bottle">
-            <img src="images/test1.png" alt="Hurricane">
-          </div>
+          <div class="slide-bottle"><img src="images/test1.png" alt="Hurricane"></div>
         </div>
       </div>
 
-      <!-- 03 Norte 41° Atlántico -->
+      <!-- 03 Norte 41° Atlántico — AVAILABLE -->
       <div class="h-slide">
         <span class="slide-bg-num">03</span>
         <div class="slide-inner">
           <div class="slide-info">
             <span class="slide-num">03 / 04</span>
+            <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
             <p class="slide-label">Limited Only</p>
             <h2 class="slide-name">Norte 41°<br>Atlántico</h2>
             <p class="slide-name-sub">&nbsp;</p>
             <p class="slide-desc">
               北緯 41°、大西洋。地図上の一点をワイン名にしたこのキュヴェは、
               テロワールそのものにフォーカスした海洋ワインです。
-              グレープフルーツ、洋梨、アプリコットのアロマに、
-              海風由来の塩気と、濡れた花崗岩のようなミネラル。<br><br>
+              グレープフルーツ、洋梨、海風由来の塩気と花崗岩のようなミネラル。<br><br>
               スタイル：辛口・ミディアム〜フルボディ
             </p>
             <div class="slide-footer">
               <div class="slide-price">¥50,400<small>（税込）</small></div>
-              <button class="btn-inquire" data-wine="Norte 41° Atlántico" data-price="¥50,400">Inquire</button>
+              <button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button>
             </div>
           </div>
-          <div class="slide-bottle">
-            <img src="images/test3.png" alt="Norte 41° Atlántico">
-          </div>
+          <div class="slide-bottle"><img src="images/test3.png" alt="Norte 41° Atlántico"></div>
         </div>
       </div>
 
-      <!-- 04 112°N -->
+      <!-- 04 112°N — LIMITED -->
       <div class="h-slide">
         <span class="slide-bg-num">04</span>
         <div class="slide-inner">
           <div class="slide-info">
             <span class="slide-num">04 / 04</span>
+            <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
             <p class="slide-label">Limited Only · Collector</p>
             <h2 class="slide-name">112°N</h2>
             <p class="slide-name-sub">&nbsp;</p>
             <p class="slide-desc">
               航海・針路・決断をテーマにしたコレクター向けの一本。
-              凝縮した果実味と熟した白桃、かすかなハーブとスモークのニュアンス。
-              重厚なフレンチオークが海のミネラル感に陰影を与え、
-              非常に長い余韻を生み出します。<br><br>
+              凝縮した果実味と熟した白桃、重厚なフレンチオークが
+              海のミネラル感に陰影を与え、非常に長い余韻を生み出します。<br><br>
               スタイル：辛口・フルボディ（熟成向き）
             </p>
             <div class="slide-footer">
               <div class="slide-price">¥65,700<small>（税込）</small></div>
-              <button class="btn-inquire" data-wine="112°N" data-price="¥65,700">Inquire</button>
+              <button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button>
             </div>
           </div>
-          <div class="slide-bottle">
-            <img src="images/test4.png" alt="112°N">
-          </div>
+          <div class="slide-bottle"><img src="images/test4.png" alt="112°N"></div>
         </div>
       </div>
 
-    </div><!-- /.h-track -->
+    </div>
   </section>
 
   <!-- WINES: MOBILE -->
   <section id="wines-mobile">
     <div class="mobile-card r">
       <div class="mobile-bottle"><img src="images/LUZ DE MI Alma.png" alt="Luz de Mi Alma"></div>
-      <p class="mobile-label">Flagship · Grand Cuvée</p>
+      <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
       <h3 class="mobile-name">"Luz de Mi Alma"</h3>
       <p class="mobile-desc">凛とした酸と海の塩気、長い余韻。年間 50〜150 本の限定グラン・キュヴェ。</p>
-      <div class="mobile-footer">
-        <span class="mobile-price">¥249,000</span>
-        <button class="btn-inquire" data-wine="Luz de Mi Alma" data-price="¥249,000">Inquire</button>
-      </div>
+      <div class="mobile-footer"><span class="mobile-price">¥249,000</span><button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button></div>
     </div>
     <div class="mobile-card r">
       <div class="mobile-bottle"><img src="images/test1.png" alt="Hurricane"></div>
-      <p class="mobile-label">Limited Only</p>
+      <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
       <h3 class="mobile-name">Hurricane</h3>
       <p class="mobile-desc">ライム、青りんご、直線的な酸とシャープなミネラル。</p>
-      <div class="mobile-footer">
-        <span class="mobile-price">¥42,300</span>
-        <button class="btn-inquire" data-wine="Hurricane" data-price="¥42,300">Inquire</button>
-      </div>
+      <div class="mobile-footer"><span class="mobile-price">¥42,300</span><button class="btn-cart" data-wine="Hurricane" data-price="42300" data-display="¥42,300">Add to Cart</button></div>
     </div>
     <div class="mobile-card r">
       <div class="mobile-bottle"><img src="images/test3.png" alt="Norte 41°"></div>
-      <p class="mobile-label">Limited Only</p>
+      <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
       <h3 class="mobile-name">Norte 41° Atlántico</h3>
       <p class="mobile-desc">北緯41°の大西洋。グレープフルーツと海風由来のミネラル。</p>
-      <div class="mobile-footer">
-        <span class="mobile-price">¥50,400</span>
-        <button class="btn-inquire" data-wine="Norte 41° Atlántico" data-price="¥50,400">Inquire</button>
-      </div>
+      <div class="mobile-footer"><span class="mobile-price">¥50,400</span><button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button></div>
     </div>
     <div class="mobile-card r">
       <div class="mobile-bottle"><img src="images/test4.png" alt="112°N"></div>
-      <p class="mobile-label">Limited Only · Collector</p>
+      <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
       <h3 class="mobile-name">112°N</h3>
       <p class="mobile-desc">航海・針路をテーマにしたコレクター向け。フレンチオークと長い余韻。</p>
-      <div class="mobile-footer">
-        <span class="mobile-price">¥65,700</span>
-        <button class="btn-inquire" data-wine="112°N" data-price="¥65,700">Inquire</button>
-      </div>
+      <div class="mobile-footer"><span class="mobile-price">¥65,700</span><button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button></div>
     </div>
   </section>
 
@@ -461,6 +521,33 @@
     <p class="footer-text">© 2025 Nautae Wine Cellar · Rías Baixas, Galicia</p>
   </footer>
 
+  <!-- FLOATING CART BUTTON -->
+  <button id="cart-btn" aria-label="Cart">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    <span id="cart-badge"></span>
+  </button>
+
+  <!-- CART DRAWER -->
+  <div id="cart-overlay"></div>
+  <div id="cart-drawer">
+    <div class="drawer-head">
+      <span class="drawer-title">Cart</span>
+      <button class="drawer-close" id="drawer-close">✕</button>
+    </div>
+    <div id="drawer-items">
+      <p class="cart-empty">カートは空です。<br>ワインを選んでください。</p>
+    </div>
+    <div class="drawer-foot">
+      <div class="drawer-total" id="drawer-total" style="display:none;">
+        <span class="drawer-total-label">合計</span>
+        <span class="drawer-total-amount" id="drawer-total-amt"></span>
+      </div>
+      <button class="btn-send-inquiry" id="drawer-inquire" disabled>Send Inquiry</button>
+    </div>
+  </div>
+
   <!-- INQUIRY MODAL -->
   <div class="modal-overlay" id="modal">
     <div class="modal-box">
@@ -468,19 +555,17 @@
       <div id="modal-form-wrap">
         <p class="modal-label">Wine Inquiry</p>
         <h3 class="modal-title">お問い合わせ</h3>
-        <p class="modal-wine-display" id="modal-wine-display">—</p>
+        <div class="cart-summary" id="modal-summary"></div>
         <form id="inquiry-form" action="https://formspree.io/f/xqewqzzy" method="POST">
-          <input type="hidden" name="wine" id="hidden-wine">
-          <input type="hidden" name="price" id="hidden-price">
+          <input type="hidden" name="order" id="hidden-order">
           <div class="form-group"><input type="text" name="name" placeholder="お名前 *" required></div>
           <div class="form-group"><input type="email" name="email" placeholder="メールアドレス *" required></div>
-          <div class="form-group"><input type="number" name="quantity" placeholder="ご希望本数" min="1" max="99"></div>
           <div class="form-group"><textarea name="message" placeholder="メッセージ・ご質問（任意）"></textarea></div>
           <button type="submit" class="form-submit">Send Inquiry</button>
         </form>
       </div>
       <div class="form-success" id="form-success">
-        <div class="success-icon">✦</div>
+        <div class="s-icon">✦</div>
         <p>ありがとうございます。</p>
         <small>担当者より 2〜3 営業日以内にご連絡いたします。</small>
       </div>
@@ -492,14 +577,23 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
+    /* ============================
+       招待コード — ここで変更可能
+    ============================ */
+    const ACCESS_CODE = 'NAUTAE';
+
     /* ===== LOADER ===== */
     const isFirst = !sessionStorage.getItem('nwc_v');
     sessionStorage.setItem('nwc_v', '1');
+    const hasAccess = !!sessionStorage.getItem('nwc_access');
 
     function hideLoader() {
       gsap.to('#loader', {
         yPercent: -100, duration: 0.85, ease: 'power3.inOut',
-        onComplete: () => { document.getElementById('loader').style.display = 'none'; }
+        onComplete: () => {
+          document.getElementById('loader').style.display = 'none';
+          if (!hasAccess) showCodeGate();
+        }
       });
     }
 
@@ -512,11 +606,46 @@
     } else {
       gsap.to('#loader', {
         yPercent: -100, duration: 0.65, ease: 'power3.inOut', delay: 0.1,
-        onComplete: () => { document.getElementById('loader').style.display = 'none'; }
+        onComplete: () => {
+          document.getElementById('loader').style.display = 'none';
+          if (!hasAccess) showCodeGate();
+        }
       });
     }
 
-    /* ===== PAGE TRANSITION (exit) ===== */
+    /* ===== CODE GATE ===== */
+    function showCodeGate() {
+      const gate = document.getElementById('code-gate');
+      gate.classList.add('active');
+      gsap.to(gate, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+      setTimeout(() => document.getElementById('gate-input').focus(), 500);
+    }
+
+    function checkCode() {
+      const val = document.getElementById('gate-input').value.trim().toUpperCase();
+      const err = document.getElementById('gate-error');
+      if (val === ACCESS_CODE) {
+        sessionStorage.setItem('nwc_access', '1');
+        gsap.to('#code-gate', {
+          yPercent: -100, duration: 0.8, ease: 'power3.inOut',
+          onComplete: () => { document.getElementById('code-gate').style.display = 'none'; }
+        });
+      } else {
+        err.classList.add('show');
+        gsap.fromTo('#gate-input',
+          { x: -10 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' }
+        );
+        setTimeout(() => err.classList.remove('show'), 3000);
+      }
+    }
+
+    document.getElementById('gate-submit').addEventListener('click', checkCode);
+    document.getElementById('gate-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkCode();
+      document.getElementById('gate-error').classList.remove('show');
+    });
+
+    /* ===== PAGE TRANSITION ===== */
     document.querySelectorAll('a[href]').forEach(link => {
       const h = link.getAttribute('href');
       if (!h || h.startsWith('#') || h.startsWith('http') || h.startsWith('mailto') || h.startsWith('tel')) return;
@@ -535,8 +664,7 @@
     /* ===== CURSOR ===== */
     if (window.matchMedia('(pointer: fine)').matches) {
       document.body.style.cursor = 'none';
-      const dot = document.getElementById('cur-dot');
-      const ring = document.getElementById('cur-ring');
+      const dot = document.getElementById('cur-dot'), ring = document.getElementById('cur-ring');
       let mx = 0, my = 0, rx = 0, ry = 0;
       window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; gsap.to(dot, { x: mx, y: my, duration: 0.05 }); });
       (function lerp() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; gsap.set(ring, { x: rx, y: ry }); requestAnimationFrame(lerp); })();
@@ -557,45 +685,25 @@
       const track = document.getElementById('h-track');
       const slides = gsap.utils.toArray('.h-slide');
       const dots = document.querySelectorAll('.h-dot');
-      const progress = document.getElementById('h-progress');
-
-      const getTotalScroll = () => track.scrollWidth - window.innerWidth;
+      const prog = document.getElementById('h-progress');
 
       gsap.to(track, {
-        x: () => -getTotalScroll(),
+        x: () => -(track.scrollWidth - window.innerWidth),
         ease: 'none',
         scrollTrigger: {
-          trigger: '#wines-h',
-          pin: true,
-          scrub: 1.2,
+          trigger: '#wines-h', pin: true, scrub: 1.2,
           snap: { snapTo: 1 / (slides.length - 1), duration: { min: 0.2, max: 0.5 }, ease: 'power2.inOut' },
-          end: () => '+=' + getTotalScroll(),
-          onEnter: ()      => progress.classList.add('visible'),
-          onLeave: ()      => progress.classList.remove('visible'),
-          onEnterBack: ()  => progress.classList.add('visible'),
-          onLeaveBack: ()  => progress.classList.remove('visible'),
+          end: () => '+=' + (track.scrollWidth - window.innerWidth),
+          onEnter: ()     => prog.classList.add('visible'),
+          onLeave: ()     => prog.classList.remove('visible'),
+          onEnterBack: () => prog.classList.add('visible'),
+          onLeaveBack: () => prog.classList.remove('visible'),
           onUpdate: self => {
             const idx = Math.round(self.progress * (slides.length - 1));
             dots.forEach((d, i) => d.classList.toggle('active', i === idx));
           }
         }
       });
-
-      // Dot click navigation
-      dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => {
-          const totalScroll = getTotalScroll();
-          const targetScroll = ScrollTrigger.getById('wines-h')
-            ? ScrollTrigger.getAll().find(t => t.trigger === document.getElementById('wines-h'))
-            : null;
-          if (targetScroll) {
-            const st = targetScroll;
-            const scrollTo = st.start + (i / (slides.length - 1)) * (st.end - st.start);
-            window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-          }
-        });
-      });
-
       window.addEventListener('resize', () => ScrollTrigger.refresh());
     }
 
@@ -607,36 +715,140 @@
       });
     });
 
-    /* ===== MODAL ===== */
-    const modal = document.getElementById('modal');
-    document.querySelectorAll('.btn-inquire').forEach(btn => {
+    /* ===== CART ===== */
+    let cart = [];
+
+    function addToCart(wine, priceNum, display) {
+      const existing = cart.find(i => i.wine === wine);
+      if (existing) { existing.qty++; }
+      else { cart.push({ wine, priceNum, display, qty: 1 }); }
+      updateCart();
+    }
+    function removeFromCart(wine) {
+      cart = cart.filter(i => i.wine !== wine);
+      updateCart();
+    }
+    function changeQty(wine, delta) {
+      const item = cart.find(i => i.wine === wine);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + delta);
+      updateCart();
+    }
+
+    function updateCart() {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      badge.textContent = count;
+      if (count > 0) {
+        badge.classList.add('show');
+        gsap.fromTo('#cart-btn', { scale: 0.88 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+      } else {
+        badge.classList.remove('show');
+      }
+      renderDrawer();
+    }
+
+    function renderDrawer() {
+      const container = document.getElementById('drawer-items');
+      const totalEl   = document.getElementById('drawer-total');
+      const totalAmt  = document.getElementById('drawer-total-amt');
+      const btn       = document.getElementById('drawer-inquire');
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p class="cart-empty">カートは空です。<br>ワインを選んでください。</p>';
+        totalEl.style.display = 'none';
+        btn.disabled = true;
+        return;
+      }
+
+      const total = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+      container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div style="flex:1; min-width:0;">
+            <p class="ci-name">${escHtml(item.wine)}</p>
+            <p class="ci-price">${item.display}</p>
+          </div>
+          <div class="ci-controls">
+            <button class="ci-btn" data-action="dec" data-wine="${escHtml(item.wine)}">−</button>
+            <span class="ci-qty">${item.qty}</span>
+            <button class="ci-btn" data-action="inc" data-wine="${escHtml(item.wine)}">+</button>
+            <button class="ci-remove" data-action="rem" data-wine="${escHtml(item.wine)}">✕</button>
+          </div>
+        </div>
+      `).join('');
+
+      totalEl.style.display = 'flex';
+      totalAmt.textContent = '¥' + total.toLocaleString();
+      btn.disabled = false;
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // Delegated events for cart items
+    document.getElementById('drawer-items').addEventListener('click', e => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const wine = btn.dataset.wine;
+      if (btn.dataset.action === 'dec') changeQty(wine, -1);
+      if (btn.dataset.action === 'inc') changeQty(wine,  1);
+      if (btn.dataset.action === 'rem') removeFromCart(wine);
+    });
+
+    // Add to cart buttons
+    document.querySelectorAll('.btn-cart:not(:disabled)').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.getElementById('hidden-wine').value = btn.dataset.wine;
-        document.getElementById('hidden-price').value = btn.dataset.price;
-        document.getElementById('modal-wine-display').textContent = btn.dataset.wine + '  ' + btn.dataset.price;
-        document.getElementById('form-success').style.display = 'none';
-        document.getElementById('modal-form-wrap').style.display = 'block';
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        addToCart(btn.dataset.wine, parseInt(btn.dataset.price), btn.dataset.display);
+        // Brief "Added" feedback
+        const orig = btn.textContent;
+        btn.textContent = 'Added ✓';
+        btn.classList.add('added');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1200);
       });
     });
 
+    // Cart drawer open/close
+    function openDrawer()  { document.getElementById('cart-drawer').classList.add('open'); document.getElementById('cart-overlay').classList.add('show'); document.body.style.overflow = 'hidden'; }
+    function closeDrawer() { document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('show'); document.body.style.overflow = ''; }
+
+    document.getElementById('cart-btn').addEventListener('click', openDrawer);
+    document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+    document.getElementById('cart-overlay').addEventListener('click', closeDrawer);
+
+    /* ===== INQUIRY MODAL ===== */
+    function openModal() {
+      const total = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+      const summary = document.getElementById('modal-summary');
+      summary.innerHTML = cart.map(i =>
+        `<div class="summary-row"><span>${escHtml(i.wine)} × ${i.qty}</span><span>¥${(i.priceNum*i.qty).toLocaleString()}</span></div>`
+      ).join('') + `<div class="summary-total"><span>合計</span><span>¥${total.toLocaleString()}</span></div>`;
+      document.getElementById('hidden-order').value =
+        cart.map(i => `${i.wine} x${i.qty} ${i.display}`).join(' / ') + ` | 合計 ¥${total.toLocaleString()}`;
+      document.getElementById('form-success').style.display = 'none';
+      document.getElementById('modal-form-wrap').style.display = 'block';
+      closeDrawer();
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    document.getElementById('drawer-inquire').addEventListener('click', openModal);
+
+    function closeModal() { document.getElementById('modal').classList.remove('active'); document.body.style.overflow = ''; }
     document.getElementById('modal-close').addEventListener('click', closeModal);
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-    function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; }
 
     document.getElementById('inquiry-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const form = e.target;
-      const btn = form.querySelector('.form-submit');
+      const form = e.target, btn = form.querySelector('.form-submit');
       btn.textContent = 'Sending...'; btn.disabled = true;
       try {
         const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
         if (res.ok) {
           document.getElementById('modal-form-wrap').style.display = 'none';
           document.getElementById('form-success').style.display = 'block';
-          form.reset();
+          cart = []; updateCart(); form.reset();
         } else { btn.textContent = 'Error — Retry'; btn.disabled = false; }
       } catch { btn.textContent = 'Error — Retry'; btn.disabled = false; }
     });
