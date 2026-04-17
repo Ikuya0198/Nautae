@@ -15,6 +15,23 @@
     img { max-width: 100%; display: block; }
     a { text-decoration: none; }
 
+    /* ===== AGE GATE ===== */
+    #age-gate {
+      position: fixed; inset: 0; z-index: 10000; background: #04040c;
+      display: none; align-items: center; justify-content: center;
+    }
+    .age-inner { text-align: center; padding: 48px 24px; max-width: 440px; width: 100%; }
+    .age-logo { width: 56px; margin: 0 auto 40px; opacity: 0.55; }
+    .age-vline { width: 1px; height: 48px; background: linear-gradient(to bottom, transparent, #c8a96e, transparent); margin: 0 auto 36px; }
+    .age-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 300; line-height: 1.5; margin-bottom: 16px; }
+    .age-sub { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 1px; line-height: 2; margin-bottom: 44px; }
+    .age-btns { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .age-yes { background: #c8a96e; color: #080808; border: none; padding: 14px 52px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+    .age-yes:hover { background: #d4b87c; }
+    .age-no { background: none; border: none; color: rgba(255,255,255,0.22); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 1px; cursor: pointer; text-decoration: underline; transition: color 0.3s; padding: 4px; }
+    .age-no:hover { color: rgba(255,255,255,0.5); }
+    .age-denied { display: none; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 2; margin-top: 28px; }
+
     /* ===== LOADER ===== */
     #loader {
       position: fixed; inset: 0; z-index: 9999;
@@ -189,6 +206,17 @@
       background: #c8a96e; margin-top: 13px;
     }
 
+    /* ===== COUNTDOWN ===== */
+    #countdown { background: #06060e; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 80px 48px; text-align: center; overflow: hidden; }
+    .cd-label { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 10px; }
+    .cd-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.5vw, 26px); font-weight: 300; letter-spacing: 5px; color: rgba(255,255,255,0.55); margin-bottom: 52px; }
+    .cd-units { display: flex; justify-content: center; }
+    .cd-unit { padding: 0 32px; position: relative; }
+    .cd-unit:not(:last-child)::after { content: ':'; position: absolute; right: -2px; top: 50%; transform: translateY(-68%); font-family: 'Cormorant Garamond', serif; font-size: 36px; color: rgba(200,169,110,0.25); }
+    .cd-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 8vw, 96px); font-weight: 300; color: #c8a96e; line-height: 1; display: block; }
+    .cd-unit-label { font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-top: 12px; display: block; }
+    @media (max-width: 600px) { .cd-unit { padding: 0 14px; } }
+
     /* ===== COMING SOON ===== */
     #coming-soon { background: #0a0a0a; text-align: center; }
     .cs-stores {
@@ -323,6 +351,21 @@
 </head>
 <body>
 
+  <!-- AGE GATE -->
+  <div id="age-gate">
+    <div class="age-inner">
+      <img src="images/logo white.png" alt="Nautae" class="age-logo">
+      <div class="age-vline"></div>
+      <h2 class="age-heading">このサイトは<br>アルコール飲料を扱っています</h2>
+      <p class="age-sub">ご利用には年齢確認が必要です。<br>あなたは20歳以上ですか？</p>
+      <div class="age-btns">
+        <button class="age-yes" id="age-yes">はい、20歳以上です</button>
+        <button class="age-no" id="age-no">いいえ、20歳未満です</button>
+      </div>
+      <p class="age-denied" id="age-denied">申し訳ありませんが、<br>このサイトにはアクセスできません。</p>
+    </div>
+  </div>
+
   <!-- LOADER -->
   <div id="loader">
     <img src="images/logo white.png" alt="Nautae" class="loader-logo-img">
@@ -340,6 +383,7 @@
       <li><a href="index.html" class="active">Story</a></li>
       <li><a href="shop.html">Shop</a></li>
       <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="archive.html">Archive</a></li>
     </ul>
     <div class="lang-toggle">
       <button class="lang-btn active" data-lang="ja">JP</button>
@@ -360,6 +404,18 @@
     <div class="scroll-indicator">
       <span>Scroll</span>
       <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section id="countdown">
+    <p class="cd-label">Next Release</p>
+    <p class="cd-title">2026 Collection — Autumn</p>
+    <div class="cd-units">
+      <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><span class="cd-unit-label">Days</span></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-hrs">--</span><span class="cd-unit-label">Hours</span></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-min">--</span><span class="cd-unit-label">Min</span></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-sec">--</span><span class="cd-unit-label">Sec</span></div>
     </div>
   </section>
 
@@ -504,6 +560,7 @@
           <li><a href="index.html">Story</a></li>
           <li><a href="shop.html">Shop</a></li>
           <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="archive.html">Archive</a></li>
         </ul>
       </div>
       <div>
@@ -679,6 +736,37 @@
         scrollTrigger: { trigger: el, start: 'top 87%' }
       });
     });
+
+    /* ===== AGE GATE ===== */
+    (function() {
+      if (sessionStorage.getItem('nwc_age')) return;
+      const gate = document.getElementById('age-gate');
+      gate.style.display = 'flex';
+      document.getElementById('age-yes').addEventListener('click', () => {
+        sessionStorage.setItem('nwc_age', '1');
+        gate.style.transition = 'opacity 0.6s ease';
+        gate.style.opacity = '0';
+        setTimeout(() => { gate.style.display = 'none'; }, 600);
+      });
+      document.getElementById('age-no').addEventListener('click', () => {
+        document.querySelector('.age-btns').style.display = 'none';
+        document.getElementById('age-denied').style.display = 'block';
+      });
+    })();
+
+    /* ===== COUNTDOWN ===== */
+    const RELEASE_DATE = new Date('2026-10-01T00:00:00');
+    function updateCountdown() {
+      const diff = RELEASE_DATE - new Date();
+      if (diff <= 0) { ['cd-days','cd-hrs','cd-min','cd-sec'].forEach(id => document.getElementById(id).textContent = '00'); return; }
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('cd-days').textContent = pad(Math.floor(diff / 86400000));
+      document.getElementById('cd-hrs').textContent  = pad(Math.floor((diff % 86400000) / 3600000));
+      document.getElementById('cd-min').textContent  = pad(Math.floor((diff % 3600000) / 60000));
+      document.getElementById('cd-sec').textContent  = pad(Math.floor((diff % 60000) / 1000));
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
     /* ===== LANGUAGE TOGGLE ===== */
     const i18n = {

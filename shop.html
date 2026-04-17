@@ -15,6 +15,26 @@
     img { max-width: 100%; display: block; }
     a { text-decoration: none; }
 
+    /* ===== AGE GATE ===== */
+    #age-gate { position: fixed; inset: 0; z-index: 10000; background: #04040c; display: none; align-items: center; justify-content: center; }
+    .age-inner { text-align: center; padding: 48px 24px; max-width: 440px; width: 100%; }
+    .age-logo { width: 56px; margin: 0 auto 40px; opacity: 0.55; }
+    .age-vline { width: 1px; height: 48px; background: linear-gradient(to bottom, transparent, #c8a96e, transparent); margin: 0 auto 36px; }
+    .age-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 300; line-height: 1.5; margin-bottom: 16px; }
+    .age-sub { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 1px; line-height: 2; margin-bottom: 44px; }
+    .age-btns { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .age-yes { background: #c8a96e; color: #080808; border: none; padding: 14px 52px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+    .age-yes:hover { background: #d4b87c; }
+    .age-no { background: none; border: none; color: rgba(255,255,255,0.22); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 1px; cursor: pointer; text-decoration: underline; transition: color 0.3s; padding: 4px; }
+    .age-no:hover { color: rgba(255,255,255,0.5); }
+    .age-denied { display: none; font-size: 13px; color: rgba(255,255,255,0.35); line-height: 2; margin-top: 28px; }
+
+    /* ===== PAIRING ===== */
+    .slide-pairing { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .pairing-icon { color: rgba(200,169,110,0.45); flex-shrink: 0; }
+    .pairing-label { font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(200,169,110,0.55); margin-right: 4px; }
+    .pairing-text { font-size: 11px; color: rgba(255,255,255,0.32); letter-spacing: 0.5px; }
+
     /* ===== LOADER ===== */
     #loader {
       position: fixed; inset: 0; z-index: 9999; background: #080808;
@@ -410,6 +430,21 @@
 </head>
 <body>
 
+  <!-- AGE GATE -->
+  <div id="age-gate">
+    <div class="age-inner">
+      <img src="images/logo white.png" alt="Nautae" class="age-logo">
+      <div class="age-vline"></div>
+      <h2 class="age-heading">このサイトは<br>アルコール飲料を扱っています</h2>
+      <p class="age-sub">ご利用には年齢確認が必要です。<br>あなたは20歳以上ですか？</p>
+      <div class="age-btns">
+        <button class="age-yes" id="age-yes">はい、20歳以上です</button>
+        <button class="age-no" id="age-no">いいえ、20歳未満です</button>
+      </div>
+      <p class="age-denied" id="age-denied">申し訳ありませんが、<br>このサイトにはアクセスできません。</p>
+    </div>
+  </div>
+
   <!-- LOADER -->
   <div id="loader">
     <img src="images/logo white.png" alt="Nautae" class="loader-logo-img">
@@ -443,6 +478,7 @@
       <li><a href="index.html">Story</a></li>
       <li><a href="shop.html" class="active">Shop</a></li>
       <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="archive.html">Archive</a></li>
     </ul>
   </nav>
 
@@ -483,6 +519,11 @@
               凛とした酸が背骨をつくり、海の塩気とほのかなアーモンドが長い余韻を残します。<br><br>
               スタイル：辛口・フルボディ（長期熟成ポテンシャル）　生産本数：年間 50〜150 本
             </p>
+            <div class="slide-pairing">
+              <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <span class="pairing-label">Pairing</span>
+              <span class="pairing-text">フォアグラ · ウニ · 白トリュフ · 熟成チーズ</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥249,000<small>（税込）</small></div>
               <button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button>
@@ -507,6 +548,11 @@
               ライム、青りんご、白い花の香り。直線的な酸とシャープなミネラルが際立つスタイルです。<br><br>
               スタイル：辛口・ミディアムボディ
             </p>
+            <div class="slide-pairing">
+              <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <span class="pairing-label">Pairing</span>
+              <span class="pairing-text">牡蠣 · シーバス · 山羊チーズ · 魚介マリネ</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥42,300<small>（税込）</small></div>
               <button class="btn-cart" data-wine="Hurricane" data-price="42300" data-display="¥42,300">Add to Cart</button>
@@ -532,6 +578,11 @@
               グレープフルーツ、洋梨、海風由来の塩気と花崗岩のようなミネラル。<br><br>
               スタイル：辛口・ミディアム〜フルボディ
             </p>
+            <div class="slide-pairing">
+              <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <span class="pairing-label">Pairing</span>
+              <span class="pairing-text">鯛 · 帆立 · レモンバターソース · 白カビチーズ</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥50,400<small>（税込）</small></div>
               <button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button>
@@ -557,6 +608,11 @@
               海のミネラル感に陰影を与え、非常に長い余韻を生み出します。<br><br>
               スタイル：辛口・フルボディ（熟成向き）
             </p>
+            <div class="slide-pairing">
+              <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <span class="pairing-label">Pairing</span>
+              <span class="pairing-text">鴨 · フォアグラ · ハードチーズ · 松茸</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥65,700<small>（税込）</small></div>
               <button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button>
@@ -582,6 +638,11 @@
               柔らかなミネラルとなめらかな酸が静かに長い余韻を紡ぎます。<br><br>
               スタイル：辛口・ライト〜ミディアムボディ
             </p>
+            <div class="slide-pairing">
+              <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <span class="pairing-label">Pairing</span>
+              <span class="pairing-text">白身魚 · ブルーチーズ · 梨のタルト · 軽い前菜</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥38,500<small>（税込）</small></div>
               <button class="btn-cart" data-wine="Aquel Lugar" data-price="38500" data-display="¥38,500">Add to Cart</button>
@@ -706,6 +767,7 @@
           <li><a href="index.html">Story</a></li>
           <li><a href="shop.html">Shop</a></li>
           <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="archive.html">Archive</a></li>
         </ul>
       </div>
       <div>
@@ -789,6 +851,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
+
+    /* ===== AGE GATE ===== */
+    (function() {
+      if (sessionStorage.getItem('nwc_age')) return;
+      const gate = document.getElementById('age-gate');
+      gate.style.display = 'flex';
+      document.getElementById('age-yes').addEventListener('click', () => {
+        sessionStorage.setItem('nwc_age', '1');
+        gate.style.transition = 'opacity 0.6s ease';
+        gate.style.opacity = '0';
+        setTimeout(() => { gate.style.display = 'none'; }, 600);
+      });
+      document.getElementById('age-no').addEventListener('click', () => {
+        document.querySelector('.age-btns').style.display = 'none';
+        document.getElementById('age-denied').style.display = 'block';
+      });
+    })();
 
     /* ============================
        招待コード — ここで変更可能
