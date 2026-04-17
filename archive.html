@@ -80,6 +80,29 @@
     .footer-legal a { font-size: 11px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; transition: color 0.3s; }
     .footer-legal a:hover { color: rgba(255,255,255,0.45); }
 
+    /* ===== GRAIN OVERLAY ===== */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 9997; pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: grain 0.3s steps(1) infinite;
+    }
+    @keyframes grain {
+      0%   { transform: translate(0, 0); }
+      20%  { transform: translate(-3px, 2px); }
+      40%  { transform: translate(2px, -3px); }
+      60%  { transform: translate(3px, 2px); }
+      80%  { transform: translate(-2px, -2px); }
+    }
+    ::selection { background: rgba(200,169,110,0.22); color: #fff; }
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 10000;
+      height: 1px; background: linear-gradient(90deg, #c8a96e, #e8c87a, #c8a96e);
+      width: 0%; pointer-events: none;
+      box-shadow: 0 0 8px rgba(200,169,110,0.55);
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       nav, nav.scrolled { padding: 18px 24px; }
@@ -100,6 +123,8 @@
   </style>
 </head>
 <body>
+
+  <div id="scroll-progress"></div>
 
   <!-- LOADER -->
   <div id="loader">
@@ -262,10 +287,12 @@
       });
     });
 
-    /* ===== NAV ===== */
+    /* ===== NAV + SCROLL PROGRESS ===== */
+    const spEl = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-    });
+      spEl.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+    }, { passive: true });
 
     /* ===== HERO ENTRANCE ===== */
     const delay = isFirst ? 2.8 : 0.8;

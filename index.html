@@ -292,6 +292,51 @@
       .footer-bottom { flex-direction: column; gap: 12px; padding: 20px 24px; text-align: center; }
     }
 
+    /* ===== GRAIN OVERLAY ===== */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 9997; pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: grain 0.3s steps(1) infinite;
+    }
+    @keyframes grain {
+      0%   { transform: translate(0, 0); }
+      20%  { transform: translate(-3px, 2px); }
+      40%  { transform: translate(2px, -3px); }
+      60%  { transform: translate(3px, 2px); }
+      80%  { transform: translate(-2px, -2px); }
+    }
+
+    /* ===== SELECTION ===== */
+    ::selection { background: rgba(200,169,110,0.22); color: #fff; }
+
+    /* ===== SCROLL PROGRESS ===== */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 10000;
+      height: 1px; background: linear-gradient(90deg, #c8a96e 0%, #e8c87a 50%, #c8a96e 100%);
+      width: 0%; pointer-events: none;
+      box-shadow: 0 0 8px rgba(200,169,110,0.55);
+    }
+
+    /* ===== HERO VIGNETTE ===== */
+    .hero-vignette {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, #080808);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ===== BUTTON LIGHT SWEEP ===== */
+    .btn-outline { position: relative; overflow: hidden; }
+    .btn-outline::after {
+      content: ''; position: absolute; top: 0; left: -120%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(200,169,110,0.14), transparent);
+      transition: left 0.6s ease;
+    }
+    .btn-outline:hover::after { left: 160%; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
       .story-cols { grid-template-columns: 1fr; gap: 40px; }
@@ -309,6 +354,8 @@
   </style>
 </head>
 <body>
+
+  <div id="scroll-progress"></div>
 
   <!-- LOADER -->
   <div id="loader">
@@ -345,6 +392,7 @@
       <span>Scroll</span>
       <div class="scroll-line"></div>
     </div>
+    <div class="hero-vignette"></div>
   </section>
 
   <!-- COUNTDOWN -->
@@ -711,6 +759,13 @@
       btn.addEventListener('click', () => applyLang(btn.dataset.lang));
     });
     if (currentLang === 'en') applyLang('en');
+
+    /* ===== SCROLL PROGRESS ===== */
+    const spEl = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      spEl.style.width = pct + '%';
+    }, { passive: true });
 
     /* ===== NOTIFY FORM ===== */
     const notifyForm = document.getElementById('notify-form');
