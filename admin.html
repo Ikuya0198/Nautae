@@ -328,46 +328,26 @@
     }
 
     /* ===== AUTH ===== */
-    let savedHash = localStorage.getItem('nwc_admin_h');
-    const inSession = sessionStorage.getItem('nwc_admin_s') === '1';
-    let isSettingPw = !savedHash;
+    // パスワードを変更する場合: echo -n "新パスワード" | shasum -a 256 で生成したハッシュに差し替える
+    const ADMIN_HASH = '3c190122aeae9ee572261eb95d842e57b93eea12a23a816eea1898588234cfd9';
 
-    if (isSettingPw) {
-      document.getElementById('auth-title').textContent = 'パスワードを作成';
-      document.getElementById('auth-sub').textContent   = '管理画面で使用するパスワードを設定してください。';
-      document.getElementById('auth-pw1').placeholder   = '新しいパスワード';
-      document.getElementById('auth-pw2').style.display = 'block';
-      document.getElementById('auth-submit').textContent = '設定する';
-    }
-    if (inSession) showAdmin();
+    if (sessionStorage.getItem('nwc_admin_s') === '1') showAdmin();
 
-    ['auth-pw1','auth-pw2'].forEach(id => {
-      document.getElementById(id).addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('auth-submit').click();
-      });
+    document.getElementById('auth-pw1').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('auth-submit').click();
     });
 
     document.getElementById('auth-submit').addEventListener('click', async () => {
       const pw  = document.getElementById('auth-pw1').value;
       const err = document.getElementById('auth-err');
       if (!pw) { err.textContent = 'パスワードを入力してください。'; return; }
-      if (isSettingPw) {
-        const pw2 = document.getElementById('auth-pw2').value;
-        if (pw !== pw2)    { err.textContent = 'パスワードが一致しません。'; return; }
-        if (pw.length < 6) { err.textContent = '6文字以上で設定してください。'; return; }
-        const hash = await sha256(pw);
-        localStorage.setItem('nwc_admin_h', hash); savedHash = hash;
-        sessionStorage.setItem('nwc_admin_s','1');
-        showAdmin();
-      } else {
-        const hash = await sha256(pw);
-        if (hash !== savedHash) {
-          err.textContent = 'パスワードが違います。';
-          document.getElementById('auth-pw1').value = ''; return;
-        }
-        sessionStorage.setItem('nwc_admin_s','1');
-        showAdmin();
+      const hash = await sha256(pw);
+      if (hash !== ADMIN_HASH) {
+        err.textContent = 'パスワードが違います。';
+        document.getElementById('auth-pw1').value = ''; return;
       }
+      sessionStorage.setItem('nwc_admin_s', '1');
+      showAdmin();
     });
 
     function showAdmin() {
@@ -842,11 +822,11 @@
         if (!p1)       { msg.style.color='#e08080'; msg.textContent='パスワードを入力してください。'; return; }
         if (p1 !== p2) { msg.style.color='#e08080'; msg.textContent='パスワードが一致しません。'; return; }
         if (p1.length < 6) { msg.style.color='#e08080'; msg.textContent='6文字以上で設定してください。'; return; }
-        localStorage.setItem('nwc_admin_h', await sha256(p1)); savedHash = localStorage.getItem('nwc_admin_h');
+        const newHash = await sha256(p1);
         document.getElementById('new-pw1').value = '';
         document.getElementById('new-pw2').value = '';
-        msg.style.color='#7dc99a'; msg.textContent='パスワードを変更しました。';
-        setTimeout(() => { msg.textContent=''; }, 4000);
+        msg.style.color='#c8a96e';
+        msg.textContent = '新しいハッシュ（admin.htmlのADMIN_HASHに貼り替えてください）: ' + newHash;
       });
 
       document.getElementById('btn-logout').addEventListener('click', () => { sessionStorage.removeItem('nwc_admin_s'); location.reload(); });
