@@ -19,7 +19,6 @@
     }
     #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-content { position: relative; z-index: 1; padding: 0 24px; }
-    .hero-logo-img { width: 80px; margin: 0 auto 32px; opacity: 0; }
     .hero-badge {
       display: inline-block; font-size: 10px; letter-spacing: 4px;
       text-transform: uppercase; color: #c8a96e;
@@ -125,7 +124,7 @@
     .cd-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.5vw, 26px); font-weight: 300; letter-spacing: 5px; color: rgba(255,255,255,0.55); margin-bottom: 52px; }
     .cd-units { display: flex; justify-content: center; }
     .cd-unit { padding: 0 32px; position: relative; }
-    .cd-unit:not(:last-child)::after { content: ':'; position: absolute; right: -2px; top: 50%; transform: translateY(-68%); font-family: 'Cormorant Garamond', serif; font-size: 36px; color: rgba(200,169,110,0.25); }
+    .cd-unit:not(:last-child)::after { content: ':'; position: absolute; right: -2px; top: 50%; transform: translateY(-68%); font-family: 'Cormorant Garamond', serif; font-size: 36px; color: rgba(200,169,110,0.55); }
     .cd-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 8vw, 96px); font-weight: 300; color: #c8a96e; line-height: 1; display: block; }
     .cd-unit-label { font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-top: 12px; display: block; }
     @media (max-width: 600px) { .cd-unit { padding: 0 14px; } }
@@ -285,7 +284,6 @@
   <section id="hero">
     <canvas id="hero-canvas"></canvas>
     <div class="hero-content">
-      <img src="images/logo white.webp" alt="Nautae" class="hero-logo-img">
       <div class="hero-badge">Spain · Italy · Japan</div>
       <h1 class="hero-title">Nautae Wine Cellar</h1>
       <p class="hero-region">Limited · Handcrafted · Always Evolving</p>
@@ -542,10 +540,11 @@
     });
 
     /* ===== THREE.JS GERSTNER OCEAN ===== */
-    if (window.innerWidth >= 768) {
+    {
+      const isMobile = window.innerWidth < 768;
       const canvas = document.getElementById('hero-canvas');
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isMobile });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
 
       const scene = new THREE.Scene();
@@ -650,7 +649,7 @@
         uWave7: { value: new THREE.Vector4(-0.28,  0.96, 0.04, 0.9) },  // fine surface chop
       };
 
-      const geo = new THREE.PlaneGeometry(40, 40, 220, 220);
+      const geo = new THREE.PlaneGeometry(40, 40, isMobile ? 140 : 220, isMobile ? 140 : 220);
       geo.rotateX(-Math.PI / 2);
       const ocean = new THREE.Mesh(geo, new THREE.ShaderMaterial({
         vertexShader, fragmentShader, uniforms, transparent: true
@@ -677,14 +676,11 @@
         camera.lookAt(camera.position.x * 0.15, 0.4, -8);
         renderer.render(scene, camera);
       })();
-    } else {
-      document.getElementById('hero-canvas').style.display = 'none';
     }
 
     /* ===== HERO ENTRANCE ===== */
     const tl = gsap.timeline({ delay: isFirst ? 2.8 : 0.8 });
-    tl.to('.hero-logo-img',  { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 0)
-      .to('.hero-badge',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.2)
+    tl.to('.hero-badge',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0)
       .to('.hero-title',     { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out' }, 0.4)
       .to('.hero-region',    { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.65)
       .to('.hero-sub',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.8)

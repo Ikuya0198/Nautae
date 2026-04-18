@@ -15,6 +15,7 @@
     #g-wrap {
       position: relative;
       height: 100vh;
+      height: 100svh; /* iOS Safari: small viewport height — excludes browser chrome */
       overflow: hidden;
     }
 
@@ -31,7 +32,8 @@
     /* Case C: 写真を額縁スタイルで表示 — 縦横比そのまま、余白あり */
     .g-slide img {
       display: block;
-      max-height: calc(100vh - 130px);
+      max-height: calc(100vh - 140px);
+      max-height: calc(100svh - 140px);
       max-width: calc(100% - 200px);
       width: auto;
       height: auto;
@@ -145,15 +147,26 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 20px 48px; max-width: 1200px; margin: 0 auto;
     }
-    .gf-copy { font-size: 11px; color: rgba(255,255,255,0.16); letter-spacing: 0.5px; }
+    .gf-copy { font-size: 11px; color: rgba(255,255,255,0.38); letter-spacing: 0.5px; }
     .gf-links { display: flex; gap: 28px; }
-    .gf-links a { font-size: 11px; color: rgba(255,255,255,0.16); letter-spacing: 0.5px; transition: color 0.3s; }
-    .gf-links a:hover { color: rgba(255,255,255,0.45); }
+    .gf-links a { font-size: 11px; color: rgba(255,255,255,0.38); letter-spacing: 0.5px; transition: color 0.3s; }
+    .gf-links a:hover { color: rgba(255,255,255,0.65); }
+
+    /* ===== NAV: always visible on gallery page ===== */
+    #navbar {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      transition: none;
+    }
 
     /* ===== MOBILE ===== */
     @media (max-width: 768px) {
+      #g-wrap {
+        height: 100svh; /* svh override for mobile — ensures gallery fits visible area */
+      }
       .g-slide img {
-        max-height: calc(100vh - 110px);
+        max-height: calc(100vh - 160px); /* fallback */
+        max-height: calc(100svh - 160px); /* nav (~74px) × 2 + buffer → image clears nav */
         max-width: calc(100% - 80px);
       }
       .g-arrow { padding: 16px 13px; }
@@ -301,6 +314,7 @@
     let current = 0;
     let isAnimating = false;
     let autoTimer;
+    let autoResume;
     const counter   = document.getElementById('g-counter');
     const dotsWrap  = document.getElementById('g-dots');
     const gWrap     = document.getElementById('g-wrap');
@@ -347,7 +361,13 @@
       setTimeout(() => { isAnimating = false; }, 1000);
     }
 
-    function clearAuto() { clearInterval(autoTimer); }
+    function clearAuto() {
+      clearInterval(autoTimer);
+      clearTimeout(autoResume);
+      autoResume = setTimeout(() => {
+        autoTimer = setInterval(() => goTo(current + 1), 7000);
+      }, 10000);
+    }
 
     function buildGallery(list) {
       photos = list.filter(p => p.visible !== false);
