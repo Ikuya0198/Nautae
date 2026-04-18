@@ -1,10 +1,90 @@
 {
   "updatedAt": "2026-04-18T00:00:00Z",
-  "wines": {
-    "luz":       { "status": "limited",   "price": 249000, "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "13.5%" },
-    "hurricane": { "status": "available", "price": 42300,  "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "12.5%" },
-    "norte":     { "status": "available", "price": 50400,  "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "13.0%" },
-    "112n":      { "status": "limited",   "price": 65700,  "vintage": "2023", "variety": "Albariño — Barrel Fermented","region": "Rías Baixas D.O.", "abv": "13.5%" },
-    "aquel":     { "status": "available", "price": 38500,  "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "12.0%" }
-  }
+  "wines": [
+    {
+      "id": "luz",
+      "visible": true,
+      "status": "limited",
+      "name": "\"Luz de Mi Alma\"",
+      "nameSub": "ルス・デ・ミ・アルマ ／ 私の魂の光",
+      "label": "Flagship · Grand Cuvée",
+      "price": 249000,
+      "vintage": "2024",
+      "variety": "Albariño 100%",
+      "region": "Rías Baixas D.O.",
+      "abv": "13.5%",
+      "desc": "Nautae Wine Cellar の頂点に立つグラン・キュヴェ。\nレモンピールや白桃、白い花、石畳を思わせるミネラルのニュアンス。\n凛とした酸が背骨をつくり、海の塩気とほのかなアーモンドが長い余韻を残します。\n\nスタイル：辛口・フルボディ（長期熟成ポテンシャル）　生産本数：年間 50〜150 本",
+      "pairing": "フォアグラ · ウニ · 白トリュフ · 熟成チーズ",
+      "mobileDesc": "凛とした酸と海の塩気、長い余韻。年間 50〜150 本の限定グラン・キュヴェ。",
+      "image": "images/LUZ DE MI Alma.webp"
+    },
+    {
+      "id": "hurricane",
+      "visible": true,
+      "status": "available",
+      "name": "Hurricane",
+      "nameSub": "",
+      "label": "Limited Only",
+      "price": 42300,
+      "vintage": "2024",
+      "variety": "Albariño 100%",
+      "region": "Rías Baixas D.O.",
+      "abv": "12.5%",
+      "desc": "北風・北の海流・ある一日の記憶を暗示させる、知的な一本。\nライム、青りんご、白い花の香り。直線的な酸とシャープなミネラルが際立つスタイルです。\n\nスタイル：辛口・ミディアムボディ",
+      "pairing": "牡蠣 · シーバス · 山羊チーズ · 魚介マリネ",
+      "mobileDesc": "ライム、青りんご、直線的な酸とシャープなミネラル。",
+      "image": "images/test1.webp"
+    },
+    {
+      "id": "norte",
+      "visible": true,
+      "status": "available",
+      "name": "Norte 41° Atlántico",
+      "nameSub": "",
+      "label": "Limited Only",
+      "price": 50400,
+      "vintage": "2024",
+      "variety": "Albariño 100%",
+      "region": "Rías Baixas D.O.",
+      "abv": "13.0%",
+      "desc": "北緯 41°、大西洋。地図上の一点をワイン名にしたこのキュヴェは、\nテロワールそのものにフォーカスした海洋ワインです。\nグレープフルーツ、洋梨、海風由来の塩気と花崗岩のようなミネラル。\n\nスタイル：辛口・ミディアム〜フルボディ",
+      "pairing": "鯛 · 帆立 · レモンバターソース · 白カビチーズ",
+      "mobileDesc": "北緯41°の大西洋。グレープフルーツと海風由来のミネラル。",
+      "image": "images/test3.webp"
+    },
+    {
+      "id": "112n",
+      "visible": true,
+      "status": "limited",
+      "name": "112°N",
+      "nameSub": "",
+      "label": "Limited Only · Collector",
+      "price": 65700,
+      "vintage": "2023",
+      "variety": "Albariño — Barrel Fermented",
+      "region": "Rías Baixas D.O.",
+      "abv": "13.5%",
+      "desc": "航海・針路・決断をテーマにしたコレクター向けの一本。\n凝縮した果実味と熟した白桃、重厚なフレンチオークが\n海のミネラル感に陰影を与え、非常に長い余韻を生み出します。\n\nスタイル：辛口・フルボディ（熟成向き）",
+      "pairing": "鴨 · フォアグラ · ハードチーズ · 松茸",
+      "mobileDesc": "航海・針路をテーマにしたコレクター向け。フレンチオークと長い余韻。",
+      "image": "images/test4.webp"
+    },
+    {
+      "id": "aquel",
+      "visible": true,
+      "status": "available",
+      "name": "Aquel Lugar",
+      "nameSub": "アケル・ルガール ／ あの場所",
+      "label": "Limited Only",
+      "price": 38500,
+      "vintage": "2024",
+      "variety": "Albariño 100%",
+      "region": "Rías Baixas D.O.",
+      "abv": "12.0%",
+      "desc": "記憶の中の「あの場所」へと引き戻す一本。\n熟した洋梨、白い花、微かなスパイスが重なり、\n柔らかなミネラルとなめらかな酸が静かに長い余韻を紡ぎます。\n\nスタイル：辛口・ライト〜ミディアムボディ",
+      "pairing": "白身魚 · ブルーチーズ · 梨のタルト · 軽い前菜",
+      "mobileDesc": "記憶の中の「あの場所」へ。洋梨と白い花、柔らかなミネラルと長い余韻。",
+      "image": "images/test2.webp"
+    }
+  ]
 }
