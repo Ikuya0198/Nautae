@@ -1,0 +1,10 @@
+{
+  "updatedAt": "2026-04-18T00:00:00Z",
+  "wines": {
+    "luz":       { "status": "limited",   "price": 249000, "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "13.5%" },
+    "hurricane": { "status": "available", "price": 42300,  "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "12.5%" },
+    "norte":     { "status": "available", "price": 50400,  "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "13.0%" },
+    "112n":      { "status": "limited",   "price": 65700,  "vintage": "2023", "variety": "Albariño — Barrel Fermented","region": "Rías Baixas D.O.", "abv": "13.5%" },
+    "aquel":     { "status": "available", "price": 38500,  "vintage": "2024", "variety": "Albariño 100%",              "region": "Rías Baixas D.O.", "abv": "12.0%" }
+  }
+}

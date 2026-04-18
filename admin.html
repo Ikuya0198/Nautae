@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Nautae Wine Cellar</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #090909; color: #fff;
+      font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px; font-weight: 400;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== AUTH SCREEN ===== */
+    #auth-screen {
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .auth-box {
+      width: 360px; padding: 48px 40px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .auth-logo {
+      font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+      color: #c8a96e; margin-bottom: 32px;
+    }
+    .auth-title { font-size: 22px; font-weight: 300; letter-spacing: 2px; margin-bottom: 8px; }
+    .auth-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 32px; line-height: 1.7; }
+    .auth-input {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; padding: 13px 16px; margin-bottom: 10px;
+      font-family: 'Montserrat', sans-serif; font-size: 13px;
+      outline: none; transition: border-color 0.3s;
+    }
+    .auth-input:focus { border-color: rgba(200,169,110,0.5); }
+    .auth-btn {
+      width: 100%; background: #c8a96e; color: #080808; border: none;
+      padding: 13px; font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+      margin-top: 4px;
+    }
+    .auth-btn:hover { background: #d4b87c; }
+    .auth-err { font-size: 11px; color: #e08080; margin-top: 10px; min-height: 16px; }
+
+    /* ===== ADMIN SCREEN ===== */
+    #admin-screen { display: none; padding-bottom: 100px; }
+
+    /* Header */
+    .admin-header {
+      position: sticky; top: 0; z-index: 100;
+      background: #0d0d0d; border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0 40px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-header-left { display: flex; align-items: center; gap: 12px; }
+    .admin-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+    .admin-badge {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: #c8a96e; background: rgba(200,169,110,0.1); padding: 3px 8px;
+    }
+    .admin-header-right { display: flex; align-items: center; gap: 24px; }
+    .header-link {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); cursor: pointer;
+      transition: color 0.3s; text-decoration: none;
+    }
+    .header-link:hover { color: rgba(255,255,255,0.7); }
+    .header-link.danger:hover { color: #e08080; }
+
+    /* Token banner */
+    #token-banner {
+      background: rgba(200,169,110,0.07);
+      border-bottom: 1px solid rgba(200,169,110,0.2);
+      padding: 14px 40px;
+      display: none; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    #token-banner.show { display: flex; }
+    .token-desc { font-size: 12px; color: rgba(255,255,255,0.55); flex: 1; min-width: 200px; }
+    .token-desc strong { color: #c8a96e; }
+    .token-row { display: flex; gap: 8px; }
+    .token-field {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; padding: 9px 12px;
+      font-family: 'Montserrat', sans-serif; font-size: 12px;
+      width: 260px; outline: none; transition: border-color 0.3s;
+    }
+    .token-field:focus { border-color: rgba(200,169,110,0.5); }
+    .small-btn {
+      background: #c8a96e; color: #080808; border: none;
+      padding: 9px 18px; font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; cursor: pointer; white-space: nowrap;
+      transition: background 0.3s;
+    }
+    .small-btn:hover { background: #d4b87c; }
+
+    /* Status bar */
+    #status-bar {
+      padding: 11px 40px;
+      background: #0a0a0a; border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 11px; color: rgba(255,255,255,0.3);
+    }
+    #status-msg { transition: color 0.4s; }
+    #status-msg.ok      { color: #7dc99a; }
+    #status-msg.err     { color: #e08080; }
+    #status-msg.loading { color: #c8a96e; }
+
+    /* Wine grid */
+    .wines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px; padding: 32px 40px 0;
+      background: rgba(255,255,255,0.04);
+    }
+    .wine-card {
+      background: #0f0f0f; padding: 28px 24px 24px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .card-num { font-size: 10px; letter-spacing: 3px; color: rgba(200,169,110,0.4); margin-bottom: 5px; }
+    .card-name { font-size: 15px; font-weight: 400; letter-spacing: 0.5px; line-height: 1.3; }
+    .status-pill {
+      font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 20px; flex-shrink: 0; margin-top: 2px;
+    }
+    .status-pill.available { background: rgba(125,201,154,0.12); color: #7dc99a; }
+    .status-pill.limited   { background: rgba(200,169,110,0.12); color: #c8a96e; }
+    .status-pill.sold-out  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+
+    .field-group { margin-bottom: 12px; }
+    .field-label {
+      display: block; font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.28); margin-bottom: 6px;
+    }
+    .field-input, .field-select {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; padding: 9px 11px;
+      font-family: 'Montserrat', sans-serif; font-size: 12px;
+      outline: none; transition: border-color 0.3s; -webkit-appearance: none; appearance: none;
+    }
+    .field-input:focus, .field-select:focus { border-color: rgba(200,169,110,0.5); }
+    .field-select option { background: #1a1a1a; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Settings section */
+    .settings-wrap {
+      padding: 40px; max-width: 440px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .settings-heading {
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,0.25); margin-bottom: 24px;
+    }
+    .settings-row { margin-bottom: 28px; }
+    .settings-row .field-label { margin-bottom: 8px; }
+    .input-row { display: flex; gap: 8px; }
+    .input-row .field-input { flex: 1; }
+    #pw-change-msg { font-size: 11px; margin-top: 8px; min-height: 16px; }
+
+    /* Save bar */
+    #save-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: #131313; border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 0 40px; height: 64px;
+      display: none; align-items: center; justify-content: space-between;
+    }
+    #save-updated { font-size: 11px; color: rgba(255,255,255,0.22); }
+    .save-btn {
+      background: #c8a96e; color: #080808; border: none;
+      padding: 13px 40px; font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+    }
+    .save-btn:hover:not(:disabled) { background: #d4b87c; }
+    .save-btn:disabled {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.3); cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .admin-header { padding: 0 20px; }
+      #token-banner, #status-bar { padding-left: 20px; padding-right: 20px; }
+      .wines-grid { padding: 20px 20px 0; grid-template-columns: 1fr; }
+      .settings-wrap { padding: 32px 20px; }
+      #save-bar { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen">
+    <div class="auth-box">
+      <p class="auth-logo">Nautae Wine Cellar</p>
+      <h1 class="auth-title" id="auth-title">管理者ログイン</h1>
+      <p class="auth-sub" id="auth-sub">管理画面にアクセスするには<br>パスワードを入力してください。</p>
+      <input type="password" class="auth-input" id="auth-pw1" placeholder="Password" autocomplete="current-password">
+      <input type="password" class="auth-input" id="auth-pw2" placeholder="Confirm Password" style="display:none;" autocomplete="new-password">
+      <button class="auth-btn" id="auth-submit">Enter</button>
+      <p class="auth-err" id="auth-err"></p>
+    </div>
+  </div>
+
+  <!-- ADMIN SCREEN -->
+  <div id="admin-screen">
+
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <span class="admin-title">Nautae</span>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <a href="shop.html" target="_blank" class="header-link">サイトを確認 ↗</a>
+        <span class="header-link danger" id="btn-logout">ログアウト</span>
+      </div>
+    </header>
+
+    <div id="token-banner">
+      <p class="token-desc"><strong>GitHub Token が未設定です。</strong>保存機能を使うには Personal Access Token（Contents 権限）を設定してください。</p>
+      <div class="token-row">
+        <input type="password" class="token-field" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
+        <button class="small-btn" id="token-save-btn">設定する</button>
+      </div>
+    </div>
+
+    <div id="status-bar"><span id="status-msg">—</span></div>
+
+    <div class="wines-grid" id="wine-grid"></div>
+
+    <div class="settings-wrap">
+      <p class="settings-heading">Settings</p>
+
+      <div class="settings-row">
+        <label class="field-label">GitHub Token を変更</label>
+        <div class="input-row">
+          <input type="password" class="field-input" id="new-token-input" placeholder="ghp_xxxxxxxxxxxx">
+          <button class="small-btn" id="new-token-save">更新</button>
+        </div>
+      </div>
+
+      <div class="settings-row">
+        <label class="field-label">パスワードを変更</label>
+        <input type="password" class="field-input" id="new-pw1" placeholder="新しいパスワード" style="margin-bottom:8px;">
+        <input type="password" class="field-input" id="new-pw2" placeholder="確認（再入力）" style="margin-bottom:8px;">
+        <button class="small-btn" id="change-pw-btn">変更する</button>
+        <p id="pw-change-msg"></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SAVE BAR -->
+  <div id="save-bar">
+    <span id="save-updated">最終更新: —</span>
+    <button class="save-btn" id="save-btn">保存する</button>
+  </div>
+
+  <script>
+    /* ===== CONSTANTS ===== */
+    const OWNER = 'Ikuya0198';
+    const REPO  = 'Nautae';
+    const PATH  = 'data/wines.json';
+
+    const WINES_META = [
+      { id: 'luz',       num: '01', name: '"Luz de Mi Alma"'   },
+      { id: 'hurricane', num: '02', name: 'Hurricane'           },
+      { id: 'norte',     num: '03', name: 'Norte 41° Atlántico' },
+      { id: '112n',      num: '04', name: '112°N'               },
+      { id: 'aquel',     num: '05', name: 'Aquel Lugar'         },
+    ];
+
+    /* ===== UTILITIES ===== */
+    async function sha256(text) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function b64encode(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = '';
+      bytes.forEach(b => bin += String.fromCharCode(b));
+      return btoa(bin);
+    }
+
+    function b64decode(b64) {
+      const bin = atob(b64.replace(/\n/g, ''));
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function setStatus(msg, type) {
+      const el = document.getElementById('status-msg');
+      el.textContent = msg;
+      el.className = type || '';
+    }
+
+    /* ===== AUTH ===== */
+    let savedHash = localStorage.getItem('nwc_admin_h');
+    const inSession = sessionStorage.getItem('nwc_admin_s') === '1';
+    let isSettingPw = !savedHash;
+
+    if (isSettingPw) {
+      document.getElementById('auth-title').textContent = 'パスワードを作成';
+      document.getElementById('auth-sub').textContent   = '管理画面で使用するパスワードを設定してください。';
+      document.getElementById('auth-pw1').placeholder   = '新しいパスワード';
+      document.getElementById('auth-pw2').style.display = 'block';
+      document.getElementById('auth-submit').textContent = '設定する';
+    }
+
+    if (inSession) {
+      showAdmin();
+    }
+
+    ['auth-pw1', 'auth-pw2'].forEach(id => {
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('auth-submit').click();
+      });
+    });
+
+    document.getElementById('auth-submit').addEventListener('click', async () => {
+      const pw  = document.getElementById('auth-pw1').value;
+      const err = document.getElementById('auth-err');
+      if (!pw) { err.textContent = 'パスワードを入力してください。'; return; }
+
+      if (isSettingPw) {
+        const pw2 = document.getElementById('auth-pw2').value;
+        if (pw !== pw2)   { err.textContent = 'パスワードが一致しません。'; return; }
+        if (pw.length < 6){ err.textContent = '6文字以上で設定してください。'; return; }
+        const hash = await sha256(pw);
+        localStorage.setItem('nwc_admin_h', hash);
+        savedHash = hash;
+        sessionStorage.setItem('nwc_admin_s', '1');
+        showAdmin();
+      } else {
+        const hash = await sha256(pw);
+        if (hash !== savedHash) {
+          err.textContent = 'パスワードが違います。';
+          document.getElementById('auth-pw1').value = '';
+          return;
+        }
+        sessionStorage.setItem('nwc_admin_s', '1');
+        showAdmin();
+      }
+    });
+
+    /* ===== SHOW ADMIN ===== */
+    function showAdmin() {
+      document.getElementById('auth-screen').style.display  = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      document.getElementById('save-bar').style.display     = 'flex';
+      initAdmin();
+    }
+
+    /* ===== WINE CARDS ===== */
+    function buildWineCards(data) {
+      document.getElementById('wine-grid').innerHTML = WINES_META.map(wine => {
+        const w = (data && data[wine.id]) || {};
+        const status  = w.status  || 'available';
+        const price   = w.price   != null ? w.price : '';
+        const vintage = w.vintage || '';
+        const variety = w.variety || '';
+        const region  = w.region  || '';
+        const abv     = w.abv     || '';
+
+        const pillCls = { available: 'available', limited: 'limited', 'sold-out': 'sold-out' }[status] || 'available';
+        const pillTxt = { available: 'Available',  limited: 'Limited',  'sold-out': 'Sold Out' }[status] || status;
+
+        const opt = (v, label) => `<option value="${v}"${status===v?' selected':''}>${label}</option>`;
+
+        return `
+          <div class="wine-card" data-wine-id="${wine.id}">
+            <div class="card-header">
+              <div>
+                <p class="card-num">${wine.num} / 05</p>
+                <p class="card-name">${wine.name}</p>
+              </div>
+              <span class="status-pill ${pillCls}">${pillTxt}</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">在庫ステータス</label>
+              <select class="field-select" data-field="status">
+                ${opt('available','Available — 在庫あり')}
+                ${opt('limited',  'Limited — 残りわずか')}
+                ${opt('sold-out', 'Sold Out — 売り切れ')}
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">価格（税込・円）</label>
+              <input type="number" class="field-input" data-field="price"
+                value="${price}" placeholder="249000" min="0" step="100">
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label">ヴィンテージ</label>
+                <input type="text" class="field-input" data-field="vintage"
+                  value="${vintage}" placeholder="2024" maxlength="10">
+              </div>
+              <div class="field-group">
+                <label class="field-label">アルコール度数</label>
+                <input type="text" class="field-input" data-field="abv"
+                  value="${abv}" placeholder="13.5%">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">品種</label>
+              <input type="text" class="field-input" data-field="variety"
+                value="${variety}" placeholder="Albariño 100%">
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">産地</label>
+              <input type="text" class="field-input" data-field="region"
+                value="${region}" placeholder="Rías Baixas D.O.">
+            </div>
+          </div>`;
+      }).join('');
+
+      // Live pill update on status change
+      document.querySelectorAll('.field-select[data-field="status"]').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const card = sel.closest('.wine-card');
+          const pill = card.querySelector('.status-pill');
+          const v    = sel.value;
+          pill.className = 'status-pill ' + ({ available:'available', limited:'limited', 'sold-out':'sold-out' }[v] || 'available');
+          pill.textContent = { available:'Available', limited:'Limited', 'sold-out':'Sold Out' }[v] || v;
+        });
+      });
+    }
+
+    /* ===== LOAD FROM GITHUB ===== */
+    let currentSha = null;
+
+    async function loadWineData() {
+      const token = localStorage.getItem('nwc_admin_t');
+      if (!token) return;
+      setStatus('読み込み中...', 'loading');
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`,
+          { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } }
+        );
+        if (!res.ok) {
+          const e = await res.json().catch(() => ({}));
+          throw new Error(e.message || res.statusText);
+        }
+        const json = await res.json();
+        currentSha = json.sha;
+        const data = JSON.parse(b64decode(json.content));
+        buildWineCards(data.wines);
+        if (data.updatedAt) {
+          const fmt = new Date(data.updatedAt).toLocaleString('ja-JP', {
+            year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'
+          });
+          document.getElementById('save-updated').textContent = '最終更新: ' + fmt;
+        }
+        setStatus('データを読み込みました。', 'ok');
+        setTimeout(() => setStatus('—', ''), 3000);
+      } catch(e) {
+        setStatus('読み込みエラー: ' + e.message, 'err');
+      }
+    }
+
+    /* ===== COLLECT FORM DATA ===== */
+    function collectFormData() {
+      const wines = {};
+      document.querySelectorAll('.wine-card[data-wine-id]').forEach(card => {
+        const id  = card.dataset.wineId;
+        const get = f => card.querySelector(`[data-field="${f}"]`).value.trim();
+        wines[id] = {
+          status:  get('status'),
+          price:   parseInt(get('price')) || 0,
+          vintage: get('vintage'),
+          variety: get('variety'),
+          region:  get('region'),
+          abv:     get('abv'),
+        };
+      });
+      return wines;
+    }
+
+    /* ===== SAVE TO GITHUB ===== */
+    async function saveWineData() {
+      const token = localStorage.getItem('nwc_admin_t');
+      if (!token) {
+        document.getElementById('token-banner').classList.add('show');
+        setStatus('GitHub Token が設定されていません。', 'err');
+        return;
+      }
+      if (!currentSha) {
+        setStatus('データが読み込まれていません。ページを再読み込みしてください。', 'err');
+        return;
+      }
+
+      const saveBtn = document.getElementById('save-btn');
+      saveBtn.textContent = '保存中...';
+      saveBtn.disabled = true;
+
+      const now     = new Date().toISOString();
+      const payload = { updatedAt: now, wines: collectFormData() };
+      const content = b64encode(JSON.stringify(payload, null, 2));
+
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Accept': 'application/vnd.github+json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: 'admin: update wine data',
+              content,
+              sha: currentSha,
+              committer: { name: 'Nautae Admin', email: 'admin@faro-silencio.com' },
+            }),
+          }
+        );
+        if (!res.ok) {
+          const e = await res.json().catch(() => ({}));
+          throw new Error(e.message || res.statusText);
+        }
+        const json = await res.json();
+        currentSha = json.content.sha;
+        const fmt = new Date(now).toLocaleString('ja-JP', {
+          year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'
+        });
+        document.getElementById('save-updated').textContent = '最終更新: ' + fmt;
+        setStatus('保存しました。GitHub Pages への反映まで 1〜2 分かかります。', 'ok');
+        setTimeout(() => setStatus('—', ''), 8000);
+      } catch(e) {
+        setStatus('保存エラー: ' + e.message, 'err');
+      } finally {
+        saveBtn.textContent = '保存する';
+        saveBtn.disabled = false;
+      }
+    }
+
+    /* ===== INIT ADMIN ===== */
+    function initAdmin() {
+      const token = localStorage.getItem('nwc_admin_t');
+
+      if (!token) {
+        document.getElementById('token-banner').classList.add('show');
+        buildWineCards();
+        setStatus('GitHub Token を設定してください。', '');
+      } else {
+        loadWineData();
+      }
+
+      // Token setup from banner
+      document.getElementById('token-save-btn').addEventListener('click', () => {
+        const t = document.getElementById('token-input').value.trim();
+        if (!t) return;
+        localStorage.setItem('nwc_admin_t', t);
+        document.getElementById('token-banner').classList.remove('show');
+        loadWineData();
+      });
+      document.getElementById('token-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('token-save-btn').click();
+      });
+
+      // Token update from settings
+      document.getElementById('new-token-save').addEventListener('click', () => {
+        const t = document.getElementById('new-token-input').value.trim();
+        if (!t) return;
+        localStorage.setItem('nwc_admin_t', t);
+        document.getElementById('new-token-input').value = '';
+        document.getElementById('token-banner').classList.remove('show');
+        setStatus('GitHub Token を更新しました。', 'ok');
+        setTimeout(() => setStatus('—', ''), 3000);
+      });
+
+      // Password change
+      document.getElementById('change-pw-btn').addEventListener('click', async () => {
+        const p1  = document.getElementById('new-pw1').value;
+        const p2  = document.getElementById('new-pw2').value;
+        const msg = document.getElementById('pw-change-msg');
+        if (!p1)       { msg.style.color = '#e08080'; msg.textContent = 'パスワードを入力してください。'; return; }
+        if (p1 !== p2) { msg.style.color = '#e08080'; msg.textContent = 'パスワードが一致しません。'; return; }
+        if (p1.length < 6) { msg.style.color = '#e08080'; msg.textContent = '6文字以上で設定してください。'; return; }
+        const hash = await sha256(p1);
+        localStorage.setItem('nwc_admin_h', hash);
+        savedHash = hash;
+        document.getElementById('new-pw1').value = '';
+        document.getElementById('new-pw2').value = '';
+        msg.style.color = '#7dc99a';
+        msg.textContent = 'パスワードを変更しました。';
+        setTimeout(() => { msg.textContent = ''; }, 4000);
+      });
+
+      // Logout
+      document.getElementById('btn-logout').addEventListener('click', () => {
+        sessionStorage.removeItem('nwc_admin_s');
+        location.reload();
+      });
+
+      // Save
+      document.getElementById('save-btn').addEventListener('click', saveWineData);
+    }
+  </script>
+</body>
+</html>

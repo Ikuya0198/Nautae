@@ -405,7 +405,7 @@
     <div class="h-track" id="h-track">
 
       <!-- 01 Luz de Mi Alma — LIMITED -->
-      <div class="h-slide">
+      <div class="h-slide" data-wine-id="luz">
         <span class="slide-bg-num">01</span>
         <div class="scroll-hint">Scroll</div>
         <div class="slide-inner">
@@ -442,7 +442,7 @@
       </div>
 
       <!-- 02 Hurricane — AVAILABLE -->
-      <div class="h-slide">
+      <div class="h-slide" data-wine-id="hurricane">
         <span class="slide-bg-num">02</span>
         <div class="slide-inner">
           <div class="slide-info">
@@ -477,7 +477,7 @@
       </div>
 
       <!-- 03 Norte 41° Atlántico — AVAILABLE -->
-      <div class="h-slide">
+      <div class="h-slide" data-wine-id="norte">
         <span class="slide-bg-num">03</span>
         <div class="slide-inner">
           <div class="slide-info">
@@ -513,7 +513,7 @@
       </div>
 
       <!-- 04 112°N — LIMITED -->
-      <div class="h-slide">
+      <div class="h-slide" data-wine-id="112n">
         <span class="slide-bg-num">04</span>
         <div class="slide-inner">
           <div class="slide-info">
@@ -549,7 +549,7 @@
       </div>
 
       <!-- 05 Aquel Lugar — AVAILABLE -->
-      <div class="h-slide">
+      <div class="h-slide" data-wine-id="aquel">
         <span class="slide-bg-num">05</span>
         <div class="slide-inner">
           <div class="slide-info">
@@ -590,35 +590,35 @@
   <!-- WINES: MOBILE -->
   <section id="wines-mobile">
     <div class="mobile-track" id="mobile-track">
-      <div class="mobile-card">
+      <div class="mobile-card" data-wine-id="luz">
         <div class="mobile-bottle"><img src="images/LUZ DE MI Alma.webp" alt="Luz de Mi Alma"></div>
         <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
         <h3 class="mobile-name">"Luz de Mi Alma"</h3>
         <p class="mobile-desc">凛とした酸と海の塩気、長い余韻。年間 50〜150 本の限定グラン・キュヴェ。</p>
         <div class="mobile-footer"><span class="mobile-price">¥249,000</span><button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button></div>
       </div>
-      <div class="mobile-card">
+      <div class="mobile-card" data-wine-id="hurricane">
         <div class="mobile-bottle"><img src="images/test1.webp" alt="Hurricane"></div>
         <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
         <h3 class="mobile-name">Hurricane</h3>
         <p class="mobile-desc">ライム、青りんご、直線的な酸とシャープなミネラル。</p>
         <div class="mobile-footer"><span class="mobile-price">¥42,300</span><button class="btn-cart" data-wine="Hurricane" data-price="42300" data-display="¥42,300">Add to Cart</button></div>
       </div>
-      <div class="mobile-card">
+      <div class="mobile-card" data-wine-id="norte">
         <div class="mobile-bottle"><img src="images/test3.webp" alt="Norte 41°"></div>
         <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
         <h3 class="mobile-name">Norte 41° Atlántico</h3>
         <p class="mobile-desc">北緯41°の大西洋。グレープフルーツと海風由来のミネラル。</p>
         <div class="mobile-footer"><span class="mobile-price">¥50,400</span><button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button></div>
       </div>
-      <div class="mobile-card">
+      <div class="mobile-card" data-wine-id="112n">
         <div class="mobile-bottle"><img src="images/test4.webp" alt="112°N"></div>
         <div class="status-badge s-limited"><div class="status-dot"></div>Limited</div>
         <h3 class="mobile-name">112°N</h3>
         <p class="mobile-desc">航海・針路をテーマにしたコレクター向け。フレンチオークと長い余韻。</p>
         <div class="mobile-footer"><span class="mobile-price">¥65,700</span><button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button></div>
       </div>
-      <div class="mobile-card">
+      <div class="mobile-card" data-wine-id="aquel">
         <div class="mobile-bottle"><img src="images/test2.webp" alt="Aquel Lugar"></div>
         <div class="status-badge s-available"><div class="status-dot"></div>Available</div>
         <h3 class="mobile-name">Aquel Lugar</h3>
@@ -994,16 +994,15 @@
       if (btn.dataset.action === 'rem') removeFromCart(wine);
     });
 
-    // Add to cart buttons
-    document.querySelectorAll('.btn-cart:not(:disabled)').forEach(btn => {
-      btn.addEventListener('click', () => {
-        addToCart(btn.dataset.wine, parseInt(btn.dataset.price), btn.dataset.display);
-        // Brief "Added" feedback
-        const orig = btn.textContent;
-        btn.textContent = 'Added ✓';
-        btn.classList.add('added');
-        setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1200);
-      });
+    // Add to cart buttons (event delegation — handles dynamic enable/disable from wine data)
+    document.body.addEventListener('click', e => {
+      const btn = e.target.closest('.btn-cart');
+      if (!btn || btn.disabled) return;
+      addToCart(btn.dataset.wine, parseInt(btn.dataset.price), btn.dataset.display);
+      const orig = btn.textContent;
+      btn.textContent = 'Added ✓';
+      btn.classList.add('added');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1200);
     });
 
     // Cart drawer open/close
@@ -1041,6 +1040,61 @@
 
     /* Render any cart restored from localStorage */
     if (cart.length > 0) updateCart();
+
+    /* ===== LOAD WINE DATA FROM JSON ===== */
+    async function loadWineData() {
+      try {
+        const r = await fetch('data/wines.json?_=' + Date.now());
+        if (!r.ok) return;
+        const { wines } = await r.json();
+        document.querySelectorAll('[data-wine-id]').forEach(el => {
+          const wine = wines[el.dataset.wineId];
+          if (!wine) return;
+          const { status, price, vintage, variety, region, abv } = wine;
+
+          // Status badge
+          const badge = el.querySelector('.status-badge');
+          if (badge) {
+            badge.className = 'status-badge s-' + status;
+            const txt = { available:'Available', limited:'Limited', 'sold-out':'Sold Out' }[status] || status;
+            badge.innerHTML = '<div class="status-dot"></div>' + txt;
+          }
+
+          // Prices
+          const sp = el.querySelector('.slide-price');
+          if (sp) sp.innerHTML = '¥' + price.toLocaleString() + '<small>（税込）</small>';
+          const mp = el.querySelector('.mobile-price');
+          if (mp) mp.textContent = '¥' + price.toLocaleString();
+
+          // Detail row
+          el.querySelectorAll('.slide-detail-item').forEach(item => {
+            const b = item.querySelector('b');
+            if (!b) return;
+            const lbl = b.textContent.trim();
+            if (lbl === 'Vintage') item.innerHTML = '<b>Vintage</b>' + vintage;
+            if (lbl === 'Variety') item.innerHTML = '<b>Variety</b>' + variety;
+            if (lbl === 'Region')  item.innerHTML = '<b>Region</b>'  + region;
+            if (lbl === 'Vol')     item.innerHTML = '<b>Vol</b>'     + abv;
+          });
+
+          // Cart button + sold-out state
+          const btn = el.querySelector('.btn-cart');
+          if (btn) {
+            btn.dataset.price   = price;
+            btn.dataset.display = '¥' + price.toLocaleString();
+            if (status === 'sold-out') {
+              btn.disabled = true;
+              btn.textContent = 'Sold Out';
+              el.classList.add('sold-out');
+            } else {
+              btn.disabled = false;
+              el.classList.remove('sold-out');
+            }
+          }
+        });
+      } catch(e) {}
+    }
+    loadWineData();
 
     document.getElementById('inquiry-form').addEventListener('submit', async e => {
       e.preventDefault();
