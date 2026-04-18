@@ -1,0 +1,75 @@
+{
+  "updatedAt": "2026-04-18T00:00:00Z",
+  "photos": [
+    {
+      "id": "g1",
+      "src": "images/gallery/g1.webp",
+      "caption_ja": "ガリシアの葡萄畑。大西洋の風が育てるアルバリーニョ。",
+      "caption_en": "Vineyards of Galicia. Albariño shaped by Atlantic winds.",
+      "visible": true
+    },
+    {
+      "id": "g2",
+      "src": "images/gallery/g2.webp",
+      "caption_ja": "収穫期の朝。霧の中、黄金色に実る葡萄。",
+      "caption_en": "Harvest morning. Golden grapes glowing through the mist.",
+      "visible": true
+    },
+    {
+      "id": "g3",
+      "src": "images/gallery/g3.webp",
+      "caption_ja": "醸造蔵の静寂。時間をかけて熟成するワイン。",
+      "caption_en": "The quiet of the cellar. Wine slowly finding its character.",
+      "visible": true
+    },
+    {
+      "id": "g4",
+      "src": "images/gallery/g4.webp",
+      "caption_ja": "石畳の村。ガリシアの伝統が刻まれた風景。",
+      "caption_en": "A cobblestone village. Landscapes etched with Galician tradition.",
+      "visible": true
+    },
+    {
+      "id": "g5",
+      "src": "images/gallery/g5.webp",
+      "caption_ja": "大西洋を望む丘。海のミネラルが土壌に宿る。",
+      "caption_en": "Hills overlooking the Atlantic. Oceanic minerals deep in the soil.",
+      "visible": true
+    },
+    {
+      "id": "g6",
+      "src": "images/gallery/g6.webp",
+      "caption_ja": "手摘みの証。一粒一粒に込められた丁寧な仕事。",
+      "caption_en": "Evidence of hand-harvest. Careful work, grape by grape.",
+      "visible": true
+    },
+    {
+      "id": "g7",
+      "src": "images/gallery/g7.webp",
+      "caption_ja": "ボトルが生まれる場所。静かな光の中で。",
+      "caption_en": "Where each bottle is born. In quiet, filtered light.",
+      "visible": true
+    },
+    {
+      "id": "g8",
+      "src": "images/gallery/g8.webp",
+      "caption_ja": "テロワールの記憶。土と海が交差する。",
+      "caption_en": "Memory of terroir. Where earth and sea converge.",
+      "visible": true
+    },
+    {
+      "id": "g9",
+      "src": "images/gallery/g9.webp",
+      "caption_ja": "夕暮れの醸造所。一日の問いが沈んでいく。",
+      "caption_en": "The winery at dusk. The day's questions settling in.",
+      "visible": true
+    },
+    {
+      "id": "g10",
+      "src": "images/gallery/g10.webp",
+      "caption_ja": "Nautae の哲学。限定、手造り、そして常に進化する。",
+      "caption_en": "The Nautae philosophy. Limited, handcrafted, always evolving.",
+      "visible": true
+    }
+  ]
+}

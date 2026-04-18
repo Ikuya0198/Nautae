@@ -78,13 +78,17 @@
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="archive.html" class="active">Archive</a></li>
     </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="ja">JP</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </nav>
 
   <!-- PAGE HERO -->
   <section id="page-hero">
     <p class="page-label">Archive</p>
     <h1 class="page-title">The Record</h1>
-    <p class="page-sub">Ikuya Odaka が問い続けてきた、年ごとの探究の記録。<br>一年に一度だけ生まれるワインと、そのストーリー。</p>
+    <p class="page-sub" data-i18n="page-sub">Ikuya Odaka が問い続けてきた、年ごとの探究の記録。<br>一年に一度だけ生まれるワインと、そのストーリー。</p>
   </section>
 
   <!-- TIMELINE -->
@@ -97,7 +101,7 @@
       <div class="tl-content">
         <p class="tl-season">Forthcoming</p>
         <h2 class="tl-title">Next Chapter</h2>
-        <p class="tl-story">次の問いは、まだ樽の中で眠っている。</p>
+        <p class="tl-story" data-i18n="story-2027">次の問いは、まだ樽の中で眠っている。</p>
         <span class="tl-forthcoming-badge">Coming</span>
       </div>
     </div>
@@ -108,8 +112,8 @@
       <div class="tl-line"></div>
       <div class="tl-content">
         <p class="tl-season">Current Collection · Autumn 2026</p>
-        <h2 class="tl-title">三つの土地が一本に宿る年</h2>
-        <p class="tl-story">
+        <h2 class="tl-title" data-i18n="title-2026">三つの土地が一本に宿る年</h2>
+        <p class="tl-story" data-i18n="story-2026">
           スペイン、イタリア、日本——三カ国の知恵と手仕事が初めて一本のボトルに収束した年。
           Ikuya Odaka は「どこの国のワインか」という問い自体を解体し、
           産地の枠を超えた新しい語彙でワインを語り始めた。
@@ -134,8 +138,8 @@
       <div class="tl-line"></div>
       <div class="tl-content">
         <p class="tl-season">Premiere Collection · Autumn 2025</p>
-        <h2 class="tl-title">問いの、はじまり</h2>
-        <p class="tl-story">
+        <h2 class="tl-title" data-i18n="title-2025">問いの、はじまり</h2>
+        <p class="tl-story" data-i18n="story-2025">
           Nautae Wine Cellar の最初の年。Ikuya Odaka がガリシアの土地と出会い、
           「ワインは毎年問い直されるべき問いかけだ」という哲学を形にした初リリース。
           すべてのボトルが完売し、この年のコレクションは現在アーカイブのみ。
@@ -155,7 +159,7 @@
     <div class="footer-main">
       <div class="footer-brand">
         <img src="images/logo white.webp" alt="Nautae Wine Cellar">
-        <p class="footer-tagline">ガリシアの大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
+        <p class="footer-tagline" data-i18n="footer-tagline">ガリシアの大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
       </div>
       <div>
         <p class="footer-col-title">Navigate</p>
@@ -195,7 +199,18 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/i18n.js"></script>
   <script>
+    NWC_I18N({
+      'page-sub':    'A record of each year\'s inquiry — the questions Ikuya Odaka has pursued.<br>Each year, a limited wine born with its own story.',
+      'story-2027':  'The next question is still sleeping in the barrel.',
+      'title-2026':  'The Year Three Lands Became One',
+      'story-2026':  'Spain, Italy, Japan — the wisdom and craft of three nations converged into a single bottle for the first time. Ikuya Odaka dismantled the very question of "which country\'s wine" and began speaking of wine in a new vocabulary beyond the limits of origin.',
+      'title-2025':  'The Beginning of the Question',
+      'story-2025':  'The first year of Nautae Wine Cellar. The year Ikuya Odaka encountered the land of Galicia and gave form to the philosophy: "wine is a question to be asked again every year." Every bottle sold out, and this year\'s collection now exists only in the archive.',
+      'footer-tagline': 'From the rugged Atlantic coast of Galicia,<br>only a handful of barrels are born each year.'
+    });
+
     gsap.registerPlugin(ScrollTrigger);
 
     /* ===== LOADER ===== */

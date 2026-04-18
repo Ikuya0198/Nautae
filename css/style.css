@@ -66,6 +66,12 @@ nav.scrolled {
   .nav-links { gap: 22px; }
   .nav-back { margin-right: 12px; }
   .nav-back span { display: none; }
+  .lang-toggle { margin-left: 14px; }
+  .lang-btn { padding: 4px 8px; font-size: 9px; }
+}
+@media (max-width: 480px) {
+  .nav-links { display: none; }
+  .lang-toggle { margin-left: 0; }
 }
 
 /* ===== FOOTER ===== */

@@ -172,6 +172,24 @@
     .input-row .field-input { flex: 1; }
     #pw-change-msg { font-size: 11px; margin-top: 8px; min-height: 16px; }
 
+    /* Tabs */
+    .admin-tabs {
+      display: flex; gap: 0; padding: 0 40px; background: #0d0d0d;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .admin-tab {
+      font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.30); padding: 14px 22px; cursor: pointer;
+      border: none; border-bottom: 2px solid transparent; margin-bottom: -1px;
+      background: none; font-family: 'Montserrat', sans-serif; transition: all 0.25s;
+    }
+    .admin-tab.active { color: #c8a96e; border-bottom-color: #c8a96e; }
+    .admin-tab:hover:not(.active) { color: rgba(255,255,255,0.6); }
+
+    /* Gallery section */
+    #gallery-section { display: none; }
+    #add-photo-wrap { padding: 24px 40px; }
+
     /* Save bar */
     #save-bar {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
@@ -234,10 +252,23 @@
 
     <div id="status-bar"><span id="status-msg">—</span></div>
 
-    <div class="wines-grid" id="wine-grid"></div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="wines">Wines</button>
+      <button class="admin-tab" data-tab="gallery">Gallery</button>
+    </div>
 
-    <div id="add-wine-wrap">
-      <button class="add-wine-btn" id="add-wine-btn">＋ ワインを追加</button>
+    <div id="wines-section">
+      <div class="wines-grid" id="wine-grid"></div>
+      <div id="add-wine-wrap">
+        <button class="add-wine-btn" id="add-wine-btn">＋ ワインを追加</button>
+      </div>
+    </div>
+
+    <div id="gallery-section">
+      <div class="wines-grid" id="gallery-grid"></div>
+      <div id="add-photo-wrap">
+        <button class="add-wine-btn" id="add-photo-btn">＋ 写真を追加</button>
+      </div>
     </div>
 
     <div class="settings-wrap">
@@ -518,6 +549,172 @@
       newCard.querySelector('.field-input[data-field="name"]').focus();
     });
 
+    /* ===== GALLERY CARD GENERATION ===== */
+    const GALLERY_PATH = 'data/gallery.json';
+    let gallerySha = null;
+
+    function generatePhotoCardHtml(photo, idx, total) {
+      const num = String(idx + 1).padStart(2,'0');
+      const tot = String(total).padStart(2,'0');
+      const checked = photo.visible !== false ? ' checked' : '';
+      const ea = s => escAttr(s || '');
+      return `<div class="wine-card photo-card" data-photo-id="${ea(photo.id||('p'+(idx+1)))}">
+        <div class="card-header">
+          <div>
+            <p class="card-num">${num} / ${tot}</p>
+            <p class="card-name" style="font-size:12px;color:rgba(255,255,255,0.45);">${ea(photo.src)||'(パス未設定)'}</p>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="card-act-btn" data-gact="up">↑ 上へ</button>
+          <button class="card-act-btn" data-gact="down">↓ 下へ</button>
+          <button class="card-act-btn danger" data-gact="del">削除</button>
+          <label class="vis-toggle"><input type="checkbox" data-field="visible"${checked}> <span>表示</span></label>
+        </div>
+        <div class="field-group">
+          <label class="field-label">画像パス</label>
+          <input type="text" class="field-input photo-src" data-field="src" value="${ea(photo.src)}" placeholder="images/gallery/photo.webp">
+        </div>
+        <div class="field-group">
+          <label class="field-label">キャプション（日本語）</label>
+          <input type="text" class="field-input" data-field="caption_ja" value="${ea(photo.caption_ja)}" placeholder="写真の説明（日本語）">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Caption (English)</label>
+          <input type="text" class="field-input" data-field="caption_en" value="${ea(photo.caption_en)}" placeholder="Photo caption (English)">
+        </div>
+      </div>`;
+    }
+
+    function buildGalleryCards(photos) {
+      photos = Array.isArray(photos) ? photos : [];
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = photos.map((p, i) => generatePhotoCardHtml(p, i, photos.length)).join('');
+      bindPhotoSrcSync();
+    }
+
+    function bindPhotoSrcSync() {
+      document.querySelectorAll('.photo-src').forEach(input => {
+        input.addEventListener('input', () => {
+          const card = input.closest('.photo-card');
+          card.querySelector('.card-name').textContent = input.value || '(パス未設定)';
+        });
+      });
+    }
+
+    function updatePhotoCardNums() {
+      const cards = document.querySelectorAll('#gallery-grid .photo-card');
+      const tot = String(cards.length).padStart(2,'0');
+      cards.forEach((card, i) => {
+        card.querySelector('.card-num').textContent = String(i+1).padStart(2,'0') + ' / ' + tot;
+      });
+    }
+
+    document.getElementById('gallery-grid').addEventListener('click', e => {
+      const btn = e.target.closest('[data-gact]');
+      if (!btn) return;
+      const card  = btn.closest('.photo-card');
+      const grid  = document.getElementById('gallery-grid');
+      const cards = Array.from(grid.querySelectorAll('.photo-card'));
+      const idx   = cards.indexOf(card);
+      const act   = btn.dataset.gact;
+      if (act === 'up' && idx > 0)                       grid.insertBefore(card, cards[idx - 1]);
+      else if (act === 'down' && idx < cards.length - 1) grid.insertBefore(cards[idx + 1], card);
+      else if (act === 'del') {
+        if (confirm('この写真をギャラリーから削除しますか？')) card.remove();
+      }
+      updatePhotoCardNums();
+    });
+
+    document.getElementById('add-photo-btn').addEventListener('click', () => {
+      const grid  = document.getElementById('gallery-grid');
+      const cards = grid.querySelectorAll('.photo-card');
+      const newId = 'photo_' + Date.now();
+      const newPhoto = { id: newId, src: '', caption_ja: '', caption_en: '', visible: true };
+      const div = document.createElement('div');
+      div.innerHTML = generatePhotoCardHtml(newPhoto, cards.length, cards.length + 1);
+      const newCard = div.firstElementChild;
+      grid.appendChild(newCard);
+      newCard.querySelector('.photo-src').addEventListener('input', function() {
+        newCard.querySelector('.card-name').textContent = this.value || '(パス未設定)';
+      });
+      updatePhotoCardNums();
+      newCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      newCard.querySelector('.field-input[data-field="src"]').focus();
+    });
+
+    async function loadGalleryData() {
+      const token = localStorage.getItem('nwc_admin_t');
+      if (!token) return;
+      setStatus('ギャラリーデータ読み込み中...', 'loading');
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${OWNER}/${REPO}/contents/${GALLERY_PATH}`,
+          { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } }
+        );
+        if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.message||res.statusText); }
+        const json = await res.json();
+        gallerySha = json.sha;
+        const data = JSON.parse(b64decode(json.content));
+        buildGalleryCards(data.photos || []);
+        setStatus('ギャラリーデータを読み込みました。', 'ok');
+        setTimeout(() => setStatus('—', ''), 3000);
+      } catch(e) {
+        setStatus('ギャラリー読み込みエラー: ' + e.message, 'err');
+      }
+    }
+
+    function collectGalleryData() {
+      const photos = [];
+      document.querySelectorAll('#gallery-grid .photo-card').forEach(card => {
+        const get = f => { const el = card.querySelector(`[data-field="${f}"]`); return el ? el.value : ''; };
+        const chk = f => { const el = card.querySelector(`[data-field="${f}"]`); return el ? el.checked : true; };
+        photos.push({
+          id:         card.dataset.photoId || ('p_' + Date.now()),
+          src:        get('src'),
+          caption_ja: get('caption_ja'),
+          caption_en: get('caption_en'),
+          visible:    chk('visible'),
+        });
+      });
+      return photos;
+    }
+
+    async function saveGalleryData() {
+      const token = localStorage.getItem('nwc_admin_t');
+      if (!token) { document.getElementById('token-banner').classList.add('show'); setStatus('GitHub Token が設定されていません。', 'err'); return; }
+      if (!gallerySha) { setStatus('ギャラリーデータが読み込まれていません。ページを再読み込みしてください。', 'err'); return; }
+
+      const saveBtn = document.getElementById('save-btn');
+      saveBtn.textContent = '保存中...'; saveBtn.disabled = true;
+
+      const now     = new Date().toISOString();
+      const payload = { updatedAt: now, photos: collectGalleryData() };
+      const content = b64encode(JSON.stringify(payload, null, 2));
+
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${OWNER}/${REPO}/contents/${GALLERY_PATH}`,
+          {
+            method: 'PUT',
+            headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'admin: update gallery', content, sha: gallerySha, committer: { name: 'Nautae Admin', email: 'admin@faro-silencio.com' } }),
+          }
+        );
+        if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.message||res.statusText); }
+        const json = await res.json();
+        gallerySha = json.content.sha;
+        const fmt = new Date(now).toLocaleString('ja-JP', { year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit' });
+        document.getElementById('save-updated').textContent = '最終更新: ' + fmt;
+        setStatus('ギャラリーを保存しました。反映まで 1〜2 分かかります。', 'ok');
+        setTimeout(() => setStatus('—', ''), 8000);
+      } catch(e) {
+        setStatus('保存エラー: ' + e.message, 'err');
+      } finally {
+        saveBtn.textContent = '保存する'; saveBtn.disabled = false;
+      }
+    }
+
     /* ===== GITHUB LOAD / SAVE ===== */
     let currentSha = null;
 
@@ -648,7 +845,30 @@
       });
 
       document.getElementById('btn-logout').addEventListener('click', () => { sessionStorage.removeItem('nwc_admin_s'); location.reload(); });
-      document.getElementById('save-btn').addEventListener('click', saveWineData);
+
+      /* ===== TAB SWITCHING ===== */
+      document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const t = tab.dataset.tab;
+          document.querySelectorAll('.admin-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+          const winesSec   = document.getElementById('wines-section');
+          const gallerySec = document.getElementById('gallery-section');
+          if (t === 'wines') {
+            winesSec.style.display   = '';
+            gallerySec.style.display = 'none';
+          } else {
+            winesSec.style.display   = 'none';
+            gallerySec.style.display = 'block';
+            if (!gallerySha) loadGalleryData();
+          }
+        });
+      });
+
+      document.getElementById('save-btn').addEventListener('click', () => {
+        const activeTab = document.querySelector('.admin-tab.active');
+        if (activeTab && activeTab.dataset.tab === 'gallery') saveGalleryData();
+        else saveWineData();
+      });
     }
   </script>
 </body>

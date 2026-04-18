@@ -8,7 +8,6 @@
   <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/cg-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="images/logo white.webp" as="image">
-  <link rel="preload" href="images/g1.webp" as="image">
   <link rel="stylesheet" href="fonts/fonts.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
@@ -34,7 +33,7 @@
       transform-origin: center center;
     }
 
-    /* Ken Burns — slow zoom on active slide */
+    /* Ken Burns */
     @keyframes kenBurns {
       from { transform: scale(1.08); }
       to   { transform: scale(1.00); }
@@ -63,13 +62,31 @@
     /* ===== NAVIGATION ARROWS ===== */
     .g-arrow {
       position: absolute; top: 50%; transform: translateY(-50%);
-      z-index: 10; background: none; border: none; cursor: pointer;
-      color: rgba(255,255,255,0.18); padding: 28px 22px;
-      transition: color 0.45s;
+      z-index: 10; cursor: pointer;
+      color: rgba(255,255,255,0.50);
+      background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.14);
+      padding: 22px 18px;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      transition: color 0.35s, background 0.35s, border-color 0.35s;
     }
-    .g-arrow:hover { color: rgba(255,255,255,0.65); }
-    #g-prev { left: 0; }
-    #g-next { right: 0; }
+    .g-arrow:hover {
+      color: rgba(255,255,255,0.92);
+      background: rgba(0,0,0,0.40);
+      border-color: rgba(255,255,255,0.32);
+    }
+    #g-prev { left: 28px; }
+    #g-next { right: 28px; }
+
+    /* ===== CAPTION ===== */
+    #g-caption {
+      position: absolute; bottom: 92px; left: 50%; transform: translateX(-50%);
+      z-index: 8; text-align: center;
+      font-size: 11px; letter-spacing: 1.5px; color: rgba(255,255,255,0.52);
+      max-width: 620px; width: calc(100% - 180px); line-height: 1.9;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.75);
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
 
     /* ===== BOTTOM UI ===== */
     #g-bottom-ui {
@@ -92,11 +109,11 @@
     .g-dot {
       width: 5px; height: 5px; border-radius: 50%; border: none;
       background: rgba(255,255,255,0.20); cursor: pointer;
-      transition: background 0.45s, transform 0.45s, width 0.45s;
+      transition: background 0.45s, width 0.45s;
       padding: 0;
     }
     .g-dot.active {
-      background: #c8a96e; transform: scale(1);
+      background: #c8a96e;
       width: 20px; border-radius: 3px;
     }
 
@@ -116,11 +133,14 @@
 
     /* ===== MOBILE ===== */
     @media (max-width: 768px) {
-      .g-arrow { padding: 20px 14px; }
+      .g-arrow { padding: 16px 13px; }
+      #g-prev { left: 14px; }
+      #g-next { right: 14px; }
       #g-bottom-ui { padding: 44px 24px 28px; }
       #g-top-ui { padding: 80px 24px 36px; }
       .g-arrow svg { width: 14px; height: 14px; }
       #g-dots { bottom: 32px; }
+      #g-caption { bottom: 78px; font-size: 10px; width: calc(100% - 80px); letter-spacing: 1px; }
       .gf-inner { flex-direction: column; gap: 10px; padding: 16px 24px; text-align: center; }
     }
   </style>
@@ -146,6 +166,10 @@
       <li><a href="gallery.html" class="active">Gallery</a></li>
       <li><a href="archive.html">Archive</a></li>
     </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="ja">JP</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </nav>
 
   <!-- GALLERY -->
@@ -157,17 +181,7 @@
       <h1 class="g-page-title">The Record</h1>
     </div>
 
-    <!-- Slides — g1 through g10 -->
-    <div class="g-slide active"><img src="images/g1.webp" alt="" loading="eager"></div>
-    <div class="g-slide"><img src="images/g2.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g3.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g4.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g5.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g6.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g7.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g8.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g9.webp" alt="" loading="lazy"></div>
-    <div class="g-slide"><img src="images/g10.webp" alt="" loading="lazy"></div>
+    <!-- Slides built by JS from data/gallery.json -->
 
     <!-- Arrows -->
     <button class="g-arrow" id="g-prev" aria-label="Previous">
@@ -177,9 +191,12 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
 
+    <!-- Caption (center bottom) -->
+    <p id="g-caption"></p>
+
     <!-- Bottom UI -->
     <div id="g-bottom-ui">
-      <div id="g-counter">01 — 10</div>
+      <div id="g-counter">— — —</div>
       <div id="g-dots"></div>
     </div>
 
@@ -244,47 +261,50 @@
     });
 
     /* ===== GALLERY ===== */
-    const slides = Array.from(document.querySelectorAll('.g-slide'));
-    const counter = document.getElementById('g-counter');
-    const dotsWrap = document.getElementById('g-dots');
-    const TOTAL = slides.length;
+    let photos = [];
     let current = 0;
     let isAnimating = false;
     let autoTimer;
-
-    /* Build dots */
-    slides.forEach((_, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'g-dot' + (i === 0 ? ' active' : '');
-      btn.setAttribute('aria-label', 'Photo ' + (i + 1));
-      btn.addEventListener('click', () => { clearAuto(); goTo(i); });
-      dotsWrap.appendChild(btn);
-    });
-    const dots = Array.from(dotsWrap.querySelectorAll('.g-dot'));
+    const counter   = document.getElementById('g-counter');
+    const dotsWrap  = document.getElementById('g-dots');
+    const gWrap     = document.getElementById('g-wrap');
+    const captionEl = document.getElementById('g-caption');
+    const prevBtn   = document.getElementById('g-prev');
+    const nextBtn   = document.getElementById('g-next');
 
     function pad(n) { return String(n).padStart(2, '0'); }
+    function getLang() { return sessionStorage.getItem('nwc_lang') || 'en'; }
+
+    function updateCaption(idx) {
+      if (!captionEl || !photos[idx]) return;
+      const p = photos[idx];
+      captionEl.textContent = getLang() === 'en'
+        ? (p.caption_en || p.caption_ja || '')
+        : (p.caption_ja || '');
+    }
 
     function updateUI() {
-      counter.textContent = pad(current + 1) + ' — ' + pad(TOTAL);
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      counter.textContent = pad(current + 1) + ' — ' + pad(photos.length);
+      Array.from(dotsWrap.querySelectorAll('.g-dot'))
+        .forEach((d, i) => d.classList.toggle('active', i === current));
+      updateCaption(current);
     }
 
     function goTo(index) {
-      if (isAnimating) return;
+      if (isAnimating || !photos.length) return;
+      const TOTAL = photos.length;
       const next = ((index % TOTAL) + TOTAL) % TOTAL;
       if (next === current) return;
       isAnimating = true;
 
+      const slides = Array.from(gWrap.querySelectorAll('.g-slide'));
       slides[current].classList.remove('active');
       current = next;
+      slides[current].classList.add('active');
 
-      const slide = slides[current];
-      slide.classList.add('active');
-
-      /* Restart Ken Burns animation */
-      const img = slide.querySelector('img');
+      const img = slides[current].querySelector('img');
       img.style.animation = 'none';
-      void img.offsetWidth; /* reflow */
+      void img.offsetWidth;
       img.style.animation = '';
 
       updateUI();
@@ -293,27 +313,78 @@
 
     function clearAuto() { clearInterval(autoTimer); }
 
-    /* Navigation */
-    document.getElementById('g-prev').addEventListener('click', () => { clearAuto(); goTo(current - 1); });
-    document.getElementById('g-next').addEventListener('click', () => { clearAuto(); goTo(current + 1); });
+    function buildGallery(list) {
+      photos = list.filter(p => p.visible !== false);
+      if (!photos.length) return;
 
-    /* Keyboard */
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { clearAuto(); goTo(current + 1); }
-      if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { clearAuto(); goTo(current - 1); }
+      // Build slides (insert before arrows)
+      photos.forEach((p, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'g-slide' + (i === 0 ? ' active' : '');
+        const img = document.createElement('img');
+        img.src = p.src;
+        img.alt = '';
+        img.loading = i === 0 ? 'eager' : 'lazy';
+        slide.appendChild(img);
+        gWrap.insertBefore(slide, prevBtn);
+      });
+
+      // Build dots
+      photos.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'g-dot' + (i === 0 ? ' active' : '');
+        btn.setAttribute('aria-label', 'Photo ' + (i + 1));
+        btn.addEventListener('click', () => { clearAuto(); goTo(i); });
+        dotsWrap.appendChild(btn);
+      });
+
+      // Initial state
+      updateUI();
+
+      // Arrow events
+      prevBtn.addEventListener('click', () => { clearAuto(); goTo(current - 1); });
+      nextBtn.addEventListener('click', () => { clearAuto(); goTo(current + 1); });
+
+      // Keyboard
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { clearAuto(); goTo(current + 1); }
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { clearAuto(); goTo(current - 1); }
+      });
+
+      // Touch swipe
+      let txStart = 0;
+      gWrap.addEventListener('touchstart', e => { txStart = e.touches[0].clientX; }, { passive: true });
+      gWrap.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - txStart;
+        if (Math.abs(dx) > 50) { clearAuto(); goTo(dx < 0 ? current + 1 : current - 1); }
+      }, { passive: true });
+
+      // Auto-advance every 7s
+      autoTimer = setInterval(() => goTo(current + 1), 7000);
+    }
+
+    async function initGallery() {
+      try {
+        const r = await fetch('data/gallery.json?_=' + Date.now());
+        if (r.ok) {
+          const { photos: list } = await r.json();
+          buildGallery(list || []);
+        }
+      } catch (e) {}
+    }
+    initGallery();
+
+    /* ===== LANGUAGE TOGGLE ===== */
+    const initLang = getLang();
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === initLang);
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        sessionStorage.setItem('nwc_lang', lang);
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+        updateCaption(current);
+      });
     });
-
-    /* Touch swipe */
-    let txStart = 0;
-    const wrap = document.getElementById('g-wrap');
-    wrap.addEventListener('touchstart', e => { txStart = e.touches[0].clientX; }, { passive: true });
-    wrap.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - txStart;
-      if (Math.abs(dx) > 50) { clearAuto(); goTo(dx < 0 ? current + 1 : current - 1); }
-    }, { passive: true });
-
-    /* Auto-advance every 7s */
-    autoTimer = setInterval(() => goTo(current + 1), 7000);
   </script>
 </body>
 </html>

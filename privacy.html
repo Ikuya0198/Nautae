@@ -66,6 +66,10 @@
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="archive.html">Archive</a></li>
     </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="ja">JP</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </nav>
 
   <!-- PAGE HERO -->
@@ -145,7 +149,7 @@
     <div class="footer-main">
       <div class="footer-brand">
         <img src="images/logo white.webp" alt="Nautae Wine Cellar">
-        <p class="footer-tagline">ガリシアの大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
+        <p class="footer-tagline" data-i18n="footer-tagline">ガリシアの大西洋岸から、<br>静かに、ほんのわずかな樽だけが生まれる。</p>
       </div>
       <div>
         <p class="footer-col-title">Navigate</p>
@@ -180,7 +184,12 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="js/i18n.js"></script>
   <script>
+    NWC_I18N({
+      'footer-tagline': 'From the rugged Atlantic coast of Galicia,<br>only a handful of barrels are born each year.'
+    });
+
     /* ===== LOADER ===== */
     const loader = document.getElementById('loader');
     const loaderLogo = loader.querySelector('.loader-logo-img');
