@@ -340,11 +340,35 @@
     }
     .product-card:hover::after { transform: translateX(100%); }
 
+    /* ===== SHOP FILTER ===== */
+    #shop-filter {
+      display: flex; justify-content: center; gap: 8px;
+      padding: 0 48px 40px; background: #060606;
+    }
+    .filter-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.35);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      padding: 7px 18px; cursor: pointer;
+      transition: color 0.25s, border-color 0.25s, background 0.25s;
+    }
+    .filter-btn:hover { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.28); }
+    .filter-btn.active { background: #c8a96e; color: #080808; border-color: #c8a96e; }
+    .filter-empty {
+      text-align: center; padding: 80px 24px;
+      font-size: 13px; color: rgba(255,255,255,0.25); letter-spacing: 1px;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       nav, nav.scrolled { padding: 18px 24px; }
       .nav-links { gap: 22px; }
       #shop-hero { padding: 140px 24px 72px; }
+      #shop-filter { padding: 0 24px 32px; gap: 6px; }
+      .filter-btn { font-size: 8px; padding: 6px 12px; letter-spacing: 2px; }
       #wines-h { display: none; }
       #wines-mobile { display: block; }
       #h-progress { display: none; }
@@ -402,6 +426,14 @@
     <h1 class="hero-title r">Our Wines</h1>
     <p class="hero-sub r">年間生産本数が限られた、ガリシアの手造りワイン。</p>
   </section>
+
+  <!-- FILTER -->
+  <div id="shop-filter">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="available">Available</button>
+    <button class="filter-btn" data-filter="limited">Limited</button>
+    <button class="filter-btn" data-filter="sold-out">Sold Out</button>
+  </div>
 
   <!-- PROGRESS DOTS -->
   <div id="h-progress"></div>
@@ -590,9 +622,9 @@
       document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
       });
-      sessionStorage.setItem('nwc_lang', lang);
+      localStorage.setItem('nwc_lang', lang);
     }
-    const shopLang = sessionStorage.getItem('nwc_lang') || 'en';
+    const shopLang = localStorage.getItem('nwc_lang') || 'en';
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', () => applyShopLang(btn.dataset.lang));
     });
@@ -727,7 +759,7 @@
       if (!slides.length) return;
       const dots = document.querySelectorAll('.h-dot');
       const prog = document.getElementById('h-progress');
-      gsap.to(track, {
+      const tween = gsap.to(track, {
         x: () => -(track.scrollWidth - window.innerWidth),
         ease: 'none',
         scrollTrigger: {
@@ -745,7 +777,28 @@
         }
       });
       window.addEventListener('resize', () => ScrollTrigger.refresh());
+      return tween;
     }
+
+    /* ===== SHOP FILTER ===== */
+    let allWines = [];
+    let hTween   = null;
+
+    document.getElementById('shop-filter').addEventListener('click', function(e) {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn || btn.classList.contains('active')) return;
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+
+      // ScrollTrigger解除 → 再描画 → 再設定
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      if (hTween) { hTween.scrollTrigger?.kill(); hTween.kill(); hTween = null; }
+      gsap.set(document.getElementById('h-track'), { x: 0 });
+
+      const filtered = filter === 'all' ? allWines : allWines.filter(w => w.status === filter);
+      renderShop(filtered);
+      hTween = setupHScroll();
+    });
 
     /* ===== SCROLL REVEAL ===== */
     gsap.utils.toArray('.r').forEach(el => {
@@ -799,7 +852,7 @@
       const totalAmt  = document.getElementById('drawer-total-amt');
       const btn       = document.getElementById('drawer-inquire');
 
-      const lang = sessionStorage.getItem('nwc_lang') || 'en';
+      const lang = localStorage.getItem('nwc_lang') || 'en';
       if (cart.length === 0) {
         container.innerHTML = lang === 'en'
           ? '<p class="cart-empty">Your cart is empty.<br>Choose a wine to add.</p>'
@@ -866,7 +919,7 @@
     /* ===== INQUIRY MODAL ===== */
     function openModal() {
       const total = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
-      const lang = sessionStorage.getItem('nwc_lang') || 'en';
+      const lang = localStorage.getItem('nwc_lang') || 'en';
       const totalLabel = lang === 'en' ? 'Total' : '合計';
       const summary = document.getElementById('modal-summary');
       summary.innerHTML = cart.map(i =>
@@ -894,10 +947,11 @@
         const r = await fetch('data/wines.json?_=' + Date.now());
         if (r.ok) {
           const { wines } = await r.json();
-          renderShop(wines);
+          allWines = wines;
+          renderShop(allWines);
         }
       } catch(e) {}
-      setupHScroll();
+      hTween = setupHScroll();
       if (cart.length > 0) updateCart();
     }
     initShop();

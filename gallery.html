@@ -309,7 +309,7 @@
     const nextBtn   = document.getElementById('g-next');
 
     function pad(n) { return String(n).padStart(2, '0'); }
-    function getLang() { return sessionStorage.getItem('nwc_lang') || 'en'; }
+    function getLang() { return localStorage.getItem('nwc_lang') || 'en'; }
 
     function updateCaption(idx) {
       if (!captionEl || !photos[idx]) return;
@@ -417,7 +417,7 @@
       btn.classList.toggle('active', btn.dataset.lang === initLang);
       btn.addEventListener('click', () => {
         const lang = btn.dataset.lang;
-        sessionStorage.setItem('nwc_lang', lang);
+        localStorage.setItem('nwc_lang', lang);
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
         updateCaption(current);
       });

@@ -8,7 +8,7 @@
     });
 
     function apply(lang) {
-      sessionStorage.setItem("nwc_lang", lang);
+      localStorage.setItem("nwc_lang", lang);
       document.querySelectorAll("[data-i18n]").forEach(function (el) {
         var k = el.dataset.i18n;
         el.innerHTML =
@@ -29,6 +29,6 @@
       });
     });
 
-    apply(sessionStorage.getItem("nwc_lang") || "en");
+    apply(localStorage.getItem("nwc_lang") || "en");
   };
 })();

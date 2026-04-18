@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Nautae Wine Cellar</title>
+  <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/cg-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+
+    #not-found {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    #not-found::before {
+      content: '404';
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(180px, 28vw, 340px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.025);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .nf-label {
+      font-size: 9px; letter-spacing: 4.5px; text-transform: uppercase;
+      color: #c8a96e; margin-bottom: 20px; position: relative;
+    }
+    .nf-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 60px);
+      font-weight: 300; letter-spacing: 4px;
+      color: rgba(255,255,255,0.80);
+      line-height: 1.25; margin-bottom: 24px;
+      position: relative;
+    }
+    .nf-body {
+      font-size: 14px; font-weight: 300;
+      color: rgba(255,255,255,0.38); line-height: 2;
+      max-width: 380px; margin-bottom: 52px;
+      position: relative;
+    }
+    .nf-vline {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, transparent, #c8a96e, transparent);
+      margin: 0 auto 40px;
+      position: relative;
+    }
+    .nf-btn {
+      display: inline-block;
+      padding: 14px 48px; font-size: 10px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase;
+      border: 1px solid #c8a96e; color: #c8a96e;
+      transition: background 0.3s, color 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .nf-btn:hover { background: #c8a96e; color: #080808; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar" class="scrolled">
+    <button class="nav-back" onclick="history.length>1?history.back():location.href='index.html'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>Back</span>
+    </button>
+    <a href="index.html" class="nav-logo"><img src="images/logo white.webp" alt="Nautae Wine Cellar"></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Story</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="archive.html">Archive</a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="ja">JP</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <button class="nav-burger" id="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu-links">
+      <a href="index.html">Story</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="archive.html">Archive</a>
+    </nav>
+  </div>
+
+  <!-- 404 -->
+  <section id="not-found">
+    <p class="nf-label">404</p>
+    <h1 class="nf-title">Page Not Found</h1>
+    <p class="nf-body">お探しのページは存在しないか、<br>移動した可能性があります。</p>
+    <div class="nf-vline"></div>
+    <a href="index.html" class="nf-btn">Return to Home</a>
+  </section>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>

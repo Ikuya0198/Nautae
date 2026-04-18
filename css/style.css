@@ -193,6 +193,31 @@ body::after {
 /* ===== SELECTION ===== */
 ::selection { background: rgba(200,169,110,0.22); color: #fff; }
 
+/* ===== CUSTOM CURSOR ===== */
+@media (pointer: fine) {
+  html { cursor: none; }
+  a, button, input, label, select, textarea { cursor: none; }
+}
+.cursor {
+  position: fixed; top: 0; left: 0;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #c8a96e;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease, width 0.22s ease, height 0.22s ease,
+              background 0.22s ease, outline-color 0.22s ease;
+  will-change: left, top;
+}
+.cursor.visible { opacity: 0.82; }
+.cursor.hover {
+  width: 30px; height: 30px;
+  background: rgba(200,169,110,0.15);
+  outline: 1px solid rgba(200,169,110,0.55);
+}
+
 /* ===== SCROLL PROGRESS ===== */
 #scroll-progress {
   position: fixed; top: 0; left: 0; z-index: 10000;
