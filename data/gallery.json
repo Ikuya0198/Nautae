@@ -4,7 +4,7 @@
     {
       "id": "g1",
       "src": "images/gallery/g1.webp",
-      "position": "50% 50%",
+      "position": "50% 70%",
       "caption_ja": "ガリシアの葡萄畑。大西洋の風が育てるアルバリーニョ。",
       "caption_en": "Vineyards of Galicia. Albariño shaped by Atlantic winds.",
       "visible": true
@@ -12,7 +12,7 @@
     {
       "id": "g2",
       "src": "images/gallery/g2.webp",
-      "position": "50% 50%",
+      "position": "50% 45%",
       "caption_ja": "収穫期の朝。霧の中、黄金色に実る葡萄。",
       "caption_en": "Harvest morning. Golden grapes glowing through the mist.",
       "visible": true
@@ -28,7 +28,7 @@
     {
       "id": "g4",
       "src": "images/gallery/g4.webp",
-      "position": "50% 50%",
+      "position": "50% 38%",
       "caption_ja": "石畳の村。ガリシアの伝統が刻まれた風景。",
       "caption_en": "A cobblestone village. Landscapes etched with Galician tradition.",
       "visible": true
@@ -52,7 +52,7 @@
     {
       "id": "g8",
       "src": "images/gallery/g8.webp",
-      "position": "50% 50%",
+      "position": "50% 28%",
       "caption_ja": "テロワールの記憶。土と海が交差する。",
       "caption_en": "Memory of terroir. Where earth and sea converge.",
       "visible": true
