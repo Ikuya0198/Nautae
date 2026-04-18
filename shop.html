@@ -13,6 +13,18 @@
   <style>
     nav { z-index: 200; }
 
+    /* ===== WINE DETAILS ===== */
+    .slide-detail-row {
+      display: flex; flex-wrap: wrap; gap: 5px 18px; margin-bottom: 24px;
+    }
+    .slide-detail-item {
+      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+    }
+    .slide-detail-item b {
+      color: rgba(200,169,110,0.5); font-weight: 500; margin-right: 5px;
+    }
+
     /* ===== PAIRING ===== */
     .slide-pairing { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
     .pairing-icon { color: rgba(200,169,110,0.45); flex-shrink: 0; }
@@ -414,6 +426,12 @@
               <span class="pairing-label">Pairing</span>
               <span class="pairing-text">フォアグラ · ウニ · 白トリュフ · 熟成チーズ</span>
             </div>
+            <div class="slide-detail-row">
+              <span class="slide-detail-item"><b>Vintage</b>2024</span>
+              <span class="slide-detail-item"><b>Variety</b>Albariño 100%</span>
+              <span class="slide-detail-item"><b>Region</b>Rías Baixas D.O.</span>
+              <span class="slide-detail-item"><b>Vol</b>13.5%</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥249,000<small>（税込）</small></div>
               <button class="btn-cart" data-wine="Luz de Mi Alma" data-price="249000" data-display="¥249,000">Add to Cart</button>
@@ -442,6 +460,12 @@
               <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
               <span class="pairing-label">Pairing</span>
               <span class="pairing-text">牡蠣 · シーバス · 山羊チーズ · 魚介マリネ</span>
+            </div>
+            <div class="slide-detail-row">
+              <span class="slide-detail-item"><b>Vintage</b>2024</span>
+              <span class="slide-detail-item"><b>Variety</b>Albariño 100%</span>
+              <span class="slide-detail-item"><b>Region</b>Rías Baixas D.O.</span>
+              <span class="slide-detail-item"><b>Vol</b>12.5%</span>
             </div>
             <div class="slide-footer">
               <div class="slide-price">¥42,300<small>（税込）</small></div>
@@ -473,6 +497,12 @@
               <span class="pairing-label">Pairing</span>
               <span class="pairing-text">鯛 · 帆立 · レモンバターソース · 白カビチーズ</span>
             </div>
+            <div class="slide-detail-row">
+              <span class="slide-detail-item"><b>Vintage</b>2024</span>
+              <span class="slide-detail-item"><b>Variety</b>Albariño 100%</span>
+              <span class="slide-detail-item"><b>Region</b>Rías Baixas D.O.</span>
+              <span class="slide-detail-item"><b>Vol</b>13.0%</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥50,400<small>（税込）</small></div>
               <button class="btn-cart" data-wine="Norte 41° Atlántico" data-price="50400" data-display="¥50,400">Add to Cart</button>
@@ -503,6 +533,12 @@
               <span class="pairing-label">Pairing</span>
               <span class="pairing-text">鴨 · フォアグラ · ハードチーズ · 松茸</span>
             </div>
+            <div class="slide-detail-row">
+              <span class="slide-detail-item"><b>Vintage</b>2023</span>
+              <span class="slide-detail-item"><b>Variety</b>Albariño — Barrel Fermented</span>
+              <span class="slide-detail-item"><b>Region</b>Rías Baixas D.O.</span>
+              <span class="slide-detail-item"><b>Vol</b>13.5%</span>
+            </div>
             <div class="slide-footer">
               <div class="slide-price">¥65,700<small>（税込）</small></div>
               <button class="btn-cart" data-wine="112°N" data-price="65700" data-display="¥65,700">Add to Cart</button>
@@ -532,6 +568,12 @@
               <svg class="pairing-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
               <span class="pairing-label">Pairing</span>
               <span class="pairing-text">白身魚 · ブルーチーズ · 梨のタルト · 軽い前菜</span>
+            </div>
+            <div class="slide-detail-row">
+              <span class="slide-detail-item"><b>Vintage</b>2024</span>
+              <span class="slide-detail-item"><b>Variety</b>Albariño 100%</span>
+              <span class="slide-detail-item"><b>Region</b>Rías Baixas D.O.</span>
+              <span class="slide-detail-item"><b>Vol</b>12.0%</span>
             </div>
             <div class="slide-footer">
               <div class="slide-price">¥38,500<small>（税込）</small></div>
@@ -864,7 +906,11 @@
     });
 
     /* ===== CART ===== */
-    let cart = [];
+    let cart = JSON.parse(localStorage.getItem('nwc_cart') || '[]');
+
+    function saveCart() {
+      localStorage.setItem('nwc_cart', JSON.stringify(cart));
+    }
 
     function addToCart(wine, priceNum, display) {
       const existing = cart.find(i => i.wine === wine);
@@ -894,6 +940,7 @@
         badge.classList.remove('show');
       }
       renderDrawer();
+      saveCart();
     }
 
     function renderDrawer() {
@@ -970,10 +1017,12 @@
     /* ===== INQUIRY MODAL ===== */
     function openModal() {
       const total = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+      const lang = sessionStorage.getItem('nwc_lang') || 'en';
+      const totalLabel = lang === 'en' ? 'Total' : '合計';
       const summary = document.getElementById('modal-summary');
       summary.innerHTML = cart.map(i =>
         `<div class="summary-row"><span>${escHtml(i.wine)} × ${i.qty}</span><span>¥${(i.priceNum*i.qty).toLocaleString()}</span></div>`
-      ).join('') + `<div class="summary-total"><span>合計</span><span>¥${total.toLocaleString()}</span></div>`;
+      ).join('') + `<div class="summary-total"><span>${totalLabel}</span><span>¥${total.toLocaleString()}</span></div>`;
       document.getElementById('hidden-order').value =
         cart.map(i => `${i.wine} x${i.qty} ${i.display}`).join(' / ') + ` | 合計 ¥${total.toLocaleString()}`;
       document.getElementById('form-success').style.display = 'none';
@@ -990,6 +1039,9 @@
     document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+    /* Render any cart restored from localStorage */
+    if (cart.length > 0) updateCart();
+
     document.getElementById('inquiry-form').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target, btn = form.querySelector('.form-submit');
@@ -999,7 +1051,9 @@
         if (res.ok) {
           document.getElementById('modal-form-wrap').style.display = 'none';
           document.getElementById('form-success').style.display = 'block';
+          btn.textContent = 'Send Inquiry'; btn.disabled = false;
           cart = []; updateCart(); form.reset();
+          closeDrawer();
         } else { btn.textContent = 'Error — Retry'; btn.disabled = false; }
       } catch { btn.textContent = 'Error — Retry'; btn.disabled = false; }
     });
