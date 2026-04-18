@@ -583,6 +583,10 @@
           <label class="field-label">Caption (English)</label>
           <input type="text" class="field-input" data-field="caption_en" value="${ea(photo.caption_en)}" placeholder="Photo caption (English)">
         </div>
+        <div class="field-group">
+          <label class="field-label">フォーカス位置（object-position）</label>
+          <input type="text" class="field-input" data-field="position" value="${ea(photo.position||'50% 50%')}" placeholder="50% 50% / top / center bottom / 50% 30%">
+        </div>
       </div>`;
     }
 
@@ -672,6 +676,7 @@
         photos.push({
           id:         card.dataset.photoId || ('p_' + Date.now()),
           src:        get('src'),
+          position:   get('position') || '50% 50%',
           caption_ja: get('caption_ja'),
           caption_en: get('caption_en'),
           visible:    chk('visible'),
