@@ -209,6 +209,23 @@
     }
     .btn-outline:hover::after { left: 160%; }
 
+    /* ===== SCROLL ANIMATION VARIANTS ===== */
+    .r-left  { opacity: 0; transform: translateX(-28px); }
+    .r-right { opacity: 0; transform: translateX(28px); }
+
+    /* ===== CS-STORE SHIMMER ===== */
+    .cs-store::after {
+      content: '';
+      position: absolute; top: 0; left: -80%;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(200,169,110,0.07), transparent);
+      transition: left 0.8s ease;
+      pointer-events: none;
+    }
+    .cs-store:hover::after { left: 130%; }
+    .cs-store { transition: border-color 0.4s; }
+    .cs-store:hover { border-color: rgba(200,169,110,0.22); }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 900px) {
       .story-cols { grid-template-columns: 1fr; gap: 40px; }
@@ -250,7 +267,19 @@
       <button class="lang-btn" data-lang="ja">JP</button>
       <button class="lang-btn active" data-lang="en">EN</button>
     </div>
+    <button class="nav-burger" id="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu-links">
+      <a href="index.html" class="active">Story</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="archive.html">Archive</a>
+    </nav>
+  </div>
 
   <!-- HERO -->
   <section id="hero">
@@ -290,8 +319,8 @@
       </div>
       <div class="story-cols">
         <div>
-          <p class="label r">The Designer</p>
-          <p class="body-text r" data-i18n="story-designer">
+          <p class="label r r-left">The Designer</p>
+          <p class="body-text r r-left" data-i18n="story-designer">
             Ikuya Odaka——日本人ワインデザイナー。<br><br>
             スペイン・ガリシアの伝統的な醸造技法を軸に、
             イタリアの農場で葡萄栽培を研究し、
@@ -301,8 +330,8 @@
           </p>
         </div>
         <div>
-          <p class="label r">Limited Only</p>
-          <p class="body-text r" data-i18n="story-limited">
+          <p class="label r r-right">Limited Only</p>
+          <p class="body-text r r-right" data-i18n="story-limited">
             Nautae Wine Cellar のボトルは、毎年限定本数のみ。<br><br>
             新作のリリースにはかならずストーリーが伴う——
             その年の気候、訪れた土地、たどり着いた問い。
@@ -335,7 +364,7 @@
           <div><span class="stat-num">0</span><span class="stat-label" data-i18n="stat-additives">添加物</span></div>
         </div>
       </div>
-      <div class="terroir-img-wrap r">
+      <div class="terroir-img-wrap r r-right">
         <img src="images/wine3.webp" alt="Rías Baixas Vineyard" loading="lazy">
       </div>
     </div>
@@ -441,7 +470,7 @@
     </div>
     <hr class="footer-divider">
     <div class="footer-bottom">
-      <p class="footer-copy">© 2025 Nautae Wine Cellar · Rías Baixas, Galicia, España</p>
+      <p class="footer-copy">© 2026 Nautae Wine Cellar · Rías Baixas, Galicia, España</p>
       <div class="footer-legal">
         <a href="privacy.html">Privacy Policy</a>
         <a href="tokutei.html">特定商取引法に基づく表記</a>
@@ -450,6 +479,7 @@
     </div>
   </footer>
 
+  <script src="js/nav.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -654,10 +684,13 @@
 
     /* ===== SCROLL REVEAL ===== */
     gsap.utils.toArray('.r').forEach(el => {
-      gsap.to(el, {
-        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 87%' }
-      });
+      const left  = el.classList.contains('r-left');
+      const right = el.classList.contains('r-right');
+      gsap.fromTo(el,
+        { opacity: 0, x: left ? -28 : right ? 28 : 0, y: (left || right) ? 0 : 28 },
+        { opacity: 1, x: 0, y: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 87%' } }
+      );
     });
 
     /* ===== COUNTDOWN ===== */

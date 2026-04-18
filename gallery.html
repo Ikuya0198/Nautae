@@ -24,19 +24,19 @@
       opacity: 0;
       transition: opacity 1.0s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
     }
     .g-slide.active { opacity: 1; }
 
+    /* Case C: 写真を額縁スタイルで表示 — 縦横比そのまま、余白あり */
     .g-slide img {
-      /* 完全センタリング: 親要素の四隅から0で埋め、
-         object-fit:cover + object-position:center で左右・上下ともに中央を表示 */
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      filter: brightness(0.80) saturate(0.88);
+      display: block;
+      max-height: calc(100vh - 130px);
+      max-width: calc(100% - 200px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      filter: brightness(0.90) saturate(0.88);
       transform-origin: center center;
     }
 
@@ -117,11 +117,23 @@
       width: 5px; height: 5px; border-radius: 50%; border: none;
       background: rgba(255,255,255,0.20); cursor: pointer;
       transition: background 0.45s, width 0.45s;
-      padding: 0;
+      padding: 0; position: relative; overflow: hidden;
     }
     .g-dot.active {
-      background: #c8a96e;
-      width: 20px; border-radius: 3px;
+      background: rgba(200,169,110,0.22);
+      width: 24px; border-radius: 3px;
+    }
+    /* プログレスバー: 7秒で左から右へ満タンになる */
+    .g-dot.active::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 0; height: 100%;
+      background: #c8a96e; border-radius: 3px;
+      animation: dotFill 7s linear forwards;
+    }
+    @keyframes dotFill {
+      from { width: 0%; }
+      to   { width: 100%; }
     }
 
     /* ===== FOOTER BELOW GALLERY ===== */
@@ -140,6 +152,10 @@
 
     /* ===== MOBILE ===== */
     @media (max-width: 768px) {
+      .g-slide img {
+        max-height: calc(100vh - 110px);
+        max-width: calc(100% - 80px);
+      }
       .g-arrow { padding: 16px 13px; }
       #g-prev { left: 14px; }
       #g-next { right: 14px; }
@@ -177,7 +193,19 @@
       <button class="lang-btn" data-lang="ja">JP</button>
       <button class="lang-btn" data-lang="en">EN</button>
     </div>
+    <button class="nav-burger" id="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu-links">
+      <a href="index.html">Story</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html" class="active">Gallery</a>
+      <a href="archive.html">Archive</a>
+    </nav>
+  </div>
 
   <!-- GALLERY -->
   <div id="g-wrap">
@@ -221,6 +249,7 @@
     </div>
   </div>
 
+  <script src="js/nav.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script>
     /* ===== LOADER ===== */

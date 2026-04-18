@@ -382,7 +382,19 @@
       <button class="lang-btn" data-lang="ja">JP</button>
       <button class="lang-btn active" data-lang="en">EN</button>
     </div>
+    <button class="nav-burger" id="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-menu-links">
+      <a href="index.html">Story</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="archive.html">Archive</a>
+    </nav>
+  </div>
 
   <!-- SHOP HERO -->
   <section id="shop-hero">
@@ -906,5 +918,6 @@
       } catch { btn.textContent = 'Error — Retry'; btn.disabled = false; }
     });
   </script>
+  <script src="js/nav.js"></script>
 </body>
 </html>
