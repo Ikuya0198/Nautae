@@ -236,6 +236,35 @@ body::after {
 }
 .cursor.labeled .cursor-label { opacity: 1; }
 
+/* ===== SCROLL TO TOP ===== */
+#scroll-top {
+  position: fixed; bottom: 36px; left: 48px; z-index: 200;
+  width: 38px; height: 38px;
+  background: rgba(8,8,8,0.7);
+  border: 1px solid rgba(200,169,110,0.3);
+  color: #c8a96e;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s, background 0.3s, border-color 0.3s;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+#scroll-top.visible { opacity: 1; pointer-events: auto; }
+#scroll-top:hover { background: rgba(200,169,110,0.12); border-color: rgba(200,169,110,0.6); }
+@media (max-width: 768px) { #scroll-top { left: 24px; bottom: 24px; } }
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .r, .r-left, .r-right { opacity: 1 !important; transform: none !important; }
+  .r-reveal       { clip-path: none !important; }
+  .r-reveal-right { clip-path: none !important; }
+}
+
 /* ===== SCROLL PROGRESS ===== */
 #scroll-progress {
   position: fixed; top: 0; left: 0; z-index: 10000;

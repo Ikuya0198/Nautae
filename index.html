@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nautae Wine Cellar — Rías Baixas, Galicia</title>
   <meta name="description" content="ガリシアの大西洋岸から生まれた、限定手造りワイン。Nautae Wine Cellar.">
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="Nautae Wine Cellar">
+  <meta property="og:title"       content="Nautae Wine Cellar — Rías Baixas, Galicia">
+  <meta property="og:description" content="スペイン・イタリア・日本。三つの文化が交差する、限定手造りワイン。">
+  <meta property="og:url"         content="https://faro-silencio.com/">
+  <meta property="og:image"       content="https://faro-silencio.com/images/wine1.webp">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="Nautae Wine Cellar — Rías Baixas, Galicia">
+  <meta name="twitter:description" content="スペイン・イタリア・日本。三つの文化が交差する、限定手造りワイン。">
+  <meta name="twitter:image"      content="https://faro-silencio.com/images/wine1.webp">
+  <link rel="icon" href="images/logo-black.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="images/logo-black.webp">
   <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/cg-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="images/logo white.webp" as="image">
@@ -487,6 +499,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.globalTimeline.timeScale(100);
+    }
 
     /* ===== LOADER ===== */
     const isFirst = !sessionStorage.getItem('nwc_v');
