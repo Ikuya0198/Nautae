@@ -161,7 +161,7 @@
     .notify-row input {
       flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
       border-right: none; color: #fff; padding: 14px 18px;
-      font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none;
+      font-family: 'Montserrat', sans-serif; font-size: 16px; outline: none;
       transition: border-color 0.3s;
     }
     .notify-row input:focus { border-color: rgba(200,169,110,0.45); }
@@ -307,7 +307,7 @@
   <!-- STORY -->
   <section id="story" class="section">
     <div class="container">
-      <div class="quote-wrap r">
+      <div class="quote-wrap r-reveal">
         <div class="quote-bar"></div>
         <p class="quote-text" data-i18n="quote">"ワインは完成品ではない。<br>毎年問い直されるべき、生きた問いかけだ。"</p>
       </div>
@@ -366,7 +366,7 @@
           <div><span class="stat-num">0</span><span class="stat-label" data-i18n="stat-additives">添加物</span></div>
         </div>
       </div>
-      <div class="terroir-img-wrap r r-right">
+      <div class="terroir-img-wrap r-reveal-right">
         <img src="images/wine3.webp" alt="Rías Baixas Vineyard" loading="lazy">
       </div>
     </div>
@@ -674,13 +674,34 @@
       })();
     }
 
+    /* ===== SPLIT TEXT UTIL ===== */
+    function splitWords(el) {
+      var words = el.textContent.trim().split(/\s+/);
+      var frag = document.createDocumentFragment();
+      words.forEach(function(word, i) {
+        var sw  = document.createElement('span'); sw.className  = 'sw';
+        var swi = document.createElement('span'); swi.className = 'swi';
+        swi.textContent = word;
+        sw.appendChild(swi);
+        frag.appendChild(sw);
+        if (i < words.length - 1) frag.appendChild(document.createTextNode(' '));
+      });
+      el.textContent = '';
+      el.appendChild(frag);
+      return el.querySelectorAll('.swi');
+    }
+
     /* ===== HERO ENTRANCE ===== */
+    var heroTitleEl = document.querySelector('.hero-title');
+    gsap.set(heroTitleEl, { opacity: 1 });
+    var heroWords = splitWords(heroTitleEl);
+
     const tl = gsap.timeline({ delay: isFirst ? 2.8 : 0.8 });
-    tl.to('.hero-badge',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0)
-      .to('.hero-title',     { opacity: 1, y: 0, duration: 1.3, ease: 'power3.out' }, 0.4)
-      .to('.hero-region',    { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.65)
-      .to('.hero-sub',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.8)
-      .to('.scroll-indicator', { opacity: 1,    duration: 1   }, 1.1);
+    tl.to('.hero-badge',       { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0)
+      .from(heroWords,         { y: '110%',  duration: 1.2,        ease: 'power3.out', stagger: 0.07 }, 0.25)
+      .to('.hero-region',      { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.70)
+      .to('.hero-sub',         { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, 0.88)
+      .to('.scroll-indicator', { opacity: 1,        duration: 1                       }, 1.15);
 
     /* ===== SCROLL REVEAL ===== */
     gsap.utils.toArray('.r').forEach(el => {
@@ -692,6 +713,59 @@
           scrollTrigger: { trigger: el, start: 'top 87%' } }
       );
     });
+
+    /* Clip-path curtain reveals */
+    gsap.utils.toArray('.r-reveal').forEach(el => {
+      gsap.to(el, {
+        clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'power4.out',
+        scrollTrigger: { trigger: el, start: 'top 86%' }
+      });
+    });
+    gsap.utils.toArray('.r-reveal-right').forEach(el => {
+      gsap.to(el, {
+        clipPath: 'inset(0 0% 0 0)', duration: 1.3, ease: 'power4.out',
+        scrollTrigger: { trigger: el, start: 'top 90%' }
+      });
+    });
+
+    /* ===== PARALLAX ===== */
+    if (window.innerWidth >= 768) {
+      gsap.to('#challenge', {
+        backgroundPositionY: '65%',
+        ease: 'none',
+        scrollTrigger: { trigger: '#challenge', start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+      gsap.to('.terroir-img-wrap img', {
+        y: 48, ease: 'none',
+        scrollTrigger: { trigger: '#terroir', start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    }
+
+    /* ===== STAT COUNT-UP ===== */
+    (function () {
+      var statEls = document.querySelectorAll('.stat-num:not([data-i18n])');
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          var el    = entry.target;
+          var text  = el.textContent.trim();
+          var match = text.match(/^(\d+)(%?)$/);
+          if (!match) return;
+          var end    = parseInt(match[1]);
+          var suffix = match[2] || '';
+          var dur    = end >= 100 ? 1600 : 1000;
+          var t0     = performance.now();
+          (function step(now) {
+            var p = Math.min((now - t0) / dur, 1);
+            var v = Math.round((1 - Math.pow(1 - p, 3)) * end);
+            el.textContent = v + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          })(t0);
+        });
+      }, { threshold: 0.7 });
+      statEls.forEach(function(el) { io.observe(el); });
+    })();
 
     /* ===== COUNTDOWN ===== */
     const RELEASE_DATE = new Date('2026-10-01T00:00:00');

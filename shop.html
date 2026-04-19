@@ -316,16 +316,20 @@
     .form-success small { font-size: 13px; color: rgba(255,255,255,0.45); }
 
     /* ===== BOTTLE AMBIENT GLOW ===== */
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.65; transform: translateX(-50%) scaleX(1);   }
+      50%       { opacity: 1.00; transform: translateX(-50%) scaleX(1.1); }
+    }
     .slide-bottle { position: relative; }
     .slide-bottle::before {
       content: ''; position: absolute; bottom: 0; left: 50%;
       transform: translateX(-50%);
       width: 70%; height: 55%;
-      background: radial-gradient(ellipse at center bottom, rgba(200,169,110,0.11) 0%, transparent 68%);
+      background: radial-gradient(ellipse at center bottom, rgba(200,169,110,0.14) 0%, transparent 68%);
       pointer-events: none; z-index: 0;
-      transition: opacity 0.6s ease;
+      animation: glowPulse 4s ease-in-out infinite;
     }
-    .h-slide:hover .slide-bottle::before { opacity: 1.6; }
+    .h-slide:hover .slide-bottle::before { animation-play-state: paused; opacity: 1; }
     .slide-bottle img { position: relative; z-index: 1; }
 
     /* ===== BUTTON LIGHT SWEEP ===== */
@@ -432,7 +436,7 @@
   <div id="shop-entry">
     <section id="shop-hero">
       <p class="hero-label r">Limited Collection</p>
-      <h1 class="hero-title r">Our Wines</h1>
+      <h1 class="hero-title">Our Wines</h1>
       <p class="hero-sub r">年間生産本数が限られた、ガリシアの手造りワイン。</p>
     </section>
     <!-- FILTER -->
@@ -639,12 +643,41 @@
     });
     if (shopLang === 'en') applyShopLang('en');
 
+    /* ===== SPLIT TEXT UTIL ===== */
+    function splitWords(el) {
+      var words = el.textContent.trim().split(/\s+/);
+      var frag = document.createDocumentFragment();
+      words.forEach(function(word, i) {
+        var sw  = document.createElement('span'); sw.className  = 'sw';
+        var swi = document.createElement('span'); swi.className = 'swi';
+        swi.textContent = word;
+        sw.appendChild(swi);
+        frag.appendChild(sw);
+        if (i < words.length - 1) frag.appendChild(document.createTextNode(' '));
+      });
+      el.textContent = '';
+      el.appendChild(frag);
+      return el.querySelectorAll('.swi');
+    }
+
     /* ===== LOADER ===== */
     const isFirst = !sessionStorage.getItem('nwc_v');
     sessionStorage.setItem('nwc_v', '1');
 
     function hideLoader() {
-      gsap.to('#loader', { yPercent: -100, duration: 0.85, ease: 'power3.inOut', onComplete: () => { document.getElementById('loader').style.display = 'none'; } });
+      gsap.to('#loader', {
+        yPercent: -100, duration: 0.85, ease: 'power3.inOut',
+        onComplete: function() {
+          document.getElementById('loader').style.display = 'none';
+          /* ── Split text entrance for hero title ── */
+          var shopTitleEl = document.querySelector('.hero-title');
+          if (shopTitleEl) {
+            gsap.set(shopTitleEl, { opacity: 1 });
+            var shopWords = splitWords(shopTitleEl);
+            gsap.from(shopWords, { y: '110%', duration: 1.1, ease: 'power3.out', stagger: 0.1 });
+          }
+        }
+      });
     }
 
     if (isFirst) {
@@ -653,7 +686,15 @@
         .to('.loader-bar',      { width: 96,    duration: 0.7, ease: 'power2.inOut'  }, 0.7)
         .to({}, { duration: 0.6 }).call(hideLoader);
     } else {
-      gsap.to('#loader', { yPercent: -100, duration: 0.65, ease: 'power3.inOut', delay: 0.1, onComplete: () => { document.getElementById('loader').style.display = 'none'; } });
+      gsap.to('#loader', { yPercent: -100, duration: 0.65, ease: 'power3.inOut', delay: 0.1, onComplete: function() {
+        document.getElementById('loader').style.display = 'none';
+        var shopTitleEl = document.querySelector('.hero-title');
+        if (shopTitleEl) {
+          gsap.set(shopTitleEl, { opacity: 1 });
+          var shopWords = splitWords(shopTitleEl);
+          gsap.from(shopWords, { y: '110%', duration: 1.1, ease: 'power3.out', stagger: 0.1 });
+        }
+      } });
     }
 
     /* ===== PAGE TRANSITION ===== */

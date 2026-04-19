@@ -190,6 +190,14 @@ body::after {
   80%  { transform: translate(-2px, -2px); }
 }
 
+/* ===== CLIP-PATH REVEAL ===== */
+.r-reveal { clip-path: inset(0 0 100% 0); opacity: 1 !important; }
+.r-reveal-right { clip-path: inset(0 0 0 100%); opacity: 1 !important; }
+
+/* ===== SPLIT TEXT ===== */
+.sw  { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.swi { display: inline-block; }
+
 /* ===== SELECTION ===== */
 ::selection { background: rgba(200,169,110,0.22); color: #fff; }
 
@@ -217,6 +225,16 @@ body::after {
   background: rgba(200,169,110,0.15);
   outline: 1px solid rgba(200,169,110,0.55);
 }
+.cursor-label {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(200,169,110,0.95); white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.cursor.labeled .cursor-label { opacity: 1; }
 
 /* ===== SCROLL PROGRESS ===== */
 #scroll-progress {

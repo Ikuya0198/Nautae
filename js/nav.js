@@ -3,6 +3,9 @@
   if (!window.matchMedia("(pointer: fine)").matches) return;
   var dot = document.createElement("div");
   dot.className = "cursor";
+  var labelEl = document.createElement("span");
+  labelEl.className = "cursor-label";
+  dot.appendChild(labelEl);
   document.body.appendChild(dot);
 
   document.addEventListener("mousemove", function (e) {
@@ -13,14 +16,34 @@
   document.addEventListener("mouseleave", function () {
     dot.classList.remove("visible");
   });
+
+  function getLabel(t) {
+    if (t.closest(".nav-logo, .loader-logo-img, .footer-brand")) return null;
+    if (t.closest("img")) return "View";
+    if (t.closest(".btn-cart:not([disabled])")) return "Order";
+    if (t.closest(".btn-outline, .tl-link, .btn-send-inquiry"))
+      return "Explore";
+    return null;
+  }
+
   document.addEventListener("mouseover", function (e) {
-    if (e.target.closest("a, button, input, select, label, [role='button']")) {
-      dot.classList.add("hover");
+    var isInteractive = e.target.closest(
+      "a, button, input, select, label, [role='button']",
+    );
+    if (isInteractive) dot.classList.add("hover");
+    var lbl = getLabel(e.target);
+    if (lbl) {
+      labelEl.textContent = lbl;
+      dot.classList.add("labeled");
     }
   });
   document.addEventListener("mouseout", function (e) {
     if (e.target.closest("a, button, input, select, label, [role='button']")) {
       dot.classList.remove("hover");
+    }
+    if (getLabel(e.target)) {
+      labelEl.textContent = "";
+      dot.classList.remove("labeled");
     }
   });
 })();

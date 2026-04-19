@@ -265,9 +265,30 @@
   <script src="js/nav.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script>
+    /* ===== SPLIT TEXT UTIL ===== */
+    function splitWords(el) {
+      var words = el.textContent.trim().split(/\s+/);
+      var frag = document.createDocumentFragment();
+      words.forEach(function(word, i) {
+        var sw  = document.createElement('span'); sw.className  = 'sw';
+        var swi = document.createElement('span'); swi.className = 'swi';
+        swi.textContent = word;
+        sw.appendChild(swi);
+        frag.appendChild(sw);
+        if (i < words.length - 1) frag.appendChild(document.createTextNode(' '));
+      });
+      el.textContent = '';
+      el.appendChild(frag);
+      return el.querySelectorAll('.swi');
+    }
+
     /* ===== LOADER ===== */
     const isFirst = !sessionStorage.getItem('nwc_v');
     sessionStorage.setItem('nwc_v', '1');
+
+    /* Pre-split gallery title so words are ready before fade-in */
+    var gTitleEl = document.querySelector('.g-page-title');
+    var gTitleWords = gTitleEl ? splitWords(gTitleEl) : [];
 
     function hideLoader() {
       gsap.to('#loader', {
@@ -275,6 +296,9 @@
         onComplete: () => {
           document.getElementById('loader').style.display = 'none';
           document.getElementById('g-top-ui').classList.add('ready');
+          if (gTitleWords.length) {
+            gsap.from(gTitleWords, { y: '110%', duration: 1.0, ease: 'power3.out', stagger: 0.08, delay: 0.3 });
+          }
         }
       });
     }
@@ -290,6 +314,9 @@
         onComplete: () => {
           document.getElementById('loader').style.display = 'none';
           document.getElementById('g-top-ui').classList.add('ready');
+          if (gTitleWords.length) {
+            gsap.from(gTitleWords, { y: '110%', duration: 1.0, ease: 'power3.out', stagger: 0.08, delay: 0.2 });
+          }
         }
       });
     }
@@ -382,6 +409,14 @@
         img.alt = '';
         img.loading = i === 0 ? 'eager' : 'lazy';
         if (p.position) img.style.objectPosition = p.position;
+        /* Blur-up: start blurred, sharpen on load */
+        img.style.filter = 'blur(10px) brightness(0.90) saturate(0.88)';
+        var clearBlur = function() {
+          img.style.transition = 'filter 0.9s ease';
+          img.style.filter = 'brightness(0.90) saturate(0.88)';
+        };
+        if (img.complete && img.naturalWidth > 0) { clearBlur(); }
+        else { img.addEventListener('load', clearBlur, { once: true }); }
         slide.appendChild(img);
         gWrap.insertBefore(slide, prevBtn);
       });

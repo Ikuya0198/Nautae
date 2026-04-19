@@ -259,12 +259,33 @@
       spEl.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
     }, { passive: true });
 
+    /* ===== SPLIT TEXT UTIL ===== */
+    function splitWords(el) {
+      var words = el.textContent.trim().split(/\s+/);
+      var frag = document.createDocumentFragment();
+      words.forEach(function(word, i) {
+        var sw  = document.createElement('span'); sw.className  = 'sw';
+        var swi = document.createElement('span'); swi.className = 'swi';
+        swi.textContent = word;
+        sw.appendChild(swi);
+        frag.appendChild(sw);
+        if (i < words.length - 1) frag.appendChild(document.createTextNode(' '));
+      });
+      el.textContent = '';
+      el.appendChild(frag);
+      return el.querySelectorAll('.swi');
+    }
+
     /* ===== HERO ENTRANCE ===== */
+    var pageTitleEl = document.querySelector('.page-title');
+    gsap.set(pageTitleEl, { opacity: 1 });
+    var pageTitleWords = splitWords(pageTitleEl);
+
     const delay = isFirst ? 2.8 : 0.8;
     gsap.timeline({ delay })
-      .to('.page-label', { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0)
-      .to('.page-title', { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' }, 0.15)
-      .to('.page-sub',   { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.35);
+      .to('.page-label',   { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0)
+      .from(pageTitleWords,{ y: '110%',         duration: 1.1, ease: 'power3.out', stagger: 0.09 }, 0.15)
+      .to('.page-sub',     { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.45);
 
     /* ===== TIMELINE REVEAL ===== */
     gsap.utils.toArray('.tl-year-block').forEach((el, i) => {
